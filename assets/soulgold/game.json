@@ -1,0 +1,60 @@
+{
+  "name": "Pokémon SoulGold",
+  "version": "1.14",
+  "notice": "Only works on version 1.14 save files.",
+  "export_name": "Pokemon_SoulGold_edited.sav",
+
+  "sprites": {
+    "national_dex_max_id": 905,
+    "base_url": "https://eemeliri.github.io/soulgold/sprites/pokemon",
+    "shiny_suffix": "_shiny",
+    "extension": "png",
+    "use_showdown_fallback": true
+  },
+
+  "behavior": {
+    "never_shiny": [1435],
+    "new_level": 10,
+    "new_level_species": [
+      { "species": 150, "level": 70 },
+      { "species": 1435, "level": 70 }
+    ],
+    "new_level_ranges": [{ "from": 1, "to": 9, "level": 5 }],
+    "fallback_move": 33,
+    "default_ot_name": "Joze",
+    "met_location": 88,
+    "move_aliases": [
+      { "from": "Faint Attack", "to": "Feint Attack" },
+      { "from": "Hi Jump Kick", "to": "High Jump Kick" },
+      { "from": "Vice Grip", "to": "Vise Grip" },
+      { "from": "Dark Aero", "to": "Shadow Blast" }
+    ],
+    "pokeballs": [
+      { "id": 1, "name": "Poké Ball" },
+      { "id": 2, "name": "Great Ball" },
+      { "id": 3, "name": "Ultra Ball" },
+      { "id": 4, "name": "Master Ball" },
+      { "id": 5, "name": "Premier Ball" }
+    ],
+    "tera_types": [
+      { "id": 1, "name": "Normal" },
+      { "id": 2, "name": "Fighting" },
+      { "id": 3, "name": "Flying" },
+      { "id": 4, "name": "Poison" },
+      { "id": 5, "name": "Ground" },
+      { "id": 6, "name": "Rock" },
+      { "id": 7, "name": "Bug" },
+      { "id": 8, "name": "Ghost" },
+      { "id": 9, "name": "Steel" },
+      { "id": 11, "name": "Fire" },
+      { "id": 12, "name": "Water" },
+      { "id": 13, "name": "Grass" },
+      { "id": 14, "name": "Electric" },
+      { "id": 15, "name": "Psychic" },
+      { "id": 16, "name": "Ice" },
+      { "id": 17, "name": "Dragon" },
+      { "id": 18, "name": "Dark" },
+      { "id": 19, "name": "Fairy" }
+    ]
+  }
+}

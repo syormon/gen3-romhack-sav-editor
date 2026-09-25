@@ -1,0 +1,23 @@
+[package]
+name = "gen3-romhack-sav-editor"
+version = "0.1.0"
+edition = "2024"
+description = "Save editor for Pokémon ROM hacks; each game is a data pack under assets/games"
+
+[dependencies]
+eframe = "0.36"
+egui = "0.36"
+egui_extras = { version = "0.36", features = ["image", "http"] }
+image = { version = "0.25", default-features = false, features = ["png", "gif"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rfd = "0.15"
+
+# Windows only: the .exe gets its icon from a resource compiled into it, which
+# is a build-time step rather than anything the egui API can do at runtime.
+[target.'cfg(windows)'.build-dependencies]
+winresource = "0.1"
+image = { version = "0.25", default-features = false, features = ["png", "ico"] }
+
+[profile.release]
+opt-level = 2

@@ -1,0 +1,193 @@
+{
+  "name": "Pokémon Emerald Seaglass",
+  "version": "3.0",
+  "notice": "Save layout, name tables, bag and Poké Ball field all verified against the ROM and a real save.",
+  "export_name": "Seaglass_edited.sav",
+  "link": {
+    "label": "Reference editor",
+    "url": "https://github.com/Ehsan516/seaglass-save-editor"
+  },
+  "layout": {
+    "record_encoding": "gen3_shuffled",
+    "mon_size": 100,
+    "box_mon_size": 80,
+    "sb2_size": 3884,
+    "sb1_size": 15752,
+    "storage_size": 33744,
+    "sector_sizes": [
+      {
+        "sector": 0,
+        "size": 3968
+      },
+      {
+        "sector": 4,
+        "size": 3848
+      },
+      {
+        "sector": 13,
+        "size": 2000
+      }
+    ],
+    "storage_boxes": 4,
+    "storage_box_names": 33604,
+    "box_name_length": 9,
+    "storage_box_wallpapers": 33730,
+    "encryption_key": 172,
+    "money": 1168,
+    "coins": 1172,
+    "bag": 1376,
+    "pockets": [
+      {
+        "name": "Items",
+        "offset": 0,
+        "count": 80
+      },
+      {
+        "name": "KeyItems",
+        "offset": 320,
+        "count": 40
+      },
+      {
+        "name": "PokeBalls",
+        "offset": 480,
+        "count": 20
+      },
+      {
+        "name": "TMsHMs",
+        "offset": 560,
+        "count": 70
+      },
+      {
+        "name": "Berries",
+        "offset": 840,
+        "count": 60
+      }
+    ]
+  },
+  "record": {
+    "nickname_length": 10,
+    "ot_name_length": 7,
+    "gen3_ball": "growth_u16"
+  },
+  "sprites": {
+    "national_dex_max_id": 386,
+    "use_showdown_fallback": true
+  },
+  "behavior": {
+    "new_level": 5,
+    "fallback_move": 33,
+    "default_ot_name": "Trainer",
+    "met_location": 255,
+    "pokeballs": [
+      {
+        "id": 1,
+        "name": "Poké Ball"
+      },
+      {
+        "id": 2,
+        "name": "Great Ball"
+      },
+      {
+        "id": 3,
+        "name": "Ultra Ball"
+      },
+      {
+        "id": 4,
+        "name": "Master Ball"
+      },
+      {
+        "id": 5,
+        "name": "Premier Ball"
+      },
+      {
+        "id": 6,
+        "name": "Heal Ball"
+      },
+      {
+        "id": 7,
+        "name": "Net Ball"
+      },
+      {
+        "id": 8,
+        "name": "Nest Ball"
+      },
+      {
+        "id": 9,
+        "name": "Dive Ball"
+      },
+      {
+        "id": 10,
+        "name": "Dusk Ball"
+      },
+      {
+        "id": 11,
+        "name": "Timer Ball"
+      },
+      {
+        "id": 12,
+        "name": "Quick Ball"
+      },
+      {
+        "id": 13,
+        "name": "Repeat Ball"
+      },
+      {
+        "id": 14,
+        "name": "Luxury Ball"
+      },
+      {
+        "id": 15,
+        "name": "Level Ball"
+      },
+      {
+        "id": 16,
+        "name": "Lure Ball"
+      },
+      {
+        "id": 17,
+        "name": "Moon Ball"
+      },
+      {
+        "id": 18,
+        "name": "Friend Ball"
+      },
+      {
+        "id": 19,
+        "name": "Love Ball"
+      },
+      {
+        "id": 20,
+        "name": "Fast Ball"
+      },
+      {
+        "id": 21,
+        "name": "Heavy Ball"
+      },
+      {
+        "id": 22,
+        "name": "Dream Ball"
+      },
+      {
+        "id": 23,
+        "name": "Safari Ball"
+      },
+      {
+        "id": 24,
+        "name": "Sport Ball"
+      },
+      {
+        "id": 25,
+        "name": "Park Ball"
+      },
+      {
+        "id": 26,
+        "name": "Beast Ball"
+      },
+      {
+        "id": 27,
+        "name": "Cherish Ball"
+      }
+    ],
+    "tera_types": []
+  }
+}

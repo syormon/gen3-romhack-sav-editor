@@ -1,0 +1,7155 @@
+{
+ "1": {
+  "name": "Bulbasaur",
+  "stats": {
+   "hp": 45,
+   "attack": 49,
+   "defense": 49,
+   "speed": 45,
+   "sp_attack": 65,
+   "sp_defense": 65
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   34
+  ]
+ },
+ "2": {
+  "name": "Ivysaur",
+  "stats": {
+   "hp": 60,
+   "attack": 62,
+   "defense": 63,
+   "speed": 60,
+   "sp_attack": 80,
+   "sp_defense": 80
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   34
+  ]
+ },
+ "3": {
+  "name": "Venusaur",
+  "stats": {
+   "hp": 80,
+   "attack": 82,
+   "defense": 83,
+   "speed": 80,
+   "sp_attack": 100,
+   "sp_defense": 100
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   34
+  ]
+ },
+ "4": {
+  "name": "Charmander",
+  "stats": {
+   "hp": 39,
+   "attack": 52,
+   "defense": 43,
+   "speed": 65,
+   "sp_attack": 60,
+   "sp_defense": 50
+  },
+  "type": "Fire",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   94
+  ]
+ },
+ "5": {
+  "name": "Charmeleon",
+  "stats": {
+   "hp": 58,
+   "attack": 64,
+   "defense": 58,
+   "speed": 80,
+   "sp_attack": 80,
+   "sp_defense": 65
+  },
+  "type": "Fire",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   94
+  ]
+ },
+ "6": {
+  "name": "Charizard",
+  "stats": {
+   "hp": 78,
+   "attack": 84,
+   "defense": 78,
+   "speed": 100,
+   "sp_attack": 109,
+   "sp_defense": 85
+  },
+  "type": "Fire",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   94
+  ]
+ },
+ "7": {
+  "name": "Squirtle",
+  "stats": {
+   "hp": 44,
+   "attack": 48,
+   "defense": 65,
+   "speed": 43,
+   "sp_attack": 50,
+   "sp_defense": 64
+  },
+  "type": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   44
+  ]
+ },
+ "8": {
+  "name": "Wartortle",
+  "stats": {
+   "hp": 59,
+   "attack": 63,
+   "defense": 80,
+   "speed": 58,
+   "sp_attack": 65,
+   "sp_defense": 80
+  },
+  "type": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   44
+  ]
+ },
+ "9": {
+  "name": "Blastoise",
+  "stats": {
+   "hp": 79,
+   "attack": 83,
+   "defense": 100,
+   "speed": 78,
+   "sp_attack": 85,
+   "sp_defense": 105
+  },
+  "type": "Water",
+  "type2": "Steel",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   44
+  ]
+ },
+ "10": {
+  "name": "Caterpie",
+  "stats": {
+   "hp": 45,
+   "attack": 30,
+   "defense": 35,
+   "speed": 45,
+   "sp_attack": 20,
+   "sp_defense": 20
+  },
+  "type": "Bug",
+  "growth": "medium",
+  "abilities": [
+   19,
+   0,
+   0
+  ]
+ },
+ "11": {
+  "name": "Metapod",
+  "stats": {
+   "hp": 50,
+   "attack": 20,
+   "defense": 55,
+   "speed": 30,
+   "sp_attack": 25,
+   "sp_defense": 25
+  },
+  "type": "Bug",
+  "growth": "medium",
+  "abilities": [
+   61,
+   0,
+   0
+  ]
+ },
+ "12": {
+  "name": "Butterfree",
+  "stats": {
+   "hp": 60,
+   "attack": 45,
+   "defense": 50,
+   "speed": 75,
+   "sp_attack": 95,
+   "sp_defense": 80
+  },
+  "type": "Bug",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   14,
+   0,
+   0
+  ]
+ },
+ "13": {
+  "name": "Weedle",
+  "stats": {
+   "hp": 40,
+   "attack": 35,
+   "defense": 30,
+   "speed": 50,
+   "sp_attack": 20,
+   "sp_defense": 20
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "medium",
+  "abilities": [
+   19,
+   0,
+   0
+  ]
+ },
+ "14": {
+  "name": "Kakuna",
+  "stats": {
+   "hp": 45,
+   "attack": 25,
+   "defense": 50,
+   "speed": 35,
+   "sp_attack": 25,
+   "sp_defense": 25
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "medium",
+  "abilities": [
+   61,
+   0,
+   0
+  ]
+ },
+ "15": {
+  "name": "Beedrill",
+  "stats": {
+   "hp": 65,
+   "attack": 95,
+   "defense": 40,
+   "speed": 80,
+   "sp_attack": 45,
+   "sp_defense": 80
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "medium",
+  "abilities": [
+   68,
+   0,
+   0
+  ]
+ },
+ "16": {
+  "name": "Pidgey",
+  "stats": {
+   "hp": 40,
+   "attack": 45,
+   "defense": 40,
+   "speed": 56,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   51,
+   0,
+   145
+  ]
+ },
+ "17": {
+  "name": "Pidgeotto",
+  "stats": {
+   "hp": 68,
+   "attack": 60,
+   "defense": 55,
+   "speed": 71,
+   "sp_attack": 50,
+   "sp_defense": 55
+  },
+  "type": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   51,
+   0,
+   145
+  ]
+ },
+ "18": {
+  "name": "Pidgeot",
+  "stats": {
+   "hp": 88,
+   "attack": 80,
+   "defense": 80,
+   "speed": 101,
+   "sp_attack": 70,
+   "sp_defense": 75
+  },
+  "type": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   51,
+   0,
+   145
+  ]
+ },
+ "19": {
+  "name": "Rattata",
+  "stats": {
+   "hp": 30,
+   "attack": 56,
+   "defense": 35,
+   "speed": 72,
+   "sp_attack": 25,
+   "sp_defense": 35
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   62
+  ]
+ },
+ "20": {
+  "name": "Raticate",
+  "stats": {
+   "hp": 55,
+   "attack": 81,
+   "defense": 60,
+   "speed": 97,
+   "sp_attack": 50,
+   "sp_defense": 70
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   62
+  ]
+ },
+ "21": {
+  "name": "Spearow",
+  "stats": {
+   "hp": 40,
+   "attack": 60,
+   "defense": 30,
+   "speed": 70,
+   "sp_attack": 31,
+   "sp_defense": 31
+  },
+  "type": "Normal",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   101,
+   0,
+   0
+  ]
+ },
+ "22": {
+  "name": "Fearow",
+  "stats": {
+   "hp": 65,
+   "attack": 90,
+   "defense": 70,
+   "speed": 100,
+   "sp_attack": 51,
+   "sp_defense": 66
+  },
+  "type": "Normal",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   101,
+   0,
+   0
+  ]
+ },
+ "23": {
+  "name": "Ekans",
+  "stats": {
+   "hp": 35,
+   "attack": 60,
+   "defense": 44,
+   "speed": 55,
+   "sp_attack": 40,
+   "sp_defense": 54
+  },
+  "type": "Poison",
+  "type2": "Dark",
+  "growth": "medium",
+  "abilities": [
+   22,
+   0,
+   61
+  ]
+ },
+ "24": {
+  "name": "Arbok",
+  "stats": {
+   "hp": 70,
+   "attack": 95,
+   "defense": 74,
+   "speed": 80,
+   "sp_attack": 65,
+   "sp_defense": 79
+  },
+  "type": "Poison",
+  "type2": "Dark",
+  "growth": "medium",
+  "abilities": [
+   22,
+   0,
+   61
+  ]
+ },
+ "25": {
+  "name": "Pikachu",
+  "stats": {
+   "hp": 35,
+   "attack": 55,
+   "defense": 40,
+   "speed": 90,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "26": {
+  "name": "Raichu",
+  "stats": {
+   "hp": 70,
+   "attack": 90,
+   "defense": 55,
+   "speed": 120,
+   "sp_attack": 90,
+   "sp_defense": 80
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "27": {
+  "name": "Sandshrew",
+  "stats": {
+   "hp": 50,
+   "attack": 75,
+   "defense": 85,
+   "speed": 40,
+   "sp_attack": 20,
+   "sp_defense": 30
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   8,
+   0,
+   146
+  ]
+ },
+ "28": {
+  "name": "Sandslash",
+  "stats": {
+   "hp": 85,
+   "attack": 100,
+   "defense": 110,
+   "speed": 65,
+   "sp_attack": 45,
+   "sp_defense": 55
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   8,
+   0,
+   146
+  ]
+ },
+ "29": {
+  "name": "Nidoran♀",
+  "stats": {
+   "hp": 55,
+   "attack": 47,
+   "defense": 52,
+   "speed": 41,
+   "sp_attack": 40,
+   "sp_defense": 40
+  },
+  "type": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   38,
+   0,
+   79
+  ]
+ },
+ "30": {
+  "name": "Nidorina",
+  "stats": {
+   "hp": 70,
+   "attack": 62,
+   "defense": 67,
+   "speed": 56,
+   "sp_attack": 55,
+   "sp_defense": 55
+  },
+  "type": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   38,
+   0,
+   79
+  ]
+ },
+ "31": {
+  "name": "Nidoqueen",
+  "stats": {
+   "hp": 90,
+   "attack": 92,
+   "defense": 87,
+   "speed": 76,
+   "sp_attack": 75,
+   "sp_defense": 85
+  },
+  "type": "Poison",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   38,
+   0,
+   79
+  ]
+ },
+ "32": {
+  "name": "Nidoran♂",
+  "stats": {
+   "hp": 46,
+   "attack": 57,
+   "defense": 40,
+   "speed": 50,
+   "sp_attack": 40,
+   "sp_defense": 40
+  },
+  "type": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   38,
+   0,
+   79
+  ]
+ },
+ "33": {
+  "name": "Nidorino",
+  "stats": {
+   "hp": 61,
+   "attack": 72,
+   "defense": 57,
+   "speed": 65,
+   "sp_attack": 55,
+   "sp_defense": 55
+  },
+  "type": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   38,
+   0,
+   79
+  ]
+ },
+ "34": {
+  "name": "Nidoking",
+  "stats": {
+   "hp": 81,
+   "attack": 102,
+   "defense": 77,
+   "speed": 85,
+   "sp_attack": 85,
+   "sp_defense": 75
+  },
+  "type": "Poison",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   38,
+   0,
+   79
+  ]
+ },
+ "35": {
+  "name": "Clefairy",
+  "stats": {
+   "hp": 70,
+   "attack": 45,
+   "defense": 48,
+   "speed": 35,
+   "sp_attack": 60,
+   "sp_defense": 65
+  },
+  "type": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   98
+  ]
+ },
+ "36": {
+  "name": "Clefable",
+  "stats": {
+   "hp": 95,
+   "attack": 70,
+   "defense": 73,
+   "speed": 60,
+   "sp_attack": 95,
+   "sp_defense": 90
+  },
+  "type": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   98
+  ]
+ },
+ "37": {
+  "name": "Vulpix",
+  "stats": {
+   "hp": 38,
+   "attack": 41,
+   "defense": 40,
+   "speed": 65,
+   "sp_attack": 65,
+   "sp_defense": 60
+  },
+  "type": "Fire",
+  "type2": "Fairy",
+  "growth": "medium",
+  "abilities": [
+   18,
+   0,
+   0
+  ]
+ },
+ "38": {
+  "name": "Ninetales",
+  "stats": {
+   "hp": 73,
+   "attack": 76,
+   "defense": 75,
+   "speed": 100,
+   "sp_attack": 101,
+   "sp_defense": 96
+  },
+  "type": "Fire",
+  "type2": "Fairy",
+  "growth": "medium",
+  "abilities": [
+   18,
+   0,
+   0
+  ]
+ },
+ "39": {
+  "name": "Jigglypuff",
+  "stats": {
+   "hp": 115,
+   "attack": 45,
+   "defense": 25,
+   "speed": 20,
+   "sp_attack": 45,
+   "sp_defense": 25
+  },
+  "type": "Normal",
+  "type2": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   172
+  ]
+ },
+ "40": {
+  "name": "Wigglytuff",
+  "stats": {
+   "hp": 140,
+   "attack": 60,
+   "defense": 50,
+   "speed": 45,
+   "sp_attack": 85,
+   "sp_defense": 55
+  },
+  "type": "Normal",
+  "type2": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   172
+  ]
+ },
+ "41": {
+  "name": "Zubat",
+  "stats": {
+   "hp": 40,
+   "attack": 45,
+   "defense": 35,
+   "speed": 55,
+   "sp_attack": 30,
+   "sp_defense": 40
+  },
+  "type": "Poison",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   39,
+   0,
+   0
+  ]
+ },
+ "42": {
+  "name": "Golbat",
+  "stats": {
+   "hp": 75,
+   "attack": 80,
+   "defense": 70,
+   "speed": 90,
+   "sp_attack": 65,
+   "sp_defense": 75
+  },
+  "type": "Poison",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   39,
+   0,
+   0
+  ]
+ },
+ "43": {
+  "name": "Oddish",
+  "stats": {
+   "hp": 45,
+   "attack": 50,
+   "defense": 55,
+   "speed": 30,
+   "sp_attack": 75,
+   "sp_defense": 65
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   0
+  ]
+ },
+ "44": {
+  "name": "Gloom",
+  "stats": {
+   "hp": 60,
+   "attack": 65,
+   "defense": 70,
+   "speed": 40,
+   "sp_attack": 85,
+   "sp_defense": 75
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   0
+  ]
+ },
+ "45": {
+  "name": "Vileplume",
+  "stats": {
+   "hp": 75,
+   "attack": 80,
+   "defense": 85,
+   "speed": 50,
+   "sp_attack": 110,
+   "sp_defense": 90
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   0
+  ]
+ },
+ "46": {
+  "name": "Paras",
+  "stats": {
+   "hp": 35,
+   "attack": 70,
+   "defense": 55,
+   "speed": 25,
+   "sp_attack": 45,
+   "sp_defense": 55
+  },
+  "type": "Bug",
+  "type2": "Grass",
+  "growth": "medium",
+  "abilities": [
+   27,
+   0,
+   6
+  ]
+ },
+ "47": {
+  "name": "Parasect",
+  "stats": {
+   "hp": 70,
+   "attack": 95,
+   "defense": 85,
+   "speed": 30,
+   "sp_attack": 60,
+   "sp_defense": 85
+  },
+  "type": "Bug",
+  "type2": "Ghost",
+  "growth": "medium",
+  "abilities": [
+   27,
+   0,
+   6
+  ]
+ },
+ "48": {
+  "name": "Venonat",
+  "stats": {
+   "hp": 60,
+   "attack": 55,
+   "defense": 50,
+   "speed": 45,
+   "sp_attack": 40,
+   "sp_defense": 55
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "medium",
+  "abilities": [
+   14,
+   0,
+   110
+  ]
+ },
+ "49": {
+  "name": "Venomoth",
+  "stats": {
+   "hp": 70,
+   "attack": 65,
+   "defense": 60,
+   "speed": 100,
+   "sp_attack": 90,
+   "sp_defense": 75
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "medium",
+  "abilities": [
+   19,
+   0,
+   110
+  ]
+ },
+ "50": {
+  "name": "Diglett",
+  "stats": {
+   "hp": 10,
+   "attack": 55,
+   "defense": 25,
+   "speed": 95,
+   "sp_attack": 35,
+   "sp_defense": 45
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   8,
+   0,
+   71
+  ]
+ },
+ "51": {
+  "name": "Dugtrio",
+  "stats": {
+   "hp": 35,
+   "attack": 100,
+   "defense": 50,
+   "speed": 120,
+   "sp_attack": 50,
+   "sp_defense": 70
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   8,
+   0,
+   71
+  ]
+ },
+ "52": {
+  "name": "Meowth",
+  "stats": {
+   "hp": 40,
+   "attack": 50,
+   "defense": 35,
+   "speed": 90,
+   "sp_attack": 45,
+   "sp_defense": 40
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   53,
+   0,
+   101
+  ]
+ },
+ "53": {
+  "name": "Persian",
+  "stats": {
+   "hp": 75,
+   "attack": 75,
+   "defense": 60,
+   "speed": 115,
+   "sp_attack": 70,
+   "sp_defense": 65
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   7,
+   0,
+   101
+  ]
+ },
+ "54": {
+  "name": "Psyduck",
+  "stats": {
+   "hp": 50,
+   "attack": 52,
+   "defense": 48,
+   "speed": 55,
+   "sp_attack": 65,
+   "sp_defense": 50
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   6,
+   0,
+   13
+  ]
+ },
+ "55": {
+  "name": "Golduck",
+  "stats": {
+   "hp": 80,
+   "attack": 82,
+   "defense": 78,
+   "speed": 85,
+   "sp_attack": 95,
+   "sp_defense": 80
+  },
+  "type": "Water",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   6,
+   0,
+   13
+  ]
+ },
+ "56": {
+  "name": "Mankey",
+  "stats": {
+   "hp": 40,
+   "attack": 80,
+   "defense": 35,
+   "speed": 70,
+   "sp_attack": 35,
+   "sp_defense": 45
+  },
+  "type": "Fighting",
+  "growth": "medium",
+  "abilities": [
+   72,
+   0,
+   83
+  ]
+ },
+ "57": {
+  "name": "Primeape",
+  "stats": {
+   "hp": 65,
+   "attack": 105,
+   "defense": 60,
+   "speed": 95,
+   "sp_attack": 60,
+   "sp_defense": 70
+  },
+  "type": "Fighting",
+  "growth": "medium",
+  "abilities": [
+   72,
+   0,
+   83
+  ]
+ },
+ "58": {
+  "name": "Growlithe",
+  "stats": {
+   "hp": 55,
+   "attack": 70,
+   "defense": 45,
+   "speed": 60,
+   "sp_attack": 70,
+   "sp_defense": 50
+  },
+  "type": "Fire",
+  "growth": "slow",
+  "abilities": [
+   22,
+   0,
+   18
+  ]
+ },
+ "59": {
+  "name": "Arcanine",
+  "stats": {
+   "hp": 90,
+   "attack": 110,
+   "defense": 75,
+   "speed": 100,
+   "sp_attack": 100,
+   "sp_defense": 80
+  },
+  "type": "Fire",
+  "growth": "slow",
+  "abilities": [
+   22,
+   0,
+   18
+  ]
+ },
+ "60": {
+  "name": "Poliwag",
+  "stats": {
+   "hp": 40,
+   "attack": 50,
+   "defense": 40,
+   "speed": 90,
+   "sp_attack": 40,
+   "sp_defense": 40
+  },
+  "type": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   11,
+   0,
+   6
+  ]
+ },
+ "61": {
+  "name": "Poliwhirl",
+  "stats": {
+   "hp": 65,
+   "attack": 65,
+   "defense": 65,
+   "speed": 90,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   11,
+   0,
+   6
+  ]
+ },
+ "62": {
+  "name": "Poliwrath",
+  "stats": {
+   "hp": 95,
+   "attack": 110,
+   "defense": 95,
+   "speed": 70,
+   "sp_attack": 65,
+   "sp_defense": 90
+  },
+  "type": "Water",
+  "type2": "Fighting",
+  "growth": "medium-slow",
+  "abilities": [
+   11,
+   0,
+   6
+  ]
+ },
+ "63": {
+  "name": "Abra",
+  "stats": {
+   "hp": 25,
+   "attack": 20,
+   "defense": 15,
+   "speed": 90,
+   "sp_attack": 105,
+   "sp_defense": 55
+  },
+  "type": "Psychic",
+  "growth": "medium-slow",
+  "abilities": [
+   28,
+   0,
+   39
+  ]
+ },
+ "64": {
+  "name": "Kadabra",
+  "stats": {
+   "hp": 40,
+   "attack": 35,
+   "defense": 30,
+   "speed": 105,
+   "sp_attack": 120,
+   "sp_defense": 70
+  },
+  "type": "Psychic",
+  "growth": "medium-slow",
+  "abilities": [
+   28,
+   0,
+   39
+  ]
+ },
+ "65": {
+  "name": "Alakazam",
+  "stats": {
+   "hp": 55,
+   "attack": 50,
+   "defense": 45,
+   "speed": 120,
+   "sp_attack": 135,
+   "sp_defense": 95
+  },
+  "type": "Psychic",
+  "growth": "medium-slow",
+  "abilities": [
+   28,
+   0,
+   39
+  ]
+ },
+ "66": {
+  "name": "Machop",
+  "stats": {
+   "hp": 70,
+   "attack": 80,
+   "defense": 50,
+   "speed": 35,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Fighting",
+  "growth": "medium-slow",
+  "abilities": [
+   62,
+   0,
+   99
+  ]
+ },
+ "67": {
+  "name": "Machoke",
+  "stats": {
+   "hp": 80,
+   "attack": 100,
+   "defense": 70,
+   "speed": 45,
+   "sp_attack": 50,
+   "sp_defense": 60
+  },
+  "type": "Fighting",
+  "growth": "medium-slow",
+  "abilities": [
+   62,
+   0,
+   99
+  ]
+ },
+ "68": {
+  "name": "Machamp",
+  "stats": {
+   "hp": 90,
+   "attack": 130,
+   "defense": 80,
+   "speed": 55,
+   "sp_attack": 65,
+   "sp_defense": 85
+  },
+  "type": "Fighting",
+  "growth": "medium-slow",
+  "abilities": [
+   62,
+   0,
+   99
+  ]
+ },
+ "69": {
+  "name": "Bellsprout",
+  "stats": {
+   "hp": 50,
+   "attack": 75,
+   "defense": 35,
+   "speed": 40,
+   "sp_attack": 70,
+   "sp_defense": 30
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   91
+  ]
+ },
+ "70": {
+  "name": "Weepinbell",
+  "stats": {
+   "hp": 65,
+   "attack": 90,
+   "defense": 50,
+   "speed": 55,
+   "sp_attack": 85,
+   "sp_defense": 45
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   91
+  ]
+ },
+ "71": {
+  "name": "Victreebel",
+  "stats": {
+   "hp": 80,
+   "attack": 105,
+   "defense": 65,
+   "speed": 70,
+   "sp_attack": 100,
+   "sp_defense": 70
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   91
+  ]
+ },
+ "72": {
+  "name": "Tentacool",
+  "stats": {
+   "hp": 40,
+   "attack": 40,
+   "defense": 35,
+   "speed": 70,
+   "sp_attack": 50,
+   "sp_defense": 100
+  },
+  "type": "Water",
+  "type2": "Poison",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   64
+  ]
+ },
+ "73": {
+  "name": "Tentacruel",
+  "stats": {
+   "hp": 80,
+   "attack": 70,
+   "defense": 65,
+   "speed": 100,
+   "sp_attack": 80,
+   "sp_defense": 120
+  },
+  "type": "Water",
+  "type2": "Poison",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   64
+  ]
+ },
+ "74": {
+  "name": "Geodude",
+  "stats": {
+   "hp": 40,
+   "attack": 80,
+   "defense": 100,
+   "speed": 20,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Rock",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   69,
+   0,
+   5
+  ]
+ },
+ "75": {
+  "name": "Graveler",
+  "stats": {
+   "hp": 55,
+   "attack": 95,
+   "defense": 115,
+   "speed": 35,
+   "sp_attack": 45,
+   "sp_defense": 45
+  },
+  "type": "Rock",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   69,
+   0,
+   5
+  ]
+ },
+ "76": {
+  "name": "Golem",
+  "stats": {
+   "hp": 80,
+   "attack": 120,
+   "defense": 130,
+   "speed": 45,
+   "sp_attack": 55,
+   "sp_defense": 65
+  },
+  "type": "Rock",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   69,
+   0,
+   5
+  ]
+ },
+ "77": {
+  "name": "Ponyta",
+  "stats": {
+   "hp": 50,
+   "attack": 85,
+   "defense": 55,
+   "speed": 90,
+   "sp_attack": 65,
+   "sp_defense": 65
+  },
+  "type": "Fire",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   18
+  ]
+ },
+ "78": {
+  "name": "Rapidash",
+  "stats": {
+   "hp": 65,
+   "attack": 100,
+   "defense": 70,
+   "speed": 115,
+   "sp_attack": 80,
+   "sp_defense": 80
+  },
+  "type": "Fire",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   18
+  ]
+ },
+ "79": {
+  "name": "Slowpoke",
+  "stats": {
+   "hp": 90,
+   "attack": 65,
+   "defense": 65,
+   "speed": 15,
+   "sp_attack": 40,
+   "sp_defense": 40
+  },
+  "type": "Water",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   20
+  ]
+ },
+ "80": {
+  "name": "Slowbro",
+  "stats": {
+   "hp": 95,
+   "attack": 75,
+   "defense": 110,
+   "speed": 30,
+   "sp_attack": 100,
+   "sp_defense": 90
+  },
+  "type": "Water",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   20
+  ]
+ },
+ "81": {
+  "name": "Magnemite",
+  "stats": {
+   "hp": 25,
+   "attack": 35,
+   "defense": 70,
+   "speed": 45,
+   "sp_attack": 95,
+   "sp_defense": 55
+  },
+  "type": "Electric",
+  "type2": "Steel",
+  "growth": "medium",
+  "abilities": [
+   42,
+   0,
+   5
+  ]
+ },
+ "82": {
+  "name": "Magneton",
+  "stats": {
+   "hp": 50,
+   "attack": 60,
+   "defense": 95,
+   "speed": 70,
+   "sp_attack": 120,
+   "sp_defense": 70
+  },
+  "type": "Electric",
+  "type2": "Steel",
+  "growth": "medium",
+  "abilities": [
+   42,
+   0,
+   5
+  ]
+ },
+ "83": {
+  "name": "Farfetch'd",
+  "stats": {
+   "hp": 57,
+   "attack": 95,
+   "defense": 70,
+   "speed": 85,
+   "sp_attack": 58,
+   "sp_defense": 68
+  },
+  "type": "Fighting",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   51,
+   0,
+   39
+  ]
+ },
+ "84": {
+  "name": "Doduo",
+  "stats": {
+   "hp": 35,
+   "attack": 85,
+   "defense": 45,
+   "speed": 75,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Ground",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   48
+  ]
+ },
+ "85": {
+  "name": "Dodrio",
+  "stats": {
+   "hp": 70,
+   "attack": 110,
+   "defense": 70,
+   "speed": 110,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Ground",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   48
+  ]
+ },
+ "86": {
+  "name": "Seel",
+  "stats": {
+   "hp": 70,
+   "attack": 45,
+   "defense": 55,
+   "speed": 45,
+   "sp_attack": 45,
+   "sp_defense": 65
+  },
+  "type": "Water",
+  "type2": "Ice",
+  "growth": "medium",
+  "abilities": [
+   47,
+   0,
+   246
+  ]
+ },
+ "87": {
+  "name": "Dewgong",
+  "stats": {
+   "hp": 105,
+   "attack": 75,
+   "defense": 80,
+   "speed": 65,
+   "sp_attack": 75,
+   "sp_defense": 90
+  },
+  "type": "Water",
+  "type2": "Ice",
+  "growth": "medium",
+  "abilities": [
+   47,
+   0,
+   246
+  ]
+ },
+ "88": {
+  "name": "Grimer",
+  "stats": {
+   "hp": 80,
+   "attack": 80,
+   "defense": 50,
+   "speed": 25,
+   "sp_attack": 40,
+   "sp_defense": 50
+  },
+  "type": "Poison",
+  "growth": "medium",
+  "abilities": [
+   1,
+   0,
+   60
+  ]
+ },
+ "89": {
+  "name": "Muk",
+  "stats": {
+   "hp": 105,
+   "attack": 105,
+   "defense": 75,
+   "speed": 50,
+   "sp_attack": 65,
+   "sp_defense": 100
+  },
+  "type": "Poison",
+  "growth": "medium",
+  "abilities": [
+   1,
+   0,
+   60
+  ]
+ },
+ "90": {
+  "name": "Shellder",
+  "stats": {
+   "hp": 30,
+   "attack": 65,
+   "defense": 100,
+   "speed": 40,
+   "sp_attack": 45,
+   "sp_defense": 25
+  },
+  "type": "Water",
+  "growth": "slow",
+  "abilities": [
+   75,
+   0,
+   92
+  ]
+ },
+ "91": {
+  "name": "Cloyster",
+  "stats": {
+   "hp": 50,
+   "attack": 95,
+   "defense": 180,
+   "speed": 70,
+   "sp_attack": 85,
+   "sp_defense": 50
+  },
+  "type": "Water",
+  "type2": "Ice",
+  "growth": "slow",
+  "abilities": [
+   75,
+   0,
+   92
+  ]
+ },
+ "92": {
+  "name": "Gastly",
+  "stats": {
+   "hp": 30,
+   "attack": 35,
+   "defense": 30,
+   "speed": 80,
+   "sp_attack": 100,
+   "sp_defense": 35
+  },
+  "type": "Ghost",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "93": {
+  "name": "Haunter",
+  "stats": {
+   "hp": 45,
+   "attack": 50,
+   "defense": 45,
+   "speed": 95,
+   "sp_attack": 115,
+   "sp_defense": 55
+  },
+  "type": "Ghost",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "94": {
+  "name": "Gengar",
+  "stats": {
+   "hp": 60,
+   "attack": 65,
+   "defense": 60,
+   "speed": 110,
+   "sp_attack": 130,
+   "sp_defense": 75
+  },
+  "type": "Ghost",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "95": {
+  "name": "Onix",
+  "stats": {
+   "hp": 35,
+   "attack": 60,
+   "defense": 160,
+   "speed": 70,
+   "sp_attack": 30,
+   "sp_defense": 45
+  },
+  "type": "Rock",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   69,
+   0,
+   5
+  ]
+ },
+ "96": {
+  "name": "Drowzee",
+  "stats": {
+   "hp": 60,
+   "attack": 48,
+   "defense": 45,
+   "speed": 42,
+   "sp_attack": 43,
+   "sp_defense": 90
+  },
+  "type": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   15,
+   0,
+   108
+  ]
+ },
+ "97": {
+  "name": "Hypno",
+  "stats": {
+   "hp": 90,
+   "attack": 73,
+   "defense": 70,
+   "speed": 67,
+   "sp_attack": 73,
+   "sp_defense": 115
+  },
+  "type": "Psychic",
+  "type2": "Dark",
+  "growth": "medium",
+  "abilities": [
+   15,
+   0,
+   108
+  ]
+ },
+ "98": {
+  "name": "Krabby",
+  "stats": {
+   "hp": 30,
+   "attack": 105,
+   "defense": 90,
+   "speed": 50,
+   "sp_attack": 25,
+   "sp_defense": 25
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   52,
+   0,
+   75
+  ]
+ },
+ "99": {
+  "name": "Kingler",
+  "stats": {
+   "hp": 55,
+   "attack": 130,
+   "defense": 115,
+   "speed": 75,
+   "sp_attack": 50,
+   "sp_defense": 60
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   52,
+   0,
+   75
+  ]
+ },
+ "100": {
+  "name": "Voltorb",
+  "stats": {
+   "hp": 40,
+   "attack": 30,
+   "defense": 50,
+   "speed": 100,
+   "sp_attack": 55,
+   "sp_defense": 55
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   43,
+   0,
+   9
+  ]
+ },
+ "101": {
+  "name": "Electrode",
+  "stats": {
+   "hp": 60,
+   "attack": 50,
+   "defense": 70,
+   "speed": 150,
+   "sp_attack": 80,
+   "sp_defense": 80
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   43,
+   0,
+   9
+  ]
+ },
+ "102": {
+  "name": "Exeggcute",
+  "stats": {
+   "hp": 60,
+   "attack": 40,
+   "defense": 80,
+   "speed": 40,
+   "sp_attack": 60,
+   "sp_defense": 45
+  },
+  "type": "Grass",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   34,
+   0,
+   0
+  ]
+ },
+ "103": {
+  "name": "Exeggutor",
+  "stats": {
+   "hp": 105,
+   "attack": 95,
+   "defense": 85,
+   "speed": 55,
+   "sp_attack": 125,
+   "sp_defense": 75
+  },
+  "type": "Grass",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   34,
+   0,
+   0
+  ]
+ },
+ "104": {
+  "name": "Cubone",
+  "stats": {
+   "hp": 50,
+   "attack": 50,
+   "defense": 95,
+   "speed": 35,
+   "sp_attack": 40,
+   "sp_defense": 50
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   69,
+   0,
+   92
+  ]
+ },
+ "105": {
+  "name": "Marowak",
+  "stats": {
+   "hp": 75,
+   "attack": 80,
+   "defense": 110,
+   "speed": 45,
+   "sp_attack": 50,
+   "sp_defense": 85
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   69,
+   0,
+   92
+  ]
+ },
+ "106": {
+  "name": "Hitmonlee",
+  "stats": {
+   "hp": 60,
+   "attack": 120,
+   "defense": 53,
+   "speed": 87,
+   "sp_attack": 35,
+   "sp_defense": 110
+  },
+  "type": "Fighting",
+  "growth": "medium",
+  "abilities": [
+   7,
+   0,
+   203
+  ]
+ },
+ "107": {
+  "name": "Hitmonchan",
+  "stats": {
+   "hp": 60,
+   "attack": 105,
+   "defense": 79,
+   "speed": 76,
+   "sp_attack": 35,
+   "sp_defense": 110
+  },
+  "type": "Fighting",
+  "growth": "medium",
+  "abilities": [
+   51,
+   0,
+   89
+  ]
+ },
+ "108": {
+  "name": "Lickitung",
+  "stats": {
+   "hp": 90,
+   "attack": 55,
+   "defense": 75,
+   "speed": 30,
+   "sp_attack": 60,
+   "sp_defense": 75
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   20,
+   0,
+   12
+  ]
+ },
+ "109": {
+  "name": "Koffing",
+  "stats": {
+   "hp": 40,
+   "attack": 65,
+   "defense": 95,
+   "speed": 35,
+   "sp_attack": 60,
+   "sp_defense": 45
+  },
+  "type": "Poison",
+  "growth": "medium",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "110": {
+  "name": "Weezing",
+  "stats": {
+   "hp": 65,
+   "attack": 90,
+   "defense": 120,
+   "speed": 60,
+   "sp_attack": 95,
+   "sp_defense": 70
+  },
+  "type": "Poison",
+  "growth": "medium",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "111": {
+  "name": "Rhyhorn",
+  "stats": {
+   "hp": 80,
+   "attack": 85,
+   "defense": 95,
+   "speed": 25,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Ground",
+  "type2": "Rock",
+  "growth": "slow",
+  "abilities": [
+   31,
+   0,
+   69
+  ]
+ },
+ "112": {
+  "name": "Rhydon",
+  "stats": {
+   "hp": 105,
+   "attack": 130,
+   "defense": 120,
+   "speed": 40,
+   "sp_attack": 45,
+   "sp_defense": 45
+  },
+  "type": "Ground",
+  "type2": "Rock",
+  "growth": "slow",
+  "abilities": [
+   31,
+   0,
+   69
+  ]
+ },
+ "113": {
+  "name": "Chansey",
+  "stats": {
+   "hp": 250,
+   "attack": 5,
+   "defense": 5,
+   "speed": 50,
+   "sp_attack": 35,
+   "sp_defense": 105
+  },
+  "type": "Normal",
+  "growth": "fast",
+  "abilities": [
+   30,
+   0,
+   32
+  ]
+ },
+ "114": {
+  "name": "Tangela",
+  "stats": {
+   "hp": 65,
+   "attack": 55,
+   "defense": 115,
+   "speed": 60,
+   "sp_attack": 100,
+   "sp_defense": 40
+  },
+  "type": "Grass",
+  "growth": "medium",
+  "abilities": [
+   34,
+   0,
+   102
+  ]
+ },
+ "115": {
+  "name": "Kangaskhan",
+  "stats": {
+   "hp": 105,
+   "attack": 115,
+   "defense": 85,
+   "speed": 80,
+   "sp_attack": 40,
+   "sp_defense": 85
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   48,
+   0,
+   113
+  ]
+ },
+ "116": {
+  "name": "Horsea",
+  "stats": {
+   "hp": 30,
+   "attack": 40,
+   "defense": 70,
+   "speed": 60,
+   "sp_attack": 70,
+   "sp_defense": 25
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   33,
+   0,
+   97
+  ]
+ },
+ "117": {
+  "name": "Seadra",
+  "stats": {
+   "hp": 55,
+   "attack": 65,
+   "defense": 95,
+   "speed": 85,
+   "sp_attack": 95,
+   "sp_defense": 45
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   38,
+   0,
+   97
+  ]
+ },
+ "118": {
+  "name": "Goldeen",
+  "stats": {
+   "hp": 65,
+   "attack": 67,
+   "defense": 60,
+   "speed": 63,
+   "sp_attack": 35,
+   "sp_defense": 50
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   33,
+   0,
+   36
+  ]
+ },
+ "119": {
+  "name": "Seaking",
+  "stats": {
+   "hp": 100,
+   "attack": 102,
+   "defense": 70,
+   "speed": 48,
+   "sp_attack": 65,
+   "sp_defense": 85
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   33,
+   0,
+   36
+  ]
+ },
+ "120": {
+  "name": "Staryu",
+  "stats": {
+   "hp": 30,
+   "attack": 45,
+   "defense": 55,
+   "speed": 85,
+   "sp_attack": 70,
+   "sp_defense": 55
+  },
+  "type": "Water",
+  "growth": "slow",
+  "abilities": [
+   35,
+   0,
+   30
+  ]
+ },
+ "121": {
+  "name": "Starmie",
+  "stats": {
+   "hp": 60,
+   "attack": 75,
+   "defense": 85,
+   "speed": 115,
+   "sp_attack": 100,
+   "sp_defense": 85
+  },
+  "type": "Water",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   35,
+   0,
+   30
+  ]
+ },
+ "122": {
+  "name": "Mr. Mime",
+  "stats": {
+   "hp": 40,
+   "attack": 45,
+   "defense": 65,
+   "speed": 90,
+   "sp_attack": 100,
+   "sp_defense": 120
+  },
+  "type": "Psychic",
+  "type2": "Fairy",
+  "growth": "medium",
+  "abilities": [
+   43,
+   0,
+   111
+  ]
+ },
+ "123": {
+  "name": "Scyther",
+  "stats": {
+   "hp": 70,
+   "attack": 110,
+   "defense": 80,
+   "speed": 105,
+   "sp_attack": 55,
+   "sp_defense": 80
+  },
+  "type": "Bug",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   68,
+   0,
+   101
+  ]
+ },
+ "124": {
+  "name": "Jynx",
+  "stats": {
+   "hp": 75,
+   "attack": 50,
+   "defense": 35,
+   "speed": 90,
+   "sp_attack": 115,
+   "sp_defense": 95
+  },
+  "type": "Ice",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   108
+  ]
+ },
+ "125": {
+  "name": "Electabuzz",
+  "stats": {
+   "hp": 65,
+   "attack": 95,
+   "defense": 57,
+   "speed": 105,
+   "sp_attack": 83,
+   "sp_defense": 85
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "126": {
+  "name": "Magmar",
+  "stats": {
+   "hp": 65,
+   "attack": 95,
+   "defense": 57,
+   "speed": 93,
+   "sp_attack": 100,
+   "sp_defense": 85
+  },
+  "type": "Fire",
+  "growth": "medium",
+  "abilities": [
+   49,
+   0,
+   0
+  ]
+ },
+ "127": {
+  "name": "Pinsir",
+  "stats": {
+   "hp": 65,
+   "attack": 125,
+   "defense": 110,
+   "speed": 85,
+   "sp_attack": 55,
+   "sp_defense": 70
+  },
+  "type": "Bug",
+  "growth": "slow",
+  "abilities": [
+   52,
+   0,
+   104
+  ]
+ },
+ "128": {
+  "name": "Tauros",
+  "stats": {
+   "hp": 75,
+   "attack": 110,
+   "defense": 95,
+   "speed": 110,
+   "sp_attack": 40,
+   "sp_defense": 70
+  },
+  "type": "Normal",
+  "growth": "slow",
+  "abilities": [
+   22,
+   0,
+   83
+  ]
+ },
+ "129": {
+  "name": "Magikarp",
+  "stats": {
+   "hp": 20,
+   "attack": 10,
+   "defense": 55,
+   "speed": 80,
+   "sp_attack": 15,
+   "sp_defense": 20
+  },
+  "type": "Water",
+  "growth": "slow",
+  "abilities": [
+   33,
+   0,
+   0
+  ]
+ },
+ "130": {
+  "name": "Gyarados",
+  "stats": {
+   "hp": 95,
+   "attack": 125,
+   "defense": 79,
+   "speed": 81,
+   "sp_attack": 60,
+   "sp_defense": 100
+  },
+  "type": "Water",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   22,
+   0,
+   0
+  ]
+ },
+ "131": {
+  "name": "Lapras",
+  "stats": {
+   "hp": 130,
+   "attack": 75,
+   "defense": 80,
+   "speed": 60,
+   "sp_attack": 95,
+   "sp_defense": 95
+  },
+  "type": "Water",
+  "type2": "Ice",
+  "growth": "slow",
+  "abilities": [
+   11,
+   0,
+   75
+  ]
+ },
+ "132": {
+  "name": "Ditto",
+  "stats": {
+   "hp": 48,
+   "attack": 48,
+   "defense": 48,
+   "speed": 48,
+   "sp_attack": 48,
+   "sp_defense": 48
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   7,
+   0,
+   0
+  ]
+ },
+ "133": {
+  "name": "Eevee",
+  "stats": {
+   "hp": 55,
+   "attack": 55,
+   "defense": 50,
+   "speed": 55,
+   "sp_attack": 45,
+   "sp_defense": 65
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   91
+  ]
+ },
+ "134": {
+  "name": "Vaporeon",
+  "stats": {
+   "hp": 135,
+   "attack": 65,
+   "defense": 65,
+   "speed": 65,
+   "sp_attack": 110,
+   "sp_defense": 95
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   11,
+   0,
+   91
+  ]
+ },
+ "135": {
+  "name": "Jolteon",
+  "stats": {
+   "hp": 65,
+   "attack": 95,
+   "defense": 65,
+   "speed": 130,
+   "sp_attack": 115,
+   "sp_defense": 65
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   10,
+   0,
+   91
+  ]
+ },
+ "136": {
+  "name": "Flareon",
+  "stats": {
+   "hp": 75,
+   "attack": 130,
+   "defense": 60,
+   "speed": 65,
+   "sp_attack": 95,
+   "sp_defense": 110
+  },
+  "type": "Fire",
+  "growth": "medium",
+  "abilities": [
+   18,
+   0,
+   91
+  ]
+ },
+ "137": {
+  "name": "Porygon",
+  "stats": {
+   "hp": 65,
+   "attack": 60,
+   "defense": 70,
+   "speed": 40,
+   "sp_attack": 85,
+   "sp_defense": 75
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   36,
+   0,
+   88
+  ]
+ },
+ "138": {
+  "name": "Omanyte",
+  "stats": {
+   "hp": 35,
+   "attack": 50,
+   "defense": 100,
+   "speed": 35,
+   "sp_attack": 80,
+   "sp_defense": 55
+  },
+  "type": "Rock",
+  "type2": "Water",
+  "growth": "medium",
+  "abilities": [
+   92,
+   0,
+   75
+  ]
+ },
+ "139": {
+  "name": "Omastar",
+  "stats": {
+   "hp": 70,
+   "attack": 70,
+   "defense": 125,
+   "speed": 55,
+   "sp_attack": 105,
+   "sp_defense": 70
+  },
+  "type": "Rock",
+  "type2": "Water",
+  "growth": "medium",
+  "abilities": [
+   92,
+   0,
+   75
+  ]
+ },
+ "140": {
+  "name": "Kabuto",
+  "stats": {
+   "hp": 30,
+   "attack": 80,
+   "defense": 90,
+   "speed": 55,
+   "sp_attack": 55,
+   "sp_defense": 45
+  },
+  "type": "Rock",
+  "type2": "Water",
+  "growth": "medium",
+  "abilities": [
+   36,
+   1,
+   4
+  ]
+ },
+ "141": {
+  "name": "Kabutops",
+  "stats": {
+   "hp": 60,
+   "attack": 120,
+   "defense": 105,
+   "speed": 80,
+   "sp_attack": 60,
+   "sp_defense": 70
+  },
+  "type": "Rock",
+  "type2": "Water",
+  "growth": "medium",
+  "abilities": [
+   36,
+   1,
+   4
+  ]
+ },
+ "142": {
+  "name": "Aerodactyl",
+  "stats": {
+   "hp": 80,
+   "attack": 105,
+   "defense": 65,
+   "speed": 130,
+   "sp_attack": 60,
+   "sp_defense": 75
+  },
+  "type": "Rock",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   69,
+   0,
+   46
+  ]
+ },
+ "143": {
+  "name": "Snorlax",
+  "stats": {
+   "hp": 160,
+   "attack": 110,
+   "defense": 65,
+   "speed": 30,
+   "sp_attack": 65,
+   "sp_defense": 110
+  },
+  "type": "Normal",
+  "growth": "slow",
+  "abilities": [
+   17,
+   0,
+   47
+  ]
+ },
+ "144": {
+  "name": "Articuno",
+  "stats": {
+   "hp": 90,
+   "attack": 95,
+   "defense": 100,
+   "speed": 85,
+   "sp_attack": 105,
+   "sp_defense": 125
+  },
+  "type": "Ice",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "145": {
+  "name": "Zapdos",
+  "stats": {
+   "hp": 90,
+   "attack": 100,
+   "defense": 85,
+   "speed": 100,
+   "sp_attack": 135,
+   "sp_defense": 90
+  },
+  "type": "Electric",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "146": {
+  "name": "Moltres",
+  "stats": {
+   "hp": 90,
+   "attack": 110,
+   "defense": 90,
+   "speed": 90,
+   "sp_attack": 135,
+   "sp_defense": 85
+  },
+  "type": "Fire",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "147": {
+  "name": "Dratini",
+  "stats": {
+   "hp": 41,
+   "attack": 64,
+   "defense": 45,
+   "speed": 50,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Dragon",
+  "growth": "slow",
+  "abilities": [
+   61,
+   0,
+   0
+  ]
+ },
+ "148": {
+  "name": "Dragonair",
+  "stats": {
+   "hp": 61,
+   "attack": 84,
+   "defense": 65,
+   "speed": 76,
+   "sp_attack": 84,
+   "sp_defense": 70
+  },
+  "type": "Dragon",
+  "growth": "slow",
+  "abilities": [
+   61,
+   0,
+   0
+  ]
+ },
+ "149": {
+  "name": "Dragonite",
+  "stats": {
+   "hp": 91,
+   "attack": 134,
+   "defense": 95,
+   "speed": 80,
+   "sp_attack": 100,
+   "sp_defense": 100
+  },
+  "type": "Dragon",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   39,
+   0,
+   0
+  ]
+ },
+ "150": {
+  "name": "Mewtwo",
+  "stats": {
+   "hp": 106,
+   "attack": 110,
+   "defense": 90,
+   "speed": 130,
+   "sp_attack": 154,
+   "sp_defense": 90
+  },
+  "type": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "151": {
+  "name": "Mew",
+  "stats": {
+   "hp": 100,
+   "attack": 100,
+   "defense": 100,
+   "speed": 100,
+   "sp_attack": 100,
+   "sp_defense": 100
+  },
+  "type": "Psychic",
+  "growth": "medium-slow",
+  "abilities": [
+   220,
+   0,
+   0
+  ]
+ },
+ "152": {
+  "name": "Chikorita",
+  "stats": {
+   "hp": 50,
+   "attack": 49,
+   "defense": 65,
+   "speed": 45,
+   "sp_attack": 49,
+   "sp_defense": 65
+  },
+  "type": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   47
+  ]
+ },
+ "153": {
+  "name": "Bayleef",
+  "stats": {
+   "hp": 80,
+   "attack": 62,
+   "defense": 80,
+   "speed": 55,
+   "sp_attack": 63,
+   "sp_defense": 75
+  },
+  "type": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   47
+  ]
+ },
+ "154": {
+  "name": "Meganium",
+  "stats": {
+   "hp": 100,
+   "attack": 82,
+   "defense": 100,
+   "speed": 80,
+   "sp_attack": 83,
+   "sp_defense": 100
+  },
+  "type": "Grass",
+  "type2": "Fairy",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   47
+  ]
+ },
+ "155": {
+  "name": "Cyndaquil",
+  "stats": {
+   "hp": 39,
+   "attack": 52,
+   "defense": 48,
+   "speed": 65,
+   "sp_attack": 60,
+   "sp_defense": 50
+  },
+  "type": "Fire",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   18
+  ]
+ },
+ "156": {
+  "name": "Quilava",
+  "stats": {
+   "hp": 58,
+   "attack": 64,
+   "defense": 63,
+   "speed": 80,
+   "sp_attack": 80,
+   "sp_defense": 70
+  },
+  "type": "Fire",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   18
+  ]
+ },
+ "157": {
+  "name": "Typhlosion",
+  "stats": {
+   "hp": 83,
+   "attack": 90,
+   "defense": 88,
+   "speed": 100,
+   "sp_attack": 103,
+   "sp_defense": 95
+  },
+  "type": "Fire",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   18
+  ]
+ },
+ "158": {
+  "name": "Totodile",
+  "stats": {
+   "hp": 50,
+   "attack": 70,
+   "defense": 64,
+   "speed": 43,
+   "sp_attack": 44,
+   "sp_defense": 48
+  },
+  "type": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   173
+  ]
+ },
+ "159": {
+  "name": "Croconaw",
+  "stats": {
+   "hp": 65,
+   "attack": 90,
+   "defense": 80,
+   "speed": 58,
+   "sp_attack": 59,
+   "sp_defense": 63
+  },
+  "type": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   173
+  ]
+ },
+ "160": {
+  "name": "Feraligatr",
+  "stats": {
+   "hp": 90,
+   "attack": 121,
+   "defense": 100,
+   "speed": 72,
+   "sp_attack": 79,
+   "sp_defense": 88
+  },
+  "type": "Water",
+  "type2": "Dark",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   173
+  ]
+ },
+ "161": {
+  "name": "Sentret",
+  "stats": {
+   "hp": 35,
+   "attack": 46,
+   "defense": 34,
+   "speed": 20,
+   "sp_attack": 35,
+   "sp_defense": 45
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   51
+  ]
+ },
+ "162": {
+  "name": "Furret",
+  "stats": {
+   "hp": 95,
+   "attack": 81,
+   "defense": 69,
+   "speed": 90,
+   "sp_attack": 45,
+   "sp_defense": 70
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   51
+  ]
+ },
+ "163": {
+  "name": "Hoothoot",
+  "stats": {
+   "hp": 60,
+   "attack": 30,
+   "defense": 30,
+   "speed": 50,
+   "sp_attack": 41,
+   "sp_defense": 56
+  },
+  "type": "Normal",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   148,
+   0,
+   51
+  ]
+ },
+ "164": {
+  "name": "Noctowl",
+  "stats": {
+   "hp": 100,
+   "attack": 50,
+   "defense": 55,
+   "speed": 65,
+   "sp_attack": 86,
+   "sp_defense": 101
+  },
+  "type": "Ghost",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   148,
+   0,
+   51
+  ]
+ },
+ "165": {
+  "name": "Ledyba",
+  "stats": {
+   "hp": 40,
+   "attack": 40,
+   "defense": 45,
+   "speed": 55,
+   "sp_attack": 20,
+   "sp_defense": 75
+  },
+  "type": "Bug",
+  "type2": "Flying",
+  "growth": "fast",
+  "abilities": [
+   68,
+   0,
+   89
+  ]
+ },
+ "166": {
+  "name": "Ledian",
+  "stats": {
+   "hp": 55,
+   "attack": 75,
+   "defense": 80,
+   "speed": 85,
+   "sp_attack": 35,
+   "sp_defense": 100
+  },
+  "type": "Bug",
+  "type2": "Flying",
+  "growth": "fast",
+  "abilities": [
+   68,
+   0,
+   89
+  ]
+ },
+ "167": {
+  "name": "Spinarak",
+  "stats": {
+   "hp": 40,
+   "attack": 60,
+   "defense": 40,
+   "speed": 30,
+   "sp_attack": 40,
+   "sp_defense": 40
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "fast",
+  "abilities": [
+   68,
+   0,
+   15
+  ]
+ },
+ "168": {
+  "name": "Ariados",
+  "stats": {
+   "hp": 90,
+   "attack": 100,
+   "defense": 70,
+   "speed": 40,
+   "sp_attack": 60,
+   "sp_defense": 70
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "fast",
+  "abilities": [
+   68,
+   0,
+   15
+  ]
+ },
+ "169": {
+  "name": "Crobat",
+  "stats": {
+   "hp": 85,
+   "attack": 90,
+   "defense": 80,
+   "speed": 130,
+   "sp_attack": 70,
+   "sp_defense": 80
+  },
+  "type": "Poison",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   39,
+   0,
+   0
+  ]
+ },
+ "170": {
+  "name": "Chinchou",
+  "stats": {
+   "hp": 75,
+   "attack": 38,
+   "defense": 43,
+   "speed": 57,
+   "sp_attack": 61,
+   "sp_defense": 56
+  },
+  "type": "Water",
+  "type2": "Electric",
+  "growth": "slow",
+  "abilities": [
+   10,
+   0,
+   35
+  ]
+ },
+ "171": {
+  "name": "Lanturn",
+  "stats": {
+   "hp": 125,
+   "attack": 58,
+   "defense": 63,
+   "speed": 62,
+   "sp_attack": 81,
+   "sp_defense": 76
+  },
+  "type": "Water",
+  "type2": "Electric",
+  "growth": "slow",
+  "abilities": [
+   10,
+   0,
+   35
+  ]
+ },
+ "172": {
+  "name": "Pichu",
+  "stats": {
+   "hp": 20,
+   "attack": 40,
+   "defense": 15,
+   "speed": 60,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "173": {
+  "name": "Cleffa",
+  "stats": {
+   "hp": 50,
+   "attack": 25,
+   "defense": 28,
+   "speed": 15,
+   "sp_attack": 45,
+   "sp_defense": 55
+  },
+  "type": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   98
+  ]
+ },
+ "174": {
+  "name": "Igglybuff",
+  "stats": {
+   "hp": 90,
+   "attack": 30,
+   "defense": 20,
+   "speed": 15,
+   "sp_attack": 40,
+   "sp_defense": 20
+  },
+  "type": "Normal",
+  "type2": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   172
+  ]
+ },
+ "175": {
+  "name": "Togepi",
+  "stats": {
+   "hp": 35,
+   "attack": 20,
+   "defense": 65,
+   "speed": 20,
+   "sp_attack": 40,
+   "sp_defense": 65
+  },
+  "type": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   32,
+   0,
+   32
+  ]
+ },
+ "176": {
+  "name": "Togetic",
+  "stats": {
+   "hp": 65,
+   "attack": 40,
+   "defense": 85,
+   "speed": 40,
+   "sp_attack": 80,
+   "sp_defense": 105
+  },
+  "type": "Fairy",
+  "type2": "Flying",
+  "growth": "fast",
+  "abilities": [
+   32,
+   0,
+   32
+  ]
+ },
+ "177": {
+  "name": "Natu",
+  "stats": {
+   "hp": 40,
+   "attack": 50,
+   "defense": 45,
+   "speed": 70,
+   "sp_attack": 70,
+   "sp_defense": 45
+  },
+  "type": "Psychic",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   28,
+   0,
+   48
+  ]
+ },
+ "178": {
+  "name": "Xatu",
+  "stats": {
+   "hp": 75,
+   "attack": 75,
+   "defense": 70,
+   "speed": 95,
+   "sp_attack": 100,
+   "sp_defense": 70
+  },
+  "type": "Psychic",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   28,
+   0,
+   48
+  ]
+ },
+ "179": {
+  "name": "Mareep",
+  "stats": {
+   "hp": 55,
+   "attack": 40,
+   "defense": 40,
+   "speed": 35,
+   "sp_attack": 65,
+   "sp_defense": 45
+  },
+  "type": "Electric",
+  "growth": "medium-slow",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "180": {
+  "name": "Flaaffy",
+  "stats": {
+   "hp": 70,
+   "attack": 55,
+   "defense": 55,
+   "speed": 45,
+   "sp_attack": 80,
+   "sp_defense": 60
+  },
+  "type": "Electric",
+  "growth": "medium-slow",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "181": {
+  "name": "Ampharos",
+  "stats": {
+   "hp": 90,
+   "attack": 75,
+   "defense": 85,
+   "speed": 55,
+   "sp_attack": 115,
+   "sp_defense": 90
+  },
+  "type": "Electric",
+  "growth": "medium-slow",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "182": {
+  "name": "Bellossom",
+  "stats": {
+   "hp": 75,
+   "attack": 80,
+   "defense": 95,
+   "speed": 50,
+   "sp_attack": 90,
+   "sp_defense": 100
+  },
+  "type": "Grass",
+  "type2": "Fairy",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   0
+  ]
+ },
+ "183": {
+  "name": "Marill",
+  "stats": {
+   "hp": 70,
+   "attack": 25,
+   "defense": 50,
+   "speed": 40,
+   "sp_attack": 20,
+   "sp_defense": 50
+  },
+  "type": "Water",
+  "type2": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   47,
+   0,
+   37
+  ]
+ },
+ "184": {
+  "name": "Azumarill",
+  "stats": {
+   "hp": 100,
+   "attack": 50,
+   "defense": 80,
+   "speed": 50,
+   "sp_attack": 60,
+   "sp_defense": 80
+  },
+  "type": "Water",
+  "type2": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   47,
+   0,
+   37
+  ]
+ },
+ "185": {
+  "name": "Sudowoodo",
+  "stats": {
+   "hp": 70,
+   "attack": 100,
+   "defense": 115,
+   "speed": 30,
+   "sp_attack": 30,
+   "sp_defense": 65
+  },
+  "type": "Rock",
+  "growth": "medium",
+  "abilities": [
+   5,
+   0,
+   69
+  ]
+ },
+ "186": {
+  "name": "Politoed",
+  "stats": {
+   "hp": 100,
+   "attack": 75,
+   "defense": 75,
+   "speed": 70,
+   "sp_attack": 95,
+   "sp_defense": 100
+  },
+  "type": "Water",
+  "type2": "Normal",
+  "growth": "medium-slow",
+  "abilities": [
+   11,
+   0,
+   6
+  ]
+ },
+ "187": {
+  "name": "Hoppip",
+  "stats": {
+   "hp": 35,
+   "attack": 35,
+   "defense": 40,
+   "speed": 50,
+   "sp_attack": 35,
+   "sp_defense": 55
+  },
+  "type": "Grass",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   102
+  ]
+ },
+ "188": {
+  "name": "Skiploom",
+  "stats": {
+   "hp": 65,
+   "attack": 45,
+   "defense": 50,
+   "speed": 80,
+   "sp_attack": 45,
+   "sp_defense": 65
+  },
+  "type": "Grass",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   102
+  ]
+ },
+ "189": {
+  "name": "Jumpluff",
+  "stats": {
+   "hp": 85,
+   "attack": 55,
+   "defense": 85,
+   "speed": 100,
+   "sp_attack": 55,
+   "sp_defense": 100
+  },
+  "type": "Grass",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   102
+  ]
+ },
+ "190": {
+  "name": "Aipom",
+  "stats": {
+   "hp": 55,
+   "attack": 70,
+   "defense": 55,
+   "speed": 85,
+   "sp_attack": 40,
+   "sp_defense": 55
+  },
+  "type": "Normal",
+  "growth": "fast",
+  "abilities": [
+   101,
+   0,
+   53
+  ]
+ },
+ "191": {
+  "name": "Sunkern",
+  "stats": {
+   "hp": 50,
+   "attack": 30,
+   "defense": 40,
+   "speed": 30,
+   "sp_attack": 30,
+   "sp_defense": 40
+  },
+  "type": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   94
+  ]
+ },
+ "192": {
+  "name": "Sunflora",
+  "stats": {
+   "hp": 90,
+   "attack": 55,
+   "defense": 55,
+   "speed": 30,
+   "sp_attack": 115,
+   "sp_defense": 85
+  },
+  "type": "Grass",
+  "type2": "Fire",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   94
+  ]
+ },
+ "193": {
+  "name": "Yanma",
+  "stats": {
+   "hp": 65,
+   "attack": 65,
+   "defense": 45,
+   "speed": 95,
+   "sp_attack": 80,
+   "sp_defense": 45
+  },
+  "type": "Bug",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   3,
+   0,
+   14
+  ]
+ },
+ "194": {
+  "name": "Wooper",
+  "stats": {
+   "hp": 60,
+   "attack": 45,
+   "defense": 45,
+   "speed": 15,
+   "sp_attack": 25,
+   "sp_defense": 25
+  },
+  "type": "Water",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   6,
+   0,
+   11
+  ]
+ },
+ "195": {
+  "name": "Quagsire",
+  "stats": {
+   "hp": 115,
+   "attack": 85,
+   "defense": 85,
+   "speed": 35,
+   "sp_attack": 65,
+   "sp_defense": 65
+  },
+  "type": "Water",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   6,
+   0,
+   11
+  ]
+ },
+ "196": {
+  "name": "Espeon",
+  "stats": {
+   "hp": 75,
+   "attack": 65,
+   "defense": 60,
+   "speed": 110,
+   "sp_attack": 130,
+   "sp_defense": 95
+  },
+  "type": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   28,
+   0,
+   91
+  ]
+ },
+ "197": {
+  "name": "Umbreon",
+  "stats": {
+   "hp": 95,
+   "attack": 70,
+   "defense": 110,
+   "speed": 65,
+   "sp_attack": 65,
+   "sp_defense": 130
+  },
+  "type": "Dark",
+  "growth": "medium",
+  "abilities": [
+   28,
+   0,
+   91
+  ]
+ },
+ "198": {
+  "name": "Murkrow",
+  "stats": {
+   "hp": 65,
+   "attack": 85,
+   "defense": 42,
+   "speed": 91,
+   "sp_attack": 85,
+   "sp_defense": 42
+  },
+  "type": "Dark",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   15,
+   0,
+   105
+  ]
+ },
+ "199": {
+  "name": "Slowking",
+  "stats": {
+   "hp": 105,
+   "attack": 75,
+   "defense": 80,
+   "speed": 30,
+   "sp_attack": 100,
+   "sp_defense": 110
+  },
+  "type": "Water",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   20
+  ]
+ },
+ "200": {
+  "name": "Misdreavus",
+  "stats": {
+   "hp": 60,
+   "attack": 60,
+   "defense": 60,
+   "speed": 85,
+   "sp_attack": 85,
+   "sp_defense": 85
+  },
+  "type": "Ghost",
+  "growth": "fast",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "201": {
+  "name": "Unown",
+  "stats": {
+   "hp": 58,
+   "attack": 82,
+   "defense": 58,
+   "speed": 58,
+   "sp_attack": 82,
+   "sp_defense": 58
+  },
+  "type": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "202": {
+  "name": "Wobbuffet",
+  "stats": {
+   "hp": 190,
+   "attack": 33,
+   "defense": 58,
+   "speed": 33,
+   "sp_attack": 33,
+   "sp_defense": 58
+  },
+  "type": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   23,
+   0,
+   0
+  ]
+ },
+ "203": {
+  "name": "Girafarig",
+  "stats": {
+   "hp": 70,
+   "attack": 80,
+   "defense": 65,
+   "speed": 85,
+   "sp_attack": 90,
+   "sp_defense": 65
+  },
+  "type": "Normal",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   39,
+   0,
+   48
+  ]
+ },
+ "204": {
+  "name": "Pineco",
+  "stats": {
+   "hp": 50,
+   "attack": 65,
+   "defense": 90,
+   "speed": 15,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Bug",
+  "growth": "medium",
+  "abilities": [
+   5,
+   0,
+   0
+  ]
+ },
+ "205": {
+  "name": "Forretress",
+  "stats": {
+   "hp": 75,
+   "attack": 90,
+   "defense": 140,
+   "speed": 40,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Bug",
+  "type2": "Steel",
+  "growth": "medium",
+  "abilities": [
+   5,
+   0,
+   0
+  ]
+ },
+ "206": {
+  "name": "Dunsparce",
+  "stats": {
+   "hp": 100,
+   "attack": 70,
+   "defense": 70,
+   "speed": 45,
+   "sp_attack": 65,
+   "sp_defense": 65
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   32,
+   0,
+   50
+  ]
+ },
+ "207": {
+  "name": "Gligar",
+  "stats": {
+   "hp": 75,
+   "attack": 75,
+   "defense": 105,
+   "speed": 60,
+   "sp_attack": 35,
+   "sp_defense": 70
+  },
+  "type": "Ground",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   52,
+   0,
+   8
+  ]
+ },
+ "208": {
+  "name": "Steelix",
+  "stats": {
+   "hp": 75,
+   "attack": 85,
+   "defense": 200,
+   "speed": 30,
+   "sp_attack": 55,
+   "sp_defense": 65
+  },
+  "type": "Steel",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   69,
+   0,
+   5
+  ]
+ },
+ "209": {
+  "name": "Snubbull",
+  "stats": {
+   "hp": 60,
+   "attack": 80,
+   "defense": 60,
+   "speed": 30,
+   "sp_attack": 40,
+   "sp_defense": 40
+  },
+  "type": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   22,
+   0,
+   173
+  ]
+ },
+ "210": {
+  "name": "Granbull",
+  "stats": {
+   "hp": 95,
+   "attack": 120,
+   "defense": 85,
+   "speed": 45,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Fairy",
+  "type2": "Fighting",
+  "growth": "fast",
+  "abilities": [
+   22,
+   0,
+   173
+  ]
+ },
+ "211": {
+  "name": "Qwilfish",
+  "stats": {
+   "hp": 75,
+   "attack": 95,
+   "defense": 90,
+   "speed": 75,
+   "sp_attack": 55,
+   "sp_defense": 65
+  },
+  "type": "Water",
+  "type2": "Poison",
+  "growth": "medium",
+  "abilities": [
+   38,
+   0,
+   24
+  ]
+ },
+ "212": {
+  "name": "Scizor",
+  "stats": {
+   "hp": 70,
+   "attack": 130,
+   "defense": 100,
+   "speed": 65,
+   "sp_attack": 55,
+   "sp_defense": 80
+  },
+  "type": "Bug",
+  "type2": "Steel",
+  "growth": "medium",
+  "abilities": [
+   68,
+   0,
+   101
+  ]
+ },
+ "213": {
+  "name": "Shuckle",
+  "stats": {
+   "hp": 20,
+   "attack": 20,
+   "defense": 230,
+   "speed": 5,
+   "sp_attack": 20,
+   "sp_defense": 230
+  },
+  "type": "Bug",
+  "type2": "Rock",
+  "growth": "medium-slow",
+  "abilities": [
+   5,
+   0,
+   82
+  ]
+ },
+ "214": {
+  "name": "Heracross",
+  "stats": {
+   "hp": 85,
+   "attack": 125,
+   "defense": 95,
+   "speed": 80,
+   "sp_attack": 40,
+   "sp_defense": 95
+  },
+  "type": "Bug",
+  "type2": "Fighting",
+  "growth": "slow",
+  "abilities": [
+   68,
+   0,
+   62
+  ]
+ },
+ "215": {
+  "name": "Sneasel",
+  "stats": {
+   "hp": 55,
+   "attack": 95,
+   "defense": 55,
+   "speed": 115,
+   "sp_attack": 35,
+   "sp_defense": 75
+  },
+  "type": "Dark",
+  "type2": "Ice",
+  "growth": "medium-slow",
+  "abilities": [
+   39,
+   0,
+   51
+  ]
+ },
+ "216": {
+  "name": "Teddiursa",
+  "stats": {
+   "hp": 60,
+   "attack": 80,
+   "defense": 50,
+   "speed": 40,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   53,
+   0,
+   95
+  ]
+ },
+ "217": {
+  "name": "Ursaring",
+  "stats": {
+   "hp": 90,
+   "attack": 130,
+   "defense": 75,
+   "speed": 55,
+   "sp_attack": 75,
+   "sp_defense": 75
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   62,
+   0,
+   95
+  ]
+ },
+ "218": {
+  "name": "Slugma",
+  "stats": {
+   "hp": 55,
+   "attack": 40,
+   "defense": 45,
+   "speed": 20,
+   "sp_attack": 75,
+   "sp_defense": 45
+  },
+  "type": "Fire",
+  "growth": "medium",
+  "abilities": [
+   40,
+   0,
+   49
+  ]
+ },
+ "219": {
+  "name": "Magcargo",
+  "stats": {
+   "hp": 75,
+   "attack": 50,
+   "defense": 120,
+   "speed": 15,
+   "sp_attack": 90,
+   "sp_defense": 120
+  },
+  "type": "Fire",
+  "type2": "Rock",
+  "growth": "medium",
+  "abilities": [
+   20,
+   1,
+   49
+  ]
+ },
+ "220": {
+  "name": "Swinub",
+  "stats": {
+   "hp": 60,
+   "attack": 50,
+   "defense": 40,
+   "speed": 50,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Ice",
+  "type2": "Ground",
+  "growth": "slow",
+  "abilities": [
+   12,
+   0,
+   47
+  ]
+ },
+ "221": {
+  "name": "Piloswine",
+  "stats": {
+   "hp": 110,
+   "attack": 100,
+   "defense": 80,
+   "speed": 50,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Ice",
+  "type2": "Ground",
+  "growth": "slow",
+  "abilities": [
+   12,
+   0,
+   47
+  ]
+ },
+ "222": {
+  "name": "Corsola",
+  "stats": {
+   "hp": 65,
+   "attack": 55,
+   "defense": 95,
+   "speed": 35,
+   "sp_attack": 65,
+   "sp_defense": 95
+  },
+  "type": "Water",
+  "type2": "Rock",
+  "growth": "fast",
+  "abilities": [
+   92,
+   0,
+   30
+  ]
+ },
+ "223": {
+  "name": "Remoraid",
+  "stats": {
+   "hp": 35,
+   "attack": 55,
+   "defense": 35,
+   "speed": 65,
+   "sp_attack": 80,
+   "sp_defense": 35
+  },
+  "type": "Water",
+  "growth": "medium",
+  "abilities": [
+   178,
+   0,
+   97
+  ]
+ },
+ "224": {
+  "name": "Octillery",
+  "stats": {
+   "hp": 110,
+   "attack": 95,
+   "defense": 75,
+   "speed": 40,
+   "sp_attack": 100,
+   "sp_defense": 75
+  },
+  "type": "Water",
+  "type2": "Fire",
+  "growth": "medium",
+  "abilities": [
+   178,
+   0,
+   97
+  ]
+ },
+ "225": {
+  "name": "Delibird",
+  "stats": {
+   "hp": 85,
+   "attack": 80,
+   "defense": 45,
+   "speed": 75,
+   "sp_attack": 80,
+   "sp_defense": 45
+  },
+  "type": "Ice",
+  "type2": "Flying",
+  "growth": "fast",
+  "abilities": [
+   72,
+   0,
+   55
+  ]
+ },
+ "226": {
+  "name": "Mantine",
+  "stats": {
+   "hp": 95,
+   "attack": 40,
+   "defense": 70,
+   "speed": 70,
+   "sp_attack": 80,
+   "sp_defense": 140
+  },
+  "type": "Water",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   33,
+   0,
+   11
+  ]
+ },
+ "227": {
+  "name": "Skarmory",
+  "stats": {
+   "hp": 65,
+   "attack": 90,
+   "defense": 140,
+   "speed": 70,
+   "sp_attack": 40,
+   "sp_defense": 70
+  },
+  "type": "Steel",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   177,
+   0,
+   5
+  ]
+ },
+ "228": {
+  "name": "Houndour",
+  "stats": {
+   "hp": 45,
+   "attack": 60,
+   "defense": 30,
+   "speed": 70,
+   "sp_attack": 80,
+   "sp_defense": 50
+  },
+  "type": "Dark",
+  "type2": "Fire",
+  "growth": "slow",
+  "abilities": [
+   127,
+   0,
+   18
+  ]
+ },
+ "229": {
+  "name": "Houndoom",
+  "stats": {
+   "hp": 75,
+   "attack": 90,
+   "defense": 50,
+   "speed": 100,
+   "sp_attack": 110,
+   "sp_defense": 80
+  },
+  "type": "Dark",
+  "type2": "Fire",
+  "growth": "slow",
+  "abilities": [
+   127,
+   0,
+   18
+  ]
+ },
+ "230": {
+  "name": "Kingdra",
+  "stats": {
+   "hp": 80,
+   "attack": 85,
+   "defense": 95,
+   "speed": 75,
+   "sp_attack": 110,
+   "sp_defense": 95
+  },
+  "type": "Water",
+  "type2": "Dragon",
+  "growth": "medium",
+  "abilities": [
+   33,
+   0,
+   97
+  ]
+ },
+ "231": {
+  "name": "Phanpy",
+  "stats": {
+   "hp": 90,
+   "attack": 60,
+   "defense": 65,
+   "speed": 40,
+   "sp_attack": 40,
+   "sp_defense": 50
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   53,
+   0,
+   192
+  ]
+ },
+ "232": {
+  "name": "Donphan",
+  "stats": {
+   "hp": 110,
+   "attack": 120,
+   "defense": 120,
+   "speed": 50,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Ground",
+  "growth": "medium",
+  "abilities": [
+   5,
+   0,
+   192
+  ]
+ },
+ "233": {
+  "name": "Porygon2",
+  "stats": {
+   "hp": 85,
+   "attack": 80,
+   "defense": 90,
+   "speed": 60,
+   "sp_attack": 105,
+   "sp_defense": 95
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   36,
+   0,
+   88
+  ]
+ },
+ "234": {
+  "name": "Stantler",
+  "stats": {
+   "hp": 73,
+   "attack": 85,
+   "defense": 62,
+   "speed": 85,
+   "sp_attack": 95,
+   "sp_defense": 65
+  },
+  "type": "Normal",
+  "growth": "slow",
+  "abilities": [
+   22,
+   0,
+   157
+  ]
+ },
+ "235": {
+  "name": "Smeargle",
+  "stats": {
+   "hp": 85,
+   "attack": 60,
+   "defense": 50,
+   "speed": 65,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Normal",
+  "growth": "fast",
+  "abilities": [
+   20,
+   0,
+   101
+  ]
+ },
+ "236": {
+  "name": "Tyrogue",
+  "stats": {
+   "hp": 35,
+   "attack": 45,
+   "defense": 45,
+   "speed": 35,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Fighting",
+  "growth": "medium",
+  "abilities": [
+   62,
+   0,
+   80
+  ]
+ },
+ "237": {
+  "name": "Hitmontop",
+  "stats": {
+   "hp": 60,
+   "attack": 95,
+   "defense": 95,
+   "speed": 70,
+   "sp_attack": 35,
+   "sp_defense": 110
+  },
+  "type": "Fighting",
+  "growth": "medium",
+  "abilities": [
+   22,
+   0,
+   101
+  ]
+ },
+ "238": {
+  "name": "Smoochum",
+  "stats": {
+   "hp": 45,
+   "attack": 30,
+   "defense": 15,
+   "speed": 65,
+   "sp_attack": 85,
+   "sp_defense": 65
+  },
+  "type": "Ice",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   108
+  ]
+ },
+ "239": {
+  "name": "Elekid",
+  "stats": {
+   "hp": 45,
+   "attack": 63,
+   "defense": 37,
+   "speed": 95,
+   "sp_attack": 65,
+   "sp_defense": 55
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   9,
+   0,
+   0
+  ]
+ },
+ "240": {
+  "name": "Magby",
+  "stats": {
+   "hp": 45,
+   "attack": 75,
+   "defense": 37,
+   "speed": 83,
+   "sp_attack": 70,
+   "sp_defense": 55
+  },
+  "type": "Fire",
+  "growth": "medium",
+  "abilities": [
+   49,
+   0,
+   0
+  ]
+ },
+ "241": {
+  "name": "Miltank",
+  "stats": {
+   "hp": 95,
+   "attack": 80,
+   "defense": 105,
+   "speed": 100,
+   "sp_attack": 40,
+   "sp_defense": 70
+  },
+  "type": "Normal",
+  "growth": "slow",
+  "abilities": [
+   47,
+   0,
+   113
+  ]
+ },
+ "242": {
+  "name": "Blissey",
+  "stats": {
+   "hp": 255,
+   "attack": 10,
+   "defense": 10,
+   "speed": 55,
+   "sp_attack": 75,
+   "sp_defense": 135
+  },
+  "type": "Normal",
+  "growth": "fast",
+  "abilities": [
+   30,
+   0,
+   32
+  ]
+ },
+ "243": {
+  "name": "Raikou",
+  "stats": {
+   "hp": 90,
+   "attack": 85,
+   "defense": 75,
+   "speed": 115,
+   "sp_attack": 115,
+   "sp_defense": 100
+  },
+  "type": "Electric",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "244": {
+  "name": "Entei",
+  "stats": {
+   "hp": 115,
+   "attack": 115,
+   "defense": 85,
+   "speed": 100,
+   "sp_attack": 90,
+   "sp_defense": 75
+  },
+  "type": "Fire",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "245": {
+  "name": "Suicune",
+  "stats": {
+   "hp": 100,
+   "attack": 75,
+   "defense": 115,
+   "speed": 85,
+   "sp_attack": 90,
+   "sp_defense": 115
+  },
+  "type": "Water",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "246": {
+  "name": "Larvitar",
+  "stats": {
+   "hp": 50,
+   "attack": 64,
+   "defense": 50,
+   "speed": 41,
+   "sp_attack": 45,
+   "sp_defense": 50
+  },
+  "type": "Rock",
+  "type2": "Ground",
+  "growth": "slow",
+  "abilities": [
+   62,
+   0,
+   0
+  ]
+ },
+ "247": {
+  "name": "Pupitar",
+  "stats": {
+   "hp": 70,
+   "attack": 84,
+   "defense": 70,
+   "speed": 51,
+   "sp_attack": 65,
+   "sp_defense": 70
+  },
+  "type": "Rock",
+  "type2": "Ground",
+  "growth": "slow",
+  "abilities": [
+   61,
+   0,
+   0
+  ]
+ },
+ "248": {
+  "name": "Tyranitar",
+  "stats": {
+   "hp": 100,
+   "attack": 134,
+   "defense": 110,
+   "speed": 61,
+   "sp_attack": 95,
+   "sp_defense": 100
+  },
+  "type": "Rock",
+  "type2": "Dark",
+  "growth": "slow",
+  "abilities": [
+   45,
+   0,
+   0
+  ]
+ },
+ "249": {
+  "name": "Lugia",
+  "stats": {
+   "hp": 106,
+   "attack": 90,
+   "defense": 130,
+   "speed": 110,
+   "sp_attack": 90,
+   "sp_defense": 154
+  },
+  "type": "Psychic",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   199,
+   0,
+   0
+  ]
+ },
+ "250": {
+  "name": "Ho-Oh",
+  "stats": {
+   "hp": 106,
+   "attack": 130,
+   "defense": 90,
+   "speed": 90,
+   "sp_attack": 110,
+   "sp_defense": 154
+  },
+  "type": "Fire",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   220,
+   0,
+   0
+  ]
+ },
+ "251": {
+  "name": "Celebi",
+  "stats": {
+   "hp": 100,
+   "attack": 100,
+   "defense": 100,
+   "speed": 100,
+   "sp_attack": 100,
+   "sp_defense": 100
+  },
+  "type": "Psychic",
+  "type2": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   30,
+   0,
+   144
+  ]
+ },
+ "252": {
+  "name": "Treecko",
+  "stats": {
+   "hp": 40,
+   "attack": 65,
+   "defense": 35,
+   "speed": 70,
+   "sp_attack": 45,
+   "sp_defense": 55
+  },
+  "type": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   84
+  ]
+ },
+ "253": {
+  "name": "Grovyle",
+  "stats": {
+   "hp": 50,
+   "attack": 85,
+   "defense": 45,
+   "speed": 95,
+   "sp_attack": 65,
+   "sp_defense": 65
+  },
+  "type": "Grass",
+  "type2": "Dragon",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   84
+  ]
+ },
+ "254": {
+  "name": "Sceptile",
+  "stats": {
+   "hp": 70,
+   "attack": 110,
+   "defense": 65,
+   "speed": 115,
+   "sp_attack": 85,
+   "sp_defense": 85
+  },
+  "type": "Grass",
+  "type2": "Dragon",
+  "growth": "medium-slow",
+  "abilities": [
+   65,
+   0,
+   84
+  ]
+ },
+ "255": {
+  "name": "Torchic",
+  "stats": {
+   "hp": 45,
+   "attack": 60,
+   "defense": 40,
+   "speed": 45,
+   "sp_attack": 70,
+   "sp_defense": 50
+  },
+  "type": "Fire",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   128
+  ]
+ },
+ "256": {
+  "name": "Combusken",
+  "stats": {
+   "hp": 60,
+   "attack": 85,
+   "defense": 60,
+   "speed": 55,
+   "sp_attack": 85,
+   "sp_defense": 60
+  },
+  "type": "Fire",
+  "type2": "Fighting",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   128
+  ]
+ },
+ "257": {
+  "name": "Blaziken",
+  "stats": {
+   "hp": 80,
+   "attack": 120,
+   "defense": 70,
+   "speed": 80,
+   "sp_attack": 110,
+   "sp_defense": 70
+  },
+  "type": "Fire",
+  "type2": "Fighting",
+  "growth": "medium-slow",
+  "abilities": [
+   66,
+   0,
+   128
+  ]
+ },
+ "258": {
+  "name": "Mudkip",
+  "stats": {
+   "hp": 50,
+   "attack": 70,
+   "defense": 50,
+   "speed": 40,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   6
+  ]
+ },
+ "259": {
+  "name": "Marshtomp",
+  "stats": {
+   "hp": 70,
+   "attack": 85,
+   "defense": 70,
+   "speed": 50,
+   "sp_attack": 60,
+   "sp_defense": 70
+  },
+  "type": "Water",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   6
+  ]
+ },
+ "260": {
+  "name": "Swampert",
+  "stats": {
+   "hp": 100,
+   "attack": 110,
+   "defense": 90,
+   "speed": 60,
+   "sp_attack": 85,
+   "sp_defense": 90
+  },
+  "type": "Water",
+  "type2": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   67,
+   0,
+   6
+  ]
+ },
+ "261": {
+  "name": "Poochyena",
+  "stats": {
+   "hp": 35,
+   "attack": 55,
+   "defense": 35,
+   "speed": 35,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Dark",
+  "growth": "medium",
+  "abilities": [
+   50,
+   0,
+   95
+  ]
+ },
+ "262": {
+  "name": "Mightyena",
+  "stats": {
+   "hp": 76,
+   "attack": 100,
+   "defense": 70,
+   "speed": 74,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Dark",
+  "growth": "medium",
+  "abilities": [
+   22,
+   0,
+   95
+  ]
+ },
+ "263": {
+  "name": "Zigzagoon",
+  "stats": {
+   "hp": 38,
+   "attack": 30,
+   "defense": 41,
+   "speed": 60,
+   "sp_attack": 30,
+   "sp_defense": 41
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   53,
+   0,
+   82
+  ]
+ },
+ "264": {
+  "name": "Linoone",
+  "stats": {
+   "hp": 78,
+   "attack": 75,
+   "defense": 61,
+   "speed": 100,
+   "sp_attack": 50,
+   "sp_defense": 66
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   53,
+   0,
+   82
+  ]
+ },
+ "265": {
+  "name": "Wurmple",
+  "stats": {
+   "hp": 45,
+   "attack": 45,
+   "defense": 35,
+   "speed": 20,
+   "sp_attack": 20,
+   "sp_defense": 30
+  },
+  "type": "Bug",
+  "growth": "medium",
+  "abilities": [
+   19,
+   0,
+   0
+  ]
+ },
+ "266": {
+  "name": "Silcoon",
+  "stats": {
+   "hp": 50,
+   "attack": 35,
+   "defense": 55,
+   "speed": 15,
+   "sp_attack": 25,
+   "sp_defense": 25
+  },
+  "type": "Bug",
+  "growth": "medium",
+  "abilities": [
+   61,
+   0,
+   0
+  ]
+ },
+ "267": {
+  "name": "Beautifly",
+  "stats": {
+   "hp": 60,
+   "attack": 50,
+   "defense": 60,
+   "speed": 85,
+   "sp_attack": 115,
+   "sp_defense": 70
+  },
+  "type": "Bug",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   68,
+   0,
+   0
+  ]
+ },
+ "268": {
+  "name": "Cascoon",
+  "stats": {
+   "hp": 50,
+   "attack": 35,
+   "defense": 55,
+   "speed": 15,
+   "sp_attack": 25,
+   "sp_defense": 25
+  },
+  "type": "Bug",
+  "growth": "medium",
+  "abilities": [
+   61,
+   0,
+   0
+  ]
+ },
+ "269": {
+  "name": "Dustox",
+  "stats": {
+   "hp": 80,
+   "attack": 65,
+   "defense": 90,
+   "speed": 65,
+   "sp_attack": 50,
+   "sp_defense": 90
+  },
+  "type": "Bug",
+  "type2": "Poison",
+  "growth": "medium",
+  "abilities": [
+   109,
+   0,
+   0
+  ]
+ },
+ "270": {
+  "name": "Lotad",
+  "stats": {
+   "hp": 40,
+   "attack": 30,
+   "defense": 30,
+   "speed": 30,
+   "sp_attack": 40,
+   "sp_defense": 50
+  },
+  "type": "Water",
+  "type2": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   33,
+   0,
+   44
+  ]
+ },
+ "271": {
+  "name": "Lombre",
+  "stats": {
+   "hp": 60,
+   "attack": 50,
+   "defense": 50,
+   "speed": 50,
+   "sp_attack": 60,
+   "sp_defense": 70
+  },
+  "type": "Water",
+  "type2": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   33,
+   0,
+   44
+  ]
+ },
+ "272": {
+  "name": "Ludicolo",
+  "stats": {
+   "hp": 100,
+   "attack": 70,
+   "defense": 70,
+   "speed": 70,
+   "sp_attack": 90,
+   "sp_defense": 100
+  },
+  "type": "Water",
+  "type2": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   33,
+   0,
+   44
+  ]
+ },
+ "273": {
+  "name": "Seedot",
+  "stats": {
+   "hp": 40,
+   "attack": 40,
+   "defense": 50,
+   "speed": 30,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   48
+  ]
+ },
+ "274": {
+  "name": "Nuzleaf",
+  "stats": {
+   "hp": 70,
+   "attack": 70,
+   "defense": 40,
+   "speed": 60,
+   "sp_attack": 60,
+   "sp_defense": 40
+  },
+  "type": "Grass",
+  "type2": "Dark",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   48
+  ]
+ },
+ "275": {
+  "name": "Shiftry",
+  "stats": {
+   "hp": 100,
+   "attack": 100,
+   "defense": 60,
+   "speed": 90,
+   "sp_attack": 90,
+   "sp_defense": 60
+  },
+  "type": "Grass",
+  "type2": "Dark",
+  "growth": "medium-slow",
+  "abilities": [
+   34,
+   0,
+   18
+  ]
+ },
+ "276": {
+  "name": "Taillow",
+  "stats": {
+   "hp": 40,
+   "attack": 55,
+   "defense": 30,
+   "speed": 85,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Normal",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   62,
+   0,
+   0
+  ]
+ },
+ "277": {
+  "name": "Swellow",
+  "stats": {
+   "hp": 60,
+   "attack": 100,
+   "defense": 60,
+   "speed": 125,
+   "sp_attack": 60,
+   "sp_defense": 50
+  },
+  "type": "Normal",
+  "type2": "Flying",
+  "growth": "medium-slow",
+  "abilities": [
+   62,
+   0,
+   0
+  ]
+ },
+ "278": {
+  "name": "Wingull",
+  "stats": {
+   "hp": 40,
+   "attack": 30,
+   "defense": 30,
+   "speed": 85,
+   "sp_attack": 55,
+   "sp_defense": 30
+  },
+  "type": "Water",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   51,
+   0,
+   93
+  ]
+ },
+ "279": {
+  "name": "Pelipper",
+  "stats": {
+   "hp": 75,
+   "attack": 50,
+   "defense": 100,
+   "speed": 65,
+   "sp_attack": 95,
+   "sp_defense": 75
+  },
+  "type": "Water",
+  "type2": "Flying",
+  "growth": "medium",
+  "abilities": [
+   51,
+   0,
+   2
+  ]
+ },
+ "280": {
+  "name": "Ralts",
+  "stats": {
+   "hp": 28,
+   "attack": 25,
+   "defense": 25,
+   "speed": 40,
+   "sp_attack": 45,
+   "sp_defense": 35
+  },
+  "type": "Psychic",
+  "type2": "Fairy",
+  "growth": "slow",
+  "abilities": [
+   28,
+   0,
+   36
+  ]
+ },
+ "281": {
+  "name": "Kirlia",
+  "stats": {
+   "hp": 38,
+   "attack": 35,
+   "defense": 35,
+   "speed": 50,
+   "sp_attack": 65,
+   "sp_defense": 55
+  },
+  "type": "Psychic",
+  "type2": "Fairy",
+  "growth": "slow",
+  "abilities": [
+   28,
+   0,
+   36
+  ]
+ },
+ "282": {
+  "name": "Gardevoir",
+  "stats": {
+   "hp": 68,
+   "attack": 65,
+   "defense": 65,
+   "speed": 80,
+   "sp_attack": 125,
+   "sp_defense": 115
+  },
+  "type": "Psychic",
+  "type2": "Fairy",
+  "growth": "slow",
+  "abilities": [
+   28,
+   0,
+   36
+  ]
+ },
+ "283": {
+  "name": "Surskit",
+  "stats": {
+   "hp": 45,
+   "attack": 30,
+   "defense": 32,
+   "speed": 65,
+   "sp_attack": 50,
+   "sp_defense": 52
+  },
+  "type": "Bug",
+  "type2": "Water",
+  "growth": "medium",
+  "abilities": [
+   33,
+   0,
+   199
+  ]
+ },
+ "284": {
+  "name": "Masquerain",
+  "stats": {
+   "hp": 80,
+   "attack": 60,
+   "defense": 62,
+   "speed": 80,
+   "sp_attack": 100,
+   "sp_defense": 82
+  },
+  "type": "Bug",
+  "type2": "Water",
+  "growth": "medium",
+  "abilities": [
+   22,
+   0,
+   199
+  ]
+ },
+ "285": {
+  "name": "Shroomish",
+  "stats": {
+   "hp": 60,
+   "attack": 40,
+   "defense": 60,
+   "speed": 35,
+   "sp_attack": 40,
+   "sp_defense": 60
+  },
+  "type": "Grass",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   27,
+   0,
+   90
+  ]
+ },
+ "286": {
+  "name": "Breloom",
+  "stats": {
+   "hp": 60,
+   "attack": 130,
+   "defense": 80,
+   "speed": 74,
+   "sp_attack": 60,
+   "sp_defense": 66
+  },
+  "type": "Grass",
+  "type2": "Fighting",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   27,
+   0,
+   90
+  ]
+ },
+ "287": {
+  "name": "Slakoth",
+  "stats": {
+   "hp": 60,
+   "attack": 60,
+   "defense": 60,
+   "speed": 30,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Normal",
+  "growth": "slow",
+  "abilities": [
+   54,
+   0,
+   0
+  ]
+ },
+ "288": {
+  "name": "Vigoroth",
+  "stats": {
+   "hp": 95,
+   "attack": 85,
+   "defense": 80,
+   "speed": 90,
+   "sp_attack": 55,
+   "sp_defense": 55
+  },
+  "type": "Normal",
+  "growth": "slow",
+  "abilities": [
+   72,
+   0,
+   0
+  ]
+ },
+ "289": {
+  "name": "Slaking",
+  "stats": {
+   "hp": 150,
+   "attack": 160,
+   "defense": 100,
+   "speed": 80,
+   "sp_attack": 95,
+   "sp_defense": 65
+  },
+  "type": "Normal",
+  "growth": "slow",
+  "abilities": [
+   54,
+   0,
+   0
+  ]
+ },
+ "290": {
+  "name": "Nincada",
+  "stats": {
+   "hp": 31,
+   "attack": 45,
+   "defense": 90,
+   "speed": 40,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Bug",
+  "type2": "Ground",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   14,
+   0,
+   61
+  ]
+ },
+ "291": {
+  "name": "Ninjask",
+  "stats": {
+   "hp": 61,
+   "attack": 90,
+   "defense": 55,
+   "speed": 160,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Bug",
+  "type2": "Dark",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   3,
+   0,
+   36
+  ]
+ },
+ "292": {
+  "name": "Shedinja",
+  "stats": {
+   "hp": 1,
+   "attack": 90,
+   "defense": 45,
+   "speed": 40,
+   "sp_attack": 30,
+   "sp_defense": 30
+  },
+  "type": "Bug",
+  "type2": "Ghost",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   25,
+   0,
+   0
+  ]
+ },
+ "293": {
+  "name": "Whismur",
+  "stats": {
+   "hp": 64,
+   "attack": 46,
+   "defense": 23,
+   "speed": 28,
+   "sp_attack": 56,
+   "sp_defense": 23
+  },
+  "type": "Normal",
+  "growth": "medium-slow",
+  "abilities": [
+   43,
+   0,
+   0
+  ]
+ },
+ "294": {
+  "name": "Loudred",
+  "stats": {
+   "hp": 84,
+   "attack": 66,
+   "defense": 43,
+   "speed": 48,
+   "sp_attack": 76,
+   "sp_defense": 43
+  },
+  "type": "Normal",
+  "growth": "medium-slow",
+  "abilities": [
+   43,
+   0,
+   0
+  ]
+ },
+ "295": {
+  "name": "Exploud",
+  "stats": {
+   "hp": 104,
+   "attack": 81,
+   "defense": 63,
+   "speed": 68,
+   "sp_attack": 106,
+   "sp_defense": 73
+  },
+  "type": "Normal",
+  "growth": "medium-slow",
+  "abilities": [
+   43,
+   0,
+   0
+  ]
+ },
+ "296": {
+  "name": "Makuhita",
+  "stats": {
+   "hp": 72,
+   "attack": 60,
+   "defense": 30,
+   "speed": 25,
+   "sp_attack": 20,
+   "sp_defense": 30
+  },
+  "type": "Fighting",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   47,
+   0,
+   62
+  ]
+ },
+ "297": {
+  "name": "Hariyama",
+  "stats": {
+   "hp": 144,
+   "attack": 120,
+   "defense": 60,
+   "speed": 50,
+   "sp_attack": 40,
+   "sp_defense": 60
+  },
+  "type": "Fighting",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   47,
+   0,
+   62
+  ]
+ },
+ "298": {
+  "name": "Azurill",
+  "stats": {
+   "hp": 50,
+   "attack": 20,
+   "defense": 40,
+   "speed": 20,
+   "sp_attack": 20,
+   "sp_defense": 40
+  },
+  "type": "Normal",
+  "type2": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   47,
+   0,
+   37
+  ]
+ },
+ "299": {
+  "name": "Nosepass",
+  "stats": {
+   "hp": 30,
+   "attack": 45,
+   "defense": 135,
+   "speed": 30,
+   "sp_attack": 45,
+   "sp_defense": 90
+  },
+  "type": "Rock",
+  "growth": "medium",
+  "abilities": [
+   5,
+   0,
+   42
+  ]
+ },
+ "300": {
+  "name": "Skitty",
+  "stats": {
+   "hp": 65,
+   "attack": 45,
+   "defense": 45,
+   "speed": 50,
+   "sp_attack": 35,
+   "sp_defense": 35
+  },
+  "type": "Normal",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   96
+  ]
+ },
+ "301": {
+  "name": "Delcatty",
+  "stats": {
+   "hp": 95,
+   "attack": 55,
+   "defense": 70,
+   "speed": 90,
+   "sp_attack": 75,
+   "sp_defense": 70
+  },
+  "type": "Normal",
+  "growth": "fast",
+  "abilities": [
+   56,
+   0,
+   96
+  ]
+ },
+ "302": {
+  "name": "Sableye",
+  "stats": {
+   "hp": 60,
+   "attack": 85,
+   "defense": 75,
+   "speed": 50,
+   "sp_attack": 65,
+   "sp_defense": 65
+  },
+  "type": "Dark",
+  "type2": "Ghost",
+  "growth": "medium-slow",
+  "abilities": [
+   51,
+   0,
+   100
+  ]
+ },
+ "303": {
+  "name": "Mawile",
+  "stats": {
+   "hp": 50,
+   "attack": 85,
+   "defense": 85,
+   "speed": 50,
+   "sp_attack": 55,
+   "sp_defense": 65
+  },
+  "type": "Steel",
+  "type2": "Fairy",
+  "growth": "fast",
+  "abilities": [
+   52,
+   0,
+   22
+  ]
+ },
+ "304": {
+  "name": "Aron",
+  "stats": {
+   "hp": 50,
+   "attack": 70,
+   "defense": 100,
+   "speed": 30,
+   "sp_attack": 40,
+   "sp_defense": 40
+  },
+  "type": "Steel",
+  "type2": "Rock",
+  "growth": "slow",
+  "abilities": [
+   5,
+   0,
+   69
+  ]
+ },
+ "305": {
+  "name": "Lairon",
+  "stats": {
+   "hp": 60,
+   "attack": 90,
+   "defense": 140,
+   "speed": 40,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Steel",
+  "type2": "Rock",
+  "growth": "slow",
+  "abilities": [
+   5,
+   0,
+   69
+  ]
+ },
+ "306": {
+  "name": "Aggron",
+  "stats": {
+   "hp": 70,
+   "attack": 110,
+   "defense": 180,
+   "speed": 50,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Steel",
+  "type2": "Dragon",
+  "growth": "slow",
+  "abilities": [
+   5,
+   0,
+   69
+  ]
+ },
+ "307": {
+  "name": "Meditite",
+  "stats": {
+   "hp": 40,
+   "attack": 40,
+   "defense": 55,
+   "speed": 60,
+   "sp_attack": 50,
+   "sp_defense": 65
+  },
+  "type": "Fighting",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   74,
+   0,
+   0
+  ]
+ },
+ "308": {
+  "name": "Medicham",
+  "stats": {
+   "hp": 80,
+   "attack": 63,
+   "defense": 75,
+   "speed": 82,
+   "sp_attack": 72,
+   "sp_defense": 78
+  },
+  "type": "Fighting",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   55,
+   1,
+   0
+  ]
+ },
+ "309": {
+  "name": "Electrike",
+  "stats": {
+   "hp": 40,
+   "attack": 45,
+   "defense": 40,
+   "speed": 65,
+   "sp_attack": 65,
+   "sp_defense": 40
+  },
+  "type": "Electric",
+  "growth": "slow",
+  "abilities": [
+   9,
+   0,
+   31
+  ]
+ },
+ "310": {
+  "name": "Manectric",
+  "stats": {
+   "hp": 70,
+   "attack": 85,
+   "defense": 60,
+   "speed": 115,
+   "sp_attack": 105,
+   "sp_defense": 60
+  },
+  "type": "Electric",
+  "growth": "slow",
+  "abilities": [
+   9,
+   0,
+   31
+  ]
+ },
+ "311": {
+  "name": "Plusle",
+  "stats": {
+   "hp": 80,
+   "attack": 40,
+   "defense": 90,
+   "speed": 50,
+   "sp_attack": 50,
+   "sp_defense": 90
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   57,
+   0,
+   0
+  ]
+ },
+ "312": {
+  "name": "Minun",
+  "stats": {
+   "hp": 60,
+   "attack": 40,
+   "defense": 55,
+   "speed": 100,
+   "sp_attack": 95,
+   "sp_defense": 55
+  },
+  "type": "Electric",
+  "growth": "medium",
+  "abilities": [
+   58,
+   0,
+   0
+  ]
+ },
+ "313": {
+  "name": "Volbeat",
+  "stats": {
+   "hp": 70,
+   "attack": 83,
+   "defense": 75,
+   "speed": 85,
+   "sp_attack": 47,
+   "sp_defense": 85
+  },
+  "type": "Bug",
+  "type2": "Electric",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   35,
+   0,
+   68
+  ]
+ },
+ "314": {
+  "name": "Illumise",
+  "stats": {
+   "hp": 75,
+   "attack": 47,
+   "defense": 80,
+   "speed": 85,
+   "sp_attack": 73,
+   "sp_defense": 85
+  },
+  "type": "Bug",
+  "type2": "Fairy",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   12,
+   0,
+   110
+  ]
+ },
+ "315": {
+  "name": "Roselia",
+  "stats": {
+   "hp": 50,
+   "attack": 60,
+   "defense": 45,
+   "speed": 65,
+   "sp_attack": 100,
+   "sp_defense": 80
+  },
+  "type": "Grass",
+  "type2": "Poison",
+  "growth": "medium-slow",
+  "abilities": [
+   30,
+   0,
+   38
+  ]
+ },
+ "316": {
+  "name": "Gulpin",
+  "stats": {
+   "hp": 70,
+   "attack": 43,
+   "defense": 53,
+   "speed": 40,
+   "sp_attack": 43,
+   "sp_defense": 53
+  },
+  "type": "Poison",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   64,
+   0,
+   60
+  ]
+ },
+ "317": {
+  "name": "Swalot",
+  "stats": {
+   "hp": 110,
+   "attack": 73,
+   "defense": 93,
+   "speed": 55,
+   "sp_attack": 73,
+   "sp_defense": 93
+  },
+  "type": "Poison",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   64,
+   0,
+   60
+  ]
+ },
+ "318": {
+  "name": "Carvanha",
+  "stats": {
+   "hp": 45,
+   "attack": 90,
+   "defense": 20,
+   "speed": 65,
+   "sp_attack": 65,
+   "sp_defense": 20
+  },
+  "type": "Water",
+  "type2": "Dark",
+  "growth": "slow",
+  "abilities": [
+   24,
+   0,
+   0
+  ]
+ },
+ "319": {
+  "name": "Sharpedo",
+  "stats": {
+   "hp": 70,
+   "attack": 120,
+   "defense": 40,
+   "speed": 105,
+   "sp_attack": 95,
+   "sp_defense": 40
+  },
+  "type": "Water",
+  "type2": "Dark",
+  "growth": "slow",
+  "abilities": [
+   24,
+   0,
+   0
+  ]
+ },
+ "320": {
+  "name": "Wailmer",
+  "stats": {
+   "hp": 130,
+   "attack": 70,
+   "defense": 35,
+   "speed": 60,
+   "sp_attack": 70,
+   "sp_defense": 35
+  },
+  "type": "Water",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   41,
+   0,
+   12
+  ]
+ },
+ "321": {
+  "name": "Wailord",
+  "stats": {
+   "hp": 170,
+   "attack": 85,
+   "defense": 45,
+   "speed": 60,
+   "sp_attack": 95,
+   "sp_defense": 45
+  },
+  "type": "Water",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   41,
+   0,
+   12
+  ]
+ },
+ "322": {
+  "name": "Numel",
+  "stats": {
+   "hp": 60,
+   "attack": 60,
+   "defense": 40,
+   "speed": 35,
+   "sp_attack": 65,
+   "sp_defense": 45
+  },
+  "type": "Fire",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   86
+  ]
+ },
+ "323": {
+  "name": "Camerupt",
+  "stats": {
+   "hp": 85,
+   "attack": 95,
+   "defense": 70,
+   "speed": 40,
+   "sp_attack": 100,
+   "sp_defense": 75
+  },
+  "type": "Fire",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   40,
+   0,
+   116
+  ]
+ },
+ "324": {
+  "name": "Torkoal",
+  "stats": {
+   "hp": 70,
+   "attack": 85,
+   "defense": 140,
+   "speed": 20,
+   "sp_attack": 85,
+   "sp_defense": 70
+  },
+  "type": "Fire",
+  "growth": "medium",
+  "abilities": [
+   73,
+   0,
+   70
+  ]
+ },
+ "325": {
+  "name": "Spoink",
+  "stats": {
+   "hp": 65,
+   "attack": 25,
+   "defense": 35,
+   "speed": 60,
+   "sp_attack": 70,
+   "sp_defense": 80
+  },
+  "type": "Psychic",
+  "growth": "fast",
+  "abilities": [
+   47,
+   0,
+   20
+  ]
+ },
+ "326": {
+  "name": "Grumpig",
+  "stats": {
+   "hp": 95,
+   "attack": 45,
+   "defense": 60,
+   "speed": 75,
+   "sp_attack": 90,
+   "sp_defense": 110
+  },
+  "type": "Psychic",
+  "growth": "fast",
+  "abilities": [
+   47,
+   0,
+   20
+  ]
+ },
+ "327": {
+  "name": "Spinda",
+  "stats": {
+   "hp": 75,
+   "attack": 60,
+   "defense": 70,
+   "speed": 60,
+   "sp_attack": 60,
+   "sp_defense": 70
+  },
+  "type": "Normal",
+  "growth": "fast",
+  "abilities": [
+   20,
+   0,
+   77
+  ]
+ },
+ "328": {
+  "name": "Trapinch",
+  "stats": {
+   "hp": 45,
+   "attack": 100,
+   "defense": 45,
+   "speed": 10,
+   "sp_attack": 45,
+   "sp_defense": 45
+  },
+  "type": "Ground",
+  "growth": "medium-slow",
+  "abilities": [
+   52,
+   0,
+   71
+  ]
+ },
+ "329": {
+  "name": "Vibrava",
+  "stats": {
+   "hp": 50,
+   "attack": 75,
+   "defense": 55,
+   "speed": 85,
+   "sp_attack": 50,
+   "sp_defense": 55
+  },
+  "type": "Ground",
+  "type2": "Dragon",
+  "growth": "medium-slow",
+  "abilities": [
+   26,
+   0,
+   26
+  ]
+ },
+ "330": {
+  "name": "Flygon",
+  "stats": {
+   "hp": 80,
+   "attack": 110,
+   "defense": 80,
+   "speed": 100,
+   "sp_attack": 75,
+   "sp_defense": 80
+  },
+  "type": "Ground",
+  "type2": "Dragon",
+  "growth": "medium-slow",
+  "abilities": [
+   26,
+   0,
+   26
+  ]
+ },
+ "331": {
+  "name": "Cacnea",
+  "stats": {
+   "hp": 50,
+   "attack": 85,
+   "defense": 40,
+   "speed": 35,
+   "sp_attack": 85,
+   "sp_defense": 40
+  },
+  "type": "Grass",
+  "growth": "medium-slow",
+  "abilities": [
+   8,
+   0,
+   0
+  ]
+ },
+ "332": {
+  "name": "Cacturne",
+  "stats": {
+   "hp": 70,
+   "attack": 115,
+   "defense": 70,
+   "speed": 45,
+   "sp_attack": 115,
+   "sp_defense": 70
+  },
+  "type": "Grass",
+  "type2": "Dark",
+  "growth": "medium-slow",
+  "abilities": [
+   8,
+   0,
+   0
+  ]
+ },
+ "333": {
+  "name": "Swablu",
+  "stats": {
+   "hp": 50,
+   "attack": 40,
+   "defense": 65,
+   "speed": 50,
+   "sp_attack": 50,
+   "sp_defense": 75
+  },
+  "type": "Flying",
+  "type2": "Fairy",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   30,
+   0,
+   182
+  ]
+ },
+ "334": {
+  "name": "Altaria",
+  "stats": {
+   "hp": 95,
+   "attack": 75,
+   "defense": 85,
+   "speed": 80,
+   "sp_attack": 80,
+   "sp_defense": 105
+  },
+  "type": "Dragon",
+  "type2": "Fairy",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   30,
+   0,
+   182
+  ]
+ },
+ "335": {
+  "name": "Zangoose",
+  "stats": {
+   "hp": 80,
+   "attack": 125,
+   "defense": 60,
+   "speed": 100,
+   "sp_attack": 60,
+   "sp_defense": 60
+  },
+  "type": "Normal",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   17,
+   0,
+   36
+  ]
+ },
+ "336": {
+  "name": "Seviper",
+  "stats": {
+   "hp": 73,
+   "attack": 100,
+   "defense": 75,
+   "speed": 77,
+   "sp_attack": 90,
+   "sp_defense": 70
+  },
+  "type": "Poison",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   61,
+   0,
+   173
+  ]
+ },
+ "337": {
+  "name": "Lunatone",
+  "stats": {
+   "hp": 90,
+   "attack": 55,
+   "defense": 65,
+   "speed": 70,
+   "sp_attack": 105,
+   "sp_defense": 85
+  },
+  "type": "Rock",
+  "type2": "Psychic",
+  "growth": "fast",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "338": {
+  "name": "Solrock",
+  "stats": {
+   "hp": 90,
+   "attack": 105,
+   "defense": 85,
+   "speed": 70,
+   "sp_attack": 55,
+   "sp_defense": 65
+  },
+  "type": "Rock",
+  "type2": "Psychic",
+  "growth": "fast",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "339": {
+  "name": "Barboach",
+  "stats": {
+   "hp": 50,
+   "attack": 48,
+   "defense": 43,
+   "speed": 60,
+   "sp_attack": 46,
+   "sp_defense": 41
+  },
+  "type": "Water",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   107
+  ]
+ },
+ "340": {
+  "name": "Whiscash",
+  "stats": {
+   "hp": 110,
+   "attack": 78,
+   "defense": 73,
+   "speed": 60,
+   "sp_attack": 76,
+   "sp_defense": 71
+  },
+  "type": "Water",
+  "type2": "Ground",
+  "growth": "medium",
+  "abilities": [
+   12,
+   0,
+   107
+  ]
+ },
+ "341": {
+  "name": "Corphish",
+  "stats": {
+   "hp": 43,
+   "attack": 80,
+   "defense": 65,
+   "speed": 35,
+   "sp_attack": 50,
+   "sp_defense": 35
+  },
+  "type": "Water",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   52,
+   0,
+   75
+  ]
+ },
+ "342": {
+  "name": "Crawdaunt",
+  "stats": {
+   "hp": 63,
+   "attack": 120,
+   "defense": 90,
+   "speed": 55,
+   "sp_attack": 90,
+   "sp_defense": 55
+  },
+  "type": "Water",
+  "type2": "Dark",
+  "growth": "fast-then-very-slow",
+  "abilities": [
+   52,
+   0,
+   75
+  ]
+ },
+ "343": {
+  "name": "Baltoy",
+  "stats": {
+   "hp": 50,
+   "attack": 40,
+   "defense": 55,
+   "speed": 55,
+   "sp_attack": 40,
+   "sp_defense": 70
+  },
+  "type": "Ground",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "344": {
+  "name": "Claydol",
+  "stats": {
+   "hp": 75,
+   "attack": 65,
+   "defense": 105,
+   "speed": 75,
+   "sp_attack": 70,
+   "sp_defense": 120
+  },
+  "type": "Ground",
+  "type2": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "345": {
+  "name": "Lileep",
+  "stats": {
+   "hp": 71,
+   "attack": 41,
+   "defense": 77,
+   "speed": 23,
+   "sp_attack": 61,
+   "sp_defense": 87
+  },
+  "type": "Rock",
+  "type2": "Grass",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   21,
+   0,
+   0
+  ]
+ },
+ "346": {
+  "name": "Cradily",
+  "stats": {
+   "hp": 96,
+   "attack": 81,
+   "defense": 97,
+   "speed": 43,
+   "sp_attack": 81,
+   "sp_defense": 107
+  },
+  "type": "Rock",
+  "type2": "Grass",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   21,
+   0,
+   0
+  ]
+ },
+ "347": {
+  "name": "Anorith",
+  "stats": {
+   "hp": 50,
+   "attack": 95,
+   "defense": 50,
+   "speed": 75,
+   "sp_attack": 40,
+   "sp_defense": 50
+  },
+  "type": "Rock",
+  "type2": "Bug",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   4,
+   0,
+   0
+  ]
+ },
+ "348": {
+  "name": "Armaldo",
+  "stats": {
+   "hp": 85,
+   "attack": 125,
+   "defense": 100,
+   "speed": 45,
+   "sp_attack": 70,
+   "sp_defense": 80
+  },
+  "type": "Rock",
+  "type2": "Bug",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   4,
+   0,
+   0
+  ]
+ },
+ "349": {
+  "name": "Feebas",
+  "stats": {
+   "hp": 20,
+   "attack": 15,
+   "defense": 20,
+   "speed": 80,
+   "sp_attack": 10,
+   "sp_defense": 55
+  },
+  "type": "Water",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   33,
+   0,
+   12
+  ]
+ },
+ "350": {
+  "name": "Milotic",
+  "stats": {
+   "hp": 105,
+   "attack": 60,
+   "defense": 79,
+   "speed": 81,
+   "sp_attack": 100,
+   "sp_defense": 125
+  },
+  "type": "Water",
+  "type2": "Fairy",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   63,
+   0,
+   172
+  ]
+ },
+ "351": {
+  "name": "Castform",
+  "stats": {
+   "hp": 80,
+   "attack": 80,
+   "defense": 80,
+   "speed": 80,
+   "sp_attack": 80,
+   "sp_defense": 80
+  },
+  "type": "Normal",
+  "growth": "medium",
+  "abilities": [
+   59,
+   0,
+   0
+  ]
+ },
+ "352": {
+  "name": "Kecleon",
+  "stats": {
+   "hp": 75,
+   "attack": 90,
+   "defense": 75,
+   "speed": 30,
+   "sp_attack": 60,
+   "sp_defense": 120
+  },
+  "type": "Normal",
+  "growth": "medium-slow",
+  "abilities": [
+   16,
+   0,
+   168
+  ]
+ },
+ "353": {
+  "name": "Shuppet",
+  "stats": {
+   "hp": 54,
+   "attack": 75,
+   "defense": 45,
+   "speed": 45,
+   "sp_attack": 63,
+   "sp_defense": 43
+  },
+  "type": "Ghost",
+  "type2": "Normal",
+  "growth": "fast",
+  "abilities": [
+   15,
+   0,
+   119
+  ]
+ },
+ "354": {
+  "name": "Banette",
+  "stats": {
+   "hp": 74,
+   "attack": 115,
+   "defense": 75,
+   "speed": 75,
+   "sp_attack": 53,
+   "sp_defense": 73
+  },
+  "type": "Ghost",
+  "type2": "Normal",
+  "growth": "fast",
+  "abilities": [
+   15,
+   0,
+   119
+  ]
+ },
+ "355": {
+  "name": "Duskull",
+  "stats": {
+   "hp": 20,
+   "attack": 40,
+   "defense": 90,
+   "speed": 25,
+   "sp_attack": 30,
+   "sp_defense": 90
+  },
+  "type": "Ghost",
+  "growth": "fast",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "356": {
+  "name": "Dusclops",
+  "stats": {
+   "hp": 50,
+   "attack": 70,
+   "defense": 130,
+   "speed": 25,
+   "sp_attack": 60,
+   "sp_defense": 130
+  },
+  "type": "Ghost",
+  "growth": "fast",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ },
+ "357": {
+  "name": "Tropius",
+  "stats": {
+   "hp": 109,
+   "attack": 84,
+   "defense": 91,
+   "speed": 51,
+   "sp_attack": 93,
+   "sp_defense": 87
+  },
+  "type": "Grass",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   47,
+   0,
+   94
+  ]
+ },
+ "358": {
+  "name": "Chimecho",
+  "stats": {
+   "hp": 75,
+   "attack": 50,
+   "defense": 90,
+   "speed": 65,
+   "sp_attack": 100,
+   "sp_defense": 95
+  },
+  "type": "Psychic",
+  "type2": "Steel",
+  "growth": "fast",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "359": {
+  "name": "Absol",
+  "stats": {
+   "hp": 65,
+   "attack": 130,
+   "defense": 65,
+   "speed": 95,
+   "sp_attack": 75,
+   "sp_defense": 65
+  },
+  "type": "Dark",
+  "growth": "medium-slow",
+  "abilities": [
+   46,
+   0,
+   105
+  ]
+ },
+ "360": {
+  "name": "Wynaut",
+  "stats": {
+   "hp": 95,
+   "attack": 23,
+   "defense": 48,
+   "speed": 23,
+   "sp_attack": 23,
+   "sp_defense": 48
+  },
+  "type": "Psychic",
+  "growth": "medium",
+  "abilities": [
+   23,
+   0,
+   0
+  ]
+ },
+ "361": {
+  "name": "Snorunt",
+  "stats": {
+   "hp": 50,
+   "attack": 50,
+   "defense": 50,
+   "speed": 50,
+   "sp_attack": 50,
+   "sp_defense": 50
+  },
+  "type": "Ice",
+  "growth": "medium",
+  "abilities": [
+   39,
+   0,
+   115
+  ]
+ },
+ "362": {
+  "name": "Glalie",
+  "stats": {
+   "hp": 90,
+   "attack": 80,
+   "defense": 100,
+   "speed": 80,
+   "sp_attack": 80,
+   "sp_defense": 90
+  },
+  "type": "Ice",
+  "growth": "medium",
+  "abilities": [
+   173,
+   0,
+   115
+  ]
+ },
+ "363": {
+  "name": "Spheal",
+  "stats": {
+   "hp": 75,
+   "attack": 45,
+   "defense": 50,
+   "speed": 25,
+   "sp_attack": 55,
+   "sp_defense": 50
+  },
+  "type": "Ice",
+  "type2": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   47,
+   0,
+   169
+  ]
+ },
+ "364": {
+  "name": "Sealeo",
+  "stats": {
+   "hp": 95,
+   "attack": 60,
+   "defense": 70,
+   "speed": 45,
+   "sp_attack": 80,
+   "sp_defense": 70
+  },
+  "type": "Ice",
+  "type2": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   47,
+   0,
+   169
+  ]
+ },
+ "365": {
+  "name": "Walrein",
+  "stats": {
+   "hp": 120,
+   "attack": 85,
+   "defense": 90,
+   "speed": 65,
+   "sp_attack": 100,
+   "sp_defense": 90
+  },
+  "type": "Ice",
+  "type2": "Water",
+  "growth": "medium-slow",
+  "abilities": [
+   47,
+   0,
+   169
+  ]
+ },
+ "366": {
+  "name": "Clamperl",
+  "stats": {
+   "hp": 35,
+   "attack": 64,
+   "defense": 85,
+   "speed": 32,
+   "sp_attack": 74,
+   "sp_defense": 55
+  },
+  "type": "Water",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   75,
+   0,
+   0
+  ]
+ },
+ "367": {
+  "name": "Huntail",
+  "stats": {
+   "hp": 55,
+   "attack": 119,
+   "defense": 105,
+   "speed": 57,
+   "sp_attack": 94,
+   "sp_defense": 75
+  },
+  "type": "Water",
+  "type2": "Dragon",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   22,
+   0,
+   0
+  ]
+ },
+ "368": {
+  "name": "Gorebyss",
+  "stats": {
+   "hp": 75,
+   "attack": 74,
+   "defense": 105,
+   "speed": 52,
+   "sp_attack": 114,
+   "sp_defense": 85
+  },
+  "type": "Water",
+  "type2": "Fairy",
+  "growth": "slow-then-very-fast",
+  "abilities": [
+   144,
+   0,
+   0
+  ]
+ },
+ "369": {
+  "name": "Relicanth",
+  "stats": {
+   "hp": 100,
+   "attack": 90,
+   "defense": 130,
+   "speed": 35,
+   "sp_attack": 45,
+   "sp_defense": 85
+  },
+  "type": "Water",
+  "type2": "Rock",
+  "growth": "slow",
+  "abilities": [
+   33,
+   0,
+   69
+  ]
+ },
+ "370": {
+  "name": "Luvdisc",
+  "stats": {
+   "hp": 53,
+   "attack": 30,
+   "defense": 55,
+   "speed": 137,
+   "sp_attack": 95,
+   "sp_defense": 70
+  },
+  "type": "Water",
+  "growth": "fast",
+  "abilities": [
+   33,
+   0,
+   220
+  ]
+ },
+ "371": {
+  "name": "Bagon",
+  "stats": {
+   "hp": 45,
+   "attack": 75,
+   "defense": 60,
+   "speed": 50,
+   "sp_attack": 40,
+   "sp_defense": 30
+  },
+  "type": "Dragon",
+  "growth": "slow",
+  "abilities": [
+   69,
+   0,
+   0
+  ]
+ },
+ "372": {
+  "name": "Shelgon",
+  "stats": {
+   "hp": 65,
+   "attack": 95,
+   "defense": 100,
+   "speed": 50,
+   "sp_attack": 60,
+   "sp_defense": 50
+  },
+  "type": "Dragon",
+  "growth": "slow",
+  "abilities": [
+   69,
+   0,
+   0
+  ]
+ },
+ "373": {
+  "name": "Salamence",
+  "stats": {
+   "hp": 95,
+   "attack": 135,
+   "defense": 80,
+   "speed": 100,
+   "sp_attack": 110,
+   "sp_defense": 80
+  },
+  "type": "Dragon",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   22,
+   0,
+   0
+  ]
+ },
+ "374": {
+  "name": "Beldum",
+  "stats": {
+   "hp": 40,
+   "attack": 55,
+   "defense": 80,
+   "speed": 30,
+   "sp_attack": 35,
+   "sp_defense": 60
+  },
+  "type": "Steel",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   0
+  ]
+ },
+ "375": {
+  "name": "Metang",
+  "stats": {
+   "hp": 60,
+   "attack": 75,
+   "defense": 100,
+   "speed": 50,
+   "sp_attack": 55,
+   "sp_defense": 80
+  },
+  "type": "Steel",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   0
+  ]
+ },
+ "376": {
+  "name": "Metagross",
+  "stats": {
+   "hp": 80,
+   "attack": 135,
+   "defense": 130,
+   "speed": 70,
+   "sp_attack": 95,
+   "sp_defense": 90
+  },
+  "type": "Steel",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   0
+  ]
+ },
+ "377": {
+  "name": "Regirock",
+  "stats": {
+   "hp": 80,
+   "attack": 100,
+   "defense": 200,
+   "speed": 50,
+   "sp_attack": 50,
+   "sp_defense": 100
+  },
+  "type": "Rock",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   0
+  ]
+ },
+ "378": {
+  "name": "Regice",
+  "stats": {
+   "hp": 80,
+   "attack": 50,
+   "defense": 100,
+   "speed": 50,
+   "sp_attack": 100,
+   "sp_defense": 200
+  },
+  "type": "Ice",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   0
+  ]
+ },
+ "379": {
+  "name": "Registeel",
+  "stats": {
+   "hp": 80,
+   "attack": 75,
+   "defense": 150,
+   "speed": 50,
+   "sp_attack": 75,
+   "sp_defense": 150
+  },
+  "type": "Steel",
+  "growth": "slow",
+  "abilities": [
+   29,
+   0,
+   0
+  ]
+ },
+ "380": {
+  "name": "Latias",
+  "stats": {
+   "hp": 80,
+   "attack": 80,
+   "defense": 90,
+   "speed": 110,
+   "sp_attack": 110,
+   "sp_defense": 130
+  },
+  "type": "Dragon",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "381": {
+  "name": "Latios",
+  "stats": {
+   "hp": 80,
+   "attack": 90,
+   "defense": 80,
+   "speed": 110,
+   "sp_attack": 130,
+   "sp_defense": 110
+  },
+  "type": "Dragon",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   26,
+   0,
+   0
+  ]
+ },
+ "382": {
+  "name": "Kyogre",
+  "stats": {
+   "hp": 100,
+   "attack": 100,
+   "defense": 90,
+   "speed": 90,
+   "sp_attack": 150,
+   "sp_defense": 140
+  },
+  "type": "Water",
+  "growth": "slow",
+  "abilities": [
+   2,
+   0,
+   0
+  ]
+ },
+ "383": {
+  "name": "Groudon",
+  "stats": {
+   "hp": 100,
+   "attack": 150,
+   "defense": 140,
+   "speed": 90,
+   "sp_attack": 100,
+   "sp_defense": 90
+  },
+  "type": "Ground",
+  "growth": "slow",
+  "abilities": [
+   70,
+   0,
+   0
+  ]
+ },
+ "384": {
+  "name": "Rayquaza",
+  "stats": {
+   "hp": 105,
+   "attack": 150,
+   "defense": 90,
+   "speed": 95,
+   "sp_attack": 150,
+   "sp_defense": 90
+  },
+  "type": "Dragon",
+  "type2": "Flying",
+  "growth": "slow",
+  "abilities": [
+   76,
+   0,
+   0
+  ]
+ },
+ "385": {
+  "name": "Jirachi",
+  "stats": {
+   "hp": 100,
+   "attack": 100,
+   "defense": 100,
+   "speed": 100,
+   "sp_attack": 100,
+   "sp_defense": 100
+  },
+  "type": "Steel",
+  "type2": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   32,
+   0,
+   0
+  ]
+ },
+ "386": {
+  "name": "Deoxys",
+  "stats": {
+   "hp": 50,
+   "attack": 150,
+   "defense": 50,
+   "speed": 150,
+   "sp_attack": 150,
+   "sp_defense": 50
+  },
+  "type": "Psychic",
+  "growth": "slow",
+  "abilities": [
+   46,
+   0,
+   0
+  ]
+ }
+}

@@ -1,0 +1,207 @@
+{
+  "name": "Pokémon Unbound",
+  "version": "2.1.1.1",
+  "notice": "Box names are unlocated and Poké Ball names unconfirmed; everything else is verified against real saves.",
+  "export_name": "Unbound_edited.sav",
+  "link": {
+    "label": "Data source: PUSE",
+    "url": "https://github.com/Zannael/PUSE"
+  },
+  "layout": {
+    "record_encoding": "gen3_plain",
+    "sector_signature": 17963417,
+    "sector_data_size": 4080,
+    "sector_sizes": [
+      {
+        "sector": 0,
+        "size": 3876
+      },
+      {
+        "sector": 4,
+        "size": 3480
+      },
+      {
+        "sector": 13,
+        "size": 1104
+      }
+    ],
+    "sb1_size": 15720,
+    "sb2_size": 3876,
+    "storage_size": 36720,
+    "player_name": 0,
+    "player_name_length": 8,
+    "player_gender": 8,
+    "trainer_id": 10,
+    "encryption_key": null,
+    "party_count": 52,
+    "party": 56,
+    "money": 656,
+    "coins": 660,
+    "pockets": [
+      {
+        "name": "Items",
+        "offset": 35416,
+        "count": 326,
+        "region": "storage"
+      },
+      {
+        "name": "KeyItems",
+        "offset": 123376,
+        "count": 75,
+        "region": "file"
+      },
+      {
+        "name": "PokeBalls",
+        "offset": 123676,
+        "count": 50,
+        "region": "file"
+      },
+      {
+        "name": "TMsHMs",
+        "offset": 123876,
+        "count": 128,
+        "region": "file"
+      },
+      {
+        "name": "Berries",
+        "offset": 124388,
+        "count": 75,
+        "region": "file"
+      }
+    ],
+    "mon_size": 100,
+    "box_mon_size": 58,
+    "total_boxes": 19,
+    "box_capacity": 30,
+    "storage_boxes": 4,
+    "box_name_length": 0,
+    "box_encoding": "cfru_compact",
+    "bag": 0
+  },
+  "record": {
+    "nickname_length": 10,
+    "ot_name_length": 7
+  },
+  "sprites": {
+    "national_dex_max_id": 809,
+    "use_showdown_fallback": true,
+    "species_ids_are_dex_numbers": false
+  },
+  "behavior": {
+    "new_level": 5,
+    "fallback_move": 33,
+    "default_ot_name": "Trainer",
+    "met_location": 255,
+    "shiny_threshold": 16,
+    "pokeballs": [
+      {
+        "id": 1,
+        "name": "Master Ball"
+      },
+      {
+        "id": 2,
+        "name": "Ultra Ball"
+      },
+      {
+        "id": 3,
+        "name": "Great Ball"
+      },
+      {
+        "id": 4,
+        "name": "Poké Ball"
+      },
+      {
+        "id": 5,
+        "name": "Safari Ball"
+      },
+      {
+        "id": 6,
+        "name": "Net Ball"
+      },
+      {
+        "id": 7,
+        "name": "Dive Ball"
+      },
+      {
+        "id": 8,
+        "name": "Nest Ball"
+      },
+      {
+        "id": 9,
+        "name": "Repeat Ball"
+      },
+      {
+        "id": 10,
+        "name": "Timer Ball"
+      },
+      {
+        "id": 11,
+        "name": "Luxury Ball"
+      },
+      {
+        "id": 12,
+        "name": "Premier Ball"
+      },
+      {
+        "id": 13,
+        "name": "Dusk Ball"
+      },
+      {
+        "id": 14,
+        "name": "Heal Ball"
+      },
+      {
+        "id": 15,
+        "name": "Quick Ball"
+      },
+      {
+        "id": 16,
+        "name": "Cherish Ball"
+      },
+      {
+        "id": 17,
+        "name": "Park Ball"
+      },
+      {
+        "id": 18,
+        "name": "Fast Ball"
+      },
+      {
+        "id": 19,
+        "name": "Level Ball"
+      },
+      {
+        "id": 20,
+        "name": "Lure Ball"
+      },
+      {
+        "id": 21,
+        "name": "Heavy Ball"
+      },
+      {
+        "id": 22,
+        "name": "Love Ball"
+      },
+      {
+        "id": 23,
+        "name": "Friend Ball"
+      },
+      {
+        "id": 24,
+        "name": "Moon Ball"
+      },
+      {
+        "id": 25,
+        "name": "Sport Ball"
+      },
+      {
+        "id": 26,
+        "name": "Beast Ball"
+      },
+      {
+        "id": 27,
+        "name": "Dream Ball"
+      }
+    ]
+  }
+}
