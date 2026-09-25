@@ -1,5 +1,5 @@
 /target
 *.sav
 *.gba
-Cargo.lock
 examples
+/dist

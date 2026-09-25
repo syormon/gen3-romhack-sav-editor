@@ -4,4 +4,6 @@ pub mod inspector;
 pub mod party_box;
 pub mod theme;
 pub mod trainer;
+#[cfg(target_arch = "wasm32")]
+pub mod web;
 pub mod widgets;

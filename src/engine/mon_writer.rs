@@ -17,8 +17,8 @@ pub struct Rng(u32);
 
 impl Rng {
     pub fn from_clock() -> Self {
-        let nanos = std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
+        let nanos = web_time::SystemTime::now()
+            .duration_since(web_time::UNIX_EPOCH)
             .map(|d| d.subsec_nanos() ^ d.as_secs() as u32)
             .unwrap_or(0x1234_5678);
         Self(nz(nanos, 0x1234_5678))

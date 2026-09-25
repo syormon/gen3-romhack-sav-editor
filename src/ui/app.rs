@@ -1,8 +1,9 @@
 //! Application state and the top-level layout: header, drop zone, trainer bar,
 //! party sidebar, box grid, inspector and modals.
 
-use std::path::PathBuf;
-use std::time::Instant;
+use std::sync::mpsc;
+
+use web_time::Instant;
 
 use eframe::egui::{self, RichText};
 
@@ -71,13 +72,24 @@ pub struct Message {
     pub body: String,
 }
 
+/// A save file as the editor holds it: a name to show, and the bytes as read.
+///
+/// The bytes rather than a path, because in a browser a picked or dropped file
+/// has no path to go back to. It helps natively too: re-reading a save under a
+/// different game no longer depends on the file still being where it was.
+#[derive(Clone)]
+pub struct SaveFile {
+    pub name: String,
+    pub bytes: Vec<u8>,
+}
+
 /// A save file waiting on the question of which game wrote it.
 ///
 /// The bytes are kept so the answer can be changed without re-reading the file:
 /// every pick re-parses them under that game's layout, and what appears behind
 /// the dialog is that parse.
 pub struct PendingSave {
-    pub path: PathBuf,
+    pub name: String,
     pub bytes: Vec<u8>,
     /// Index into `EditorApp::packs`, once something is chosen.
     pub choice: Option<usize>,
@@ -85,7 +97,7 @@ pub struct PendingSave {
     pub error: Option<String>,
     /// The save and game that were open before, so Cancel puts them back
     /// instead of throwing away the session.
-    pub restore: Option<(PathBuf, PathBuf)>,
+    pub restore: Option<(SaveFile, std::path::PathBuf)>,
 }
 
 /// Working state for the "Add New Pokémon" dialog.
@@ -181,7 +193,16 @@ pub struct EditorApp {
     /// still being chosen.
     pub pending_save: Option<PendingSave>,
     pub save: Option<GameSave>,
-    pub loaded_path: Option<PathBuf>,
+    /// The file `save` was parsed from, kept so it can be re-read under
+    /// another game.
+    pub loaded: Option<SaveFile>,
+    /// Files that finished reading asynchronously — everything in a browser,
+    /// where picking and dropping both hand the bytes over later.
+    pub incoming: mpsc::Receiver<Result<SaveFile, String>>,
+    /// Handed to those reads so they can deliver. Natively every read is
+    /// synchronous, so nothing sends on it there.
+    #[cfg_attr(not(target_arch = "wasm32"), allow(dead_code))]
+    pub incoming_tx: mpsc::Sender<Result<SaveFile, String>>,
     pub current_box: usize,
     pub inspector: Option<Inspector>,
     pub add_modal: Option<AddModal>,
@@ -195,11 +216,12 @@ pub struct EditorApp {
 }
 
 impl EditorApp {
-    pub fn new(cc: &eframe::CreationContext<'_>, initial_file: Option<PathBuf>) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         egui_extras::install_image_loaders(&cc.egui_ctx);
         theme::apply(&cc.egui_ctx);
+        let (incoming_tx, incoming) = mpsc::channel();
 
-        let mut app = Self {
+        Self {
             packs: crate::game::discover(),
             pack_warnings: if crate::game::is_loaded() {
                 crate::game::current().warnings()
@@ -208,7 +230,9 @@ impl EditorApp {
             },
             pending_save: None,
             save: None,
-            loaded_path: None,
+            loaded: None,
+            incoming,
+            incoming_tx,
             current_box: 0,
             inspector: None,
             add_modal: None,
@@ -219,11 +243,16 @@ impl EditorApp {
             rng: Rng::from_clock(),
             load_sprites: true,
             actions: Vec::new(),
-        };
-        if let Some(path) = initial_file {
-            app.load_path(path);
         }
-        app
+    }
+
+    /// Opens a save named on the command line.
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn load_from_disk(&mut self, path: &std::path::Path) {
+        match read_disk_file(path) {
+            Ok(file) => self.load_file(file),
+            Err(err) => self.alert("Could not open file", err),
+        }
     }
 
     /// Loads a game pack and makes it the one the editor reads saves with.
@@ -240,7 +269,7 @@ impl EditorApp {
             }
         };
 
-        let reopen = self.loaded_path.take();
+        let reopen = self.loaded.take();
         self.save = None;
         self.inspector = None;
         self.add_modal = None;
@@ -255,7 +284,7 @@ impl EditorApp {
         ))));
 
         match reopen {
-            Some(path) => self.load_path(path),
+            Some(file) => self.load_file(file),
             None => self.toast(format!("Loaded {}", pack.manifest.name)),
         }
     }
@@ -279,18 +308,13 @@ impl EditorApp {
     /// Reads a save from disk. Which game it belongs to is asked afterwards, if
     /// it is not already settled — the file has to be in hand before there is
     /// anything to ask about.
-    fn load_path(&mut self, path: PathBuf) {
-        let bytes = match std::fs::read(&path) {
-            Ok(bytes) => bytes,
-            Err(err) => return self.alert("Could not open file", err.to_string()),
-        };
-
+    fn load_file(&mut self, file: SaveFile) {
         if crate::game::is_loaded() {
-            self.open_save(path, bytes);
+            self.open_save(file);
         } else {
             self.pending_save = Some(PendingSave {
-                path,
-                bytes,
+                name: file.name,
+                bytes: file.bytes,
                 choice: None,
                 error: None,
                 restore: None,
@@ -305,27 +329,22 @@ impl EditorApp {
     /// nothing tying the next save to the game the last one came from. The
     /// current game is pre-selected, so staying put is one click, and the
     /// preview behind the dialog shows straight away when it is wrong.
-    fn load_path_and_ask(&mut self, path: PathBuf) {
-        let bytes = match std::fs::read(&path) {
-            Ok(bytes) => bytes,
-            Err(err) => return self.alert("Could not open file", err.to_string()),
-        };
-
+    fn load_file_and_ask(&mut self, file: SaveFile) {
         // With a single game installed there is nothing to ask.
         if self.packs.len() < 2 && crate::game::is_loaded() {
-            return self.open_save(path, bytes);
+            return self.open_save(file);
         }
 
         let current = crate::game::current_opt()
             .and_then(|pack| self.packs.iter().position(|p| p.dir == pack.dir));
         let restore = self
-            .loaded_path
+            .loaded
             .clone()
             .zip(current.map(|i| self.packs[i].dir.clone()));
 
         self.pending_save = Some(PendingSave {
-            path,
-            bytes,
+            name: file.name,
+            bytes: file.bytes,
             choice: None,
             error: None,
             restore,
@@ -336,11 +355,11 @@ impl EditorApp {
     }
 
     /// Parses a save with the active game's layout and puts it on screen.
-    fn open_save(&mut self, path: PathBuf, bytes: Vec<u8>) {
-        match GameSave::from_bytes(bytes) {
+    fn open_save(&mut self, file: SaveFile) {
+        match GameSave::from_bytes(file.bytes.clone()) {
             Ok(save) => {
                 self.save = Some(save);
-                self.loaded_path = Some(path);
+                self.loaded = Some(file);
                 self.current_box = 0;
                 self.inspector = None;
                 self.add_modal = None;
@@ -352,25 +371,81 @@ impl EditorApp {
         }
     }
 
-    fn pick_and_load(&mut self) {
+    #[cfg(not(target_arch = "wasm32"))]
+    fn pick_and_load(&mut self, _ctx: &egui::Context) {
         if let Some(path) = rfd::FileDialog::new()
             .add_filter("Pokémon save file", &["sav"])
             .pick_file()
         {
-            self.load_path_and_ask(path);
+            match read_disk_file(&path) {
+                Ok(file) => self.load_file_and_ask(file),
+                Err(err) => self.alert("Could not open file", err),
+            }
         }
     }
 
-    fn handle_dropped_files(&mut self, ctx: &egui::Context) {
-        let dropped: Vec<PathBuf> = ctx.input(|i| {
-            i.raw
-                .dropped_files
-                .iter()
-                .map(|f| f.path().to_path_buf())
-                .collect()
+    /// The browser can only hand a picked file over asynchronously, so the
+    /// bytes arrive later through `incoming`.
+    #[cfg(target_arch = "wasm32")]
+    fn pick_and_load(&mut self, ctx: &egui::Context) {
+        let tx = self.incoming_tx.clone();
+        let ctx = ctx.clone();
+        wasm_bindgen_futures::spawn_local(async move {
+            let Some(handle) = rfd::AsyncFileDialog::new()
+                .add_filter("Pokémon save file", &["sav"])
+                .pick_file()
+                .await
+            else {
+                return;
+            };
+            let file = SaveFile {
+                name: handle.file_name(),
+                bytes: handle.read().await,
+            };
+            let _ = tx.send(Ok(file));
+            ctx.request_repaint();
         });
-        if let Some(path) = dropped.into_iter().next() {
-            self.load_path_and_ask(path);
+    }
+
+    fn handle_dropped_files(&mut self, ctx: &egui::Context) {
+        let Some(dropped) = ctx.input(|i| i.raw.dropped_files.first().cloned()) else {
+            return;
+        };
+        let name = dropped
+            .path()
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .into_owned();
+
+        #[cfg(not(target_arch = "wasm32"))]
+        match dropped.bytes() {
+            Ok(bytes) => self.load_file_and_ask(SaveFile { name, bytes }),
+            Err(err) => self.alert("Could not open file", err),
+        }
+
+        #[cfg(target_arch = "wasm32")]
+        {
+            let tx = self.incoming_tx.clone();
+            let ctx = ctx.clone();
+            wasm_bindgen_futures::spawn_local(async move {
+                let result = dropped
+                    .bytes_async()
+                    .await
+                    .map(|bytes| SaveFile { name, bytes });
+                let _ = tx.send(result);
+                ctx.request_repaint();
+            });
+        }
+    }
+
+    /// Takes in files whose bytes arrived since the last frame.
+    fn receive_files(&mut self) {
+        while let Ok(result) = self.incoming.try_recv() {
+            match result {
+                Ok(file) => self.load_file_and_ask(file),
+                Err(err) => self.alert("Could not open file", err),
+            }
         }
     }
 
@@ -548,20 +623,31 @@ impl EditorApp {
             &save.storage,
         );
 
-        let Some(path) = rfd::FileDialog::new()
-            .add_filter("Pokémon save file", &["sav"])
-            .set_file_name(crate::game::current().manifest.export_file_name())
-            .save_file()
-        else {
-            return;
-        };
+        let file_name = crate::game::current().manifest.export_file_name();
 
-        match std::fs::write(&path, &updated) {
-            Ok(()) => self.toast(format!(
-                "Saved {}",
-                path.file_name().unwrap_or_default().to_string_lossy()
-            )),
-            Err(err) => self.alert("Could not write file", err.to_string()),
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            let Some(path) = rfd::FileDialog::new()
+                .add_filter("Pokémon save file", &["sav"])
+                .set_file_name(file_name)
+                .save_file()
+            else {
+                return;
+            };
+            match std::fs::write(&path, &updated) {
+                Ok(()) => self.toast(format!(
+                    "Saved {}",
+                    path.file_name().unwrap_or_default().to_string_lossy()
+                )),
+                Err(err) => self.alert("Could not write file", err.to_string()),
+            }
+        }
+
+        // A web page cannot write to disk; it offers the file as a download.
+        #[cfg(target_arch = "wasm32")]
+        match super::web::download(&file_name, &updated) {
+            Ok(()) => self.toast(format!("Downloaded {file_name}")),
+            Err(err) => self.alert("Could not download the save", err),
         }
     }
 
@@ -649,7 +735,7 @@ impl EditorApp {
                             }
                             if color_button(ui, "📂 Load Different .sav", theme::BORDER).clicked()
                             {
-                                self.pick_and_load();
+                                self.pick_and_load(&ui.ctx().clone());
                             }
                             if color_button(ui, "Apply Changes", theme::GREEN).clicked() {
                                 self.commit_active_modals();
@@ -698,7 +784,7 @@ impl EditorApp {
                             ui.label(RichText::new(hint).size(12.0).color(theme::MUTED));
                             ui.add_space(14.0);
                             if color_button(ui, "Browse…", theme::BLUE_DEEP).clicked() {
-                                self.pick_and_load();
+                                self.pick_and_load(&ui.ctx().clone());
                             }
                         });
                     });
@@ -865,12 +951,7 @@ impl EditorApp {
         };
 
         let packs = self.packs.clone();
-        let file_name = pending
-            .path
-            .file_name()
-            .unwrap_or_default()
-            .to_string_lossy()
-            .into_owned();
+        let file_name = pending.name.clone();
         let choice = pending.choice;
         let error = pending.error.clone();
 
@@ -976,12 +1057,12 @@ impl EditorApp {
         } else if cancel || ctx.input(|i| i.key_pressed(egui::Key::Escape)) {
             let restore = self.pending_save.take().and_then(|p| p.restore);
             self.save = None;
-            self.loaded_path = None;
+            self.loaded = None;
             match restore {
                 // Put back the save that was open before this one was picked.
-                Some((path, dir)) => {
+                Some((file, dir)) => {
                     if crate::game::activate(&dir).is_ok() {
-                        self.load_path(path);
+                        self.load_file(file);
                     }
                 }
                 None => crate::game::clear(),
@@ -997,8 +1078,11 @@ impl EditorApp {
             return;
         };
         let dir = self.packs[index].dir.clone();
-        let bytes = pending.bytes.clone();
-        let path = pending.path.clone();
+        let file = SaveFile {
+            name: pending.name.clone(),
+            bytes: pending.bytes.clone(),
+        };
+        let bytes = file.bytes.clone();
 
         let outcome = crate::game::activate(&dir).and_then(|_| GameSave::from_bytes(bytes));
 
@@ -1013,7 +1097,7 @@ impl EditorApp {
         let error = match outcome {
             Ok(save) => {
                 self.save = Some(save);
-                self.loaded_path = Some(path);
+                self.loaded = Some(file);
                 None
             }
             Err(err) => Some(err),
@@ -1122,6 +1206,18 @@ pub fn window_title() -> String {
     }
 }
 
+/// Reads a save from disk into the form the editor holds it in.
+#[cfg(not(target_arch = "wasm32"))]
+fn read_disk_file(path: &std::path::Path) -> Result<SaveFile, String> {
+    let bytes = std::fs::read(path).map_err(|e| format!("{}: {e}", path.display()))?;
+    let name = path
+        .file_name()
+        .unwrap_or_default()
+        .to_string_lossy()
+        .into_owned();
+    Ok(SaveFile { name, bytes })
+}
+
 /// Writes a Pokémon into the buffer that backs `slot`.
 pub fn write_mon(save: &mut GameSave, slot: SlotRef, mon: &Pokemon) {
     let is_party = slot.is_party();
@@ -1156,6 +1252,7 @@ impl eframe::App for EditorApp {
         let ctx = &ctx;
 
         self.handle_dropped_files(ctx);
+        self.receive_files();
         self.header(ui);
 
         if self.save.is_some() {

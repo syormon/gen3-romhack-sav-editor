@@ -27,6 +27,47 @@ use eframe::egui;
 /// no `icon.png`.
 const ICON_PNG: &[u8] = include_bytes!("../assets/icon.png");
 
+/// The browser entry point: attach to the page's canvas and run.
+///
+/// There is no command line and no filesystem here. Game packs come from the
+/// copy build.rs compiles in, and saves arrive through the file picker or by
+/// dropping them on the page.
+#[cfg(target_arch = "wasm32")]
+fn main() {
+    use eframe::wasm_bindgen::JsCast as _;
+
+    wasm_bindgen_futures::spawn_local(async {
+        let document = web_sys::window()
+            .and_then(|w| w.document())
+            .expect("a browser document");
+        let canvas = document
+            .get_element_by_id("editor_canvas")
+            .expect("index.html should have a canvas with id editor_canvas")
+            .dyn_into::<web_sys::HtmlCanvasElement>()
+            .expect("editor_canvas should be a <canvas>");
+
+        let started = eframe::WebRunner::new()
+            .start(
+                canvas,
+                eframe::WebOptions::default(),
+                Box::new(|cc| Ok(Box::new(ui::app::EditorApp::new(cc)))),
+            )
+            .await;
+
+        // Swap the page's "Loading…" text for the app, or for the reason it
+        // could not start.
+        if let Some(status) = document.get_element_by_id("loading_text") {
+            match started {
+                Ok(()) => status.remove(),
+                Err(err) => status.set_inner_html(&format!(
+                    "<p>The editor could not start.</p><p><code>{err:?}</code></p>"
+                )),
+            }
+        }
+    });
+}
+
+#[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result<()> {
     let mut initial_file: Option<std::path::PathBuf> = None;
     let mut wanted_game: Option<String> = None;
@@ -103,7 +144,13 @@ fn main() -> eframe::Result<()> {
     eframe::run_native(
         "pokemon-save-editor",
         options,
-        Box::new(move |cc| Ok(Box::new(ui::app::EditorApp::new(cc, initial_file)))),
+        Box::new(move |cc| {
+            let mut app = ui::app::EditorApp::new(cc);
+            if let Some(path) = initial_file {
+                app.load_from_disk(&path);
+            }
+            Ok(Box::new(app))
+        }),
     )
 }
 
@@ -112,9 +159,8 @@ fn main() -> eframe::Result<()> {
 /// The window icon is set from this at startup and again whenever the game
 /// changes, via `ViewportCommand::Icon`.
 pub fn load_icon() -> egui::IconData {
-    let pack_icon = game::is_loaded()
-        .then(|| std::fs::read(game::current().dir.join("icon.png")).ok())
-        .flatten();
+    let pack_icon =
+        game::current_opt().and_then(|pack| game::read_pack_file(&pack.dir, "icon.png"));
 
     if let Some(icon) = pack_icon.as_deref().and_then(decode_icon) {
         return icon;

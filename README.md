@@ -1,6 +1,8 @@
 # Pokémon ROM hack save editor
 
-A native Rust + [egui](https://github.com/emilk/egui) save editor for Pokémon ROM hacks.
+A Rust + [egui](https://github.com/emilk/egui) save editor for Pokémon ROM hacks, for
+Windows, Linux, macOS — and the browser, where it runs entirely on your machine: the save
+is read and edited locally and handed back as a download, never uploaded anywhere.
 
 The program knows nothing about any particular game. Each game is a folder of JSON under
 `assets/`, and the editor discovers whatever is there at startup. Adding a hack means
@@ -9,7 +11,7 @@ adding data, not changing code.
 ⚠️ **Always keep a backup** before overwriting a save.
 
 It began as a port of [`soul-gold-web`](https://github.com/jozeton-app/soul-gold-web) by
-Jozeton. Two games ship with it:
+Jozeton. Three games ship with it:
 
 | Game | Base | Record format | State |
 | --- | --- | --- | --- |
@@ -79,9 +81,27 @@ mark as one.
 
 ## Running
 
+Download the build for your platform from the
+[Releases](../../releases) page, or use it in the browser from this repository's GitHub
+Pages site. To build it yourself:
+
 ```bash
 cargo run --release
 ```
+
+The browser build uses [Trunk](https://trunkrs.dev):
+
+```bash
+rustup target add wasm32-unknown-unknown
+cargo install trunk --locked
+trunk serve --open
+```
+
+Every game under `assets/` is compiled into the binary, so the browser — which has no
+filesystem — has them all, and a desktop release works even with its `assets` folder
+deleted. A folder on disk still wins over the built-in copy of the same game, so packs
+can be edited, and new ones added, without rebuilding. In the browser the built-in games
+are the only ones; adding a game there means adding it to `assets/` and rebuilding.
 
 Drop a `.sav` on the window or click **Browse…**. The editor then asks which game wrote
 it, and applies the answer live — the save opens behind the dialog as you change the
@@ -236,7 +256,9 @@ has 27 balls.
 assets/
   <game>/              one folder per game: manifest + data tables
   icon.png             the application icon, for both the window and the .exe
-build.rs               turns icon.png into the Windows executable's icon
+build.rs               compiles assets/ into the binary; the Windows .exe icon
+index.html             the page for the browser build (Trunk)
+.github/workflows/     desktop releases and the GitHub Pages deploy
 src/
   main.rs              pack discovery, window setup
   game/
@@ -261,6 +283,37 @@ examples/
   names.rs             nickname report for a save
   dump.rs              dump everything the parser reads
 ```
+
+### Publishing
+
+Two workflows in `.github/workflows/`:
+
+* **`release.yml`** builds Windows (x86_64), Linux (x86_64) and a universal macOS app
+  (Apple Silicon and Intel in one binary), each packaged with the `assets` folder and this
+  README. Push a tag to publish them as a GitHub Release:
+
+  ```bash
+  git tag v0.1.0 && git push origin v0.1.0
+  ```
+
+  Running it by hand from the Actions tab builds the same archives without publishing,
+  which is a way to check a build before tagging it. Tests run first; a failing test means
+  no release.
+
+* **`pages.yml`** runs the tests, builds the browser version with Trunk and deploys it to
+  GitHub Pages on every push to `main`. It needs Pages turning on once: **Settings → Pages
+  → Source: GitHub Actions**.
+
+Platform notes for the desktop builds:
+
+* **macOS** — the app is ad-hoc signed, which Apple Silicon requires before it will run
+  anything, but not notarised, since that needs a paid Apple Developer account. The first
+  launch therefore needs **right-click → Open**, or
+  `xattr -dr com.apple.quarantine "Pokemon Save Editor.app"`.
+* **Linux** — the file dialogs go through the desktop portal, which GNOME and KDE both
+  provide. On a bare window manager, install `xdg-desktop-portal` and a backend for it;
+  dragging a save onto the window works regardless.
+* **Windows** — unsigned, so SmartScreen may warn on first run: **More info → Run anyway**.
 
 ### The icon
 

@@ -1,28 +1,110 @@
-//! Gives the Windows executable an icon.
+//! Build-time steps:
 //!
-//! `ViewportBuilder::with_icon` covers the *window* — the title bar, Alt-Tab
-//! and the taskbar button of a running instance. It cannot cover the .exe
-//! itself: Explorer, the Start menu and a pinned shortcut read an icon
+//! 1. Compile every game pack under `assets/` into the binary, so the browser
+//!    build — which has no filesystem — has games to offer, and so a native
+//!    release still works without its `assets` folder.
+//! 2. Give the Windows executable an icon.
+//!
+//! On the icon: `ViewportBuilder::with_icon` covers the *window* — the title
+//! bar, Alt-Tab and the taskbar button of a running instance. It cannot cover
+//! the .exe itself: Explorer, the Start menu and a pinned shortcut read an icon
 //! resource compiled into the binary, and without one they show the generic
-//! Windows executable icon.
-//!
-//! The .ico is generated here from `assets/icon.png` rather than committed, so
-//! the PNG stays the single source of truth for both paths.
+//! Windows executable icon. The .ico is generated here from `assets/icon.png`
+//! rather than committed, so the PNG stays the single source of truth.
+
+use std::path::{Path, PathBuf};
 
 fn main() {
-    println!("cargo:rerun-if-changed=assets/icon.png");
+    // A directory here makes Cargo rescan everything inside it, so adding or
+    // editing a pack re-embeds it on the next build.
+    println!("cargo:rerun-if-changed=assets");
     println!("cargo:rerun-if-changed=build.rs");
 
-    // `cfg!(windows)` here would describe the machine doing the building, not
-    // the machine the binary is for.
-    if std::env::var("CARGO_CFG_TARGET_OS").as_deref() != Ok("windows") {
-        return;
+    let out_dir = PathBuf::from(std::env::var("OUT_DIR").expect("OUT_DIR"));
+    let manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").expect("manifest dir"));
+
+    embed_packs(
+        &manifest_dir.join("assets"),
+        &out_dir.join("embedded_packs.rs"),
+    );
+
+    // Two different "windows" here. `#[cfg(windows)]` is the machine running
+    // this script: the icon tooling is a build-dependency for Windows hosts
+    // only, so on Linux and macOS it does not exist to call. The environment
+    // variable is the machine the binary is *for*, so a Windows host building
+    // for the web does not try to put a Windows resource into a .wasm.
+    #[cfg(windows)]
+    if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("windows") {
+        windows_icon(&manifest_dir.join("assets").join("icon.png"), &out_dir);
+    }
+}
+
+/// Writes `PACKS: &[(folder, &[(file, bytes)])]`, one entry per folder under
+/// `assets/` that holds a `game.json`.
+///
+/// Only `.json` and `.png` files are taken, so stray files an editor or the OS
+/// leaves behind do not end up inside the binary.
+fn embed_packs(assets: &Path, out: &Path) {
+    let mut packs: Vec<(String, Vec<(String, PathBuf)>)> = Vec::new();
+
+    let mut folders: Vec<PathBuf> = std::fs::read_dir(assets)
+        .map(|entries| entries.flatten().map(|e| e.path()).collect())
+        .unwrap_or_default();
+    folders.sort();
+
+    for dir in folders {
+        if !dir.join("game.json").is_file() {
+            continue;
+        }
+        let Some(folder) = dir.file_name().and_then(|n| n.to_str()) else {
+            continue;
+        };
+        let mut files: Vec<(String, PathBuf)> = std::fs::read_dir(&dir)
+            .map(|entries| entries.flatten().map(|e| e.path()).collect::<Vec<_>>())
+            .unwrap_or_default()
+            .into_iter()
+            .filter(|p| p.is_file())
+            .filter(|p| {
+                matches!(
+                    p.extension().and_then(|e| e.to_str()),
+                    Some("json") | Some("png")
+                )
+            })
+            .filter_map(|p| {
+                let name = p.file_name()?.to_str()?.to_string();
+                Some((name, p))
+            })
+            .collect();
+        files.sort();
+        packs.push((folder.to_string(), files));
     }
 
-    let out_dir = std::path::PathBuf::from(std::env::var("OUT_DIR").expect("OUT_DIR"));
+    let mut code = String::from(
+        "/// Every game pack under `assets/`, compiled in by build.rs.\n\
+         pub static PACKS: &[(&str, &[(&str, &[u8])])] = &[\n",
+    );
+    for (folder, files) in &packs {
+        code.push_str(&format!("    ({folder:?}, &[\n"));
+        for (name, path) in files {
+            // `{:?}` renders a path as a correctly escaped string literal,
+            // backslashes and all.
+            code.push_str(&format!(
+                "        ({name:?}, include_bytes!({:?})),\n",
+                path.display().to_string()
+            ));
+        }
+        code.push_str("    ]),\n");
+    }
+    code.push_str("];\n");
+
+    std::fs::write(out, code).expect("write embedded_packs.rs");
+}
+
+#[cfg(windows)]
+fn windows_icon(png: &Path, out_dir: &Path) {
     let ico = out_dir.join("icon.ico");
 
-    if let Err(err) = write_ico("assets/icon.png", &ico) {
+    if let Err(err) = write_ico(png, &ico) {
         // A missing icon is not worth failing a build over, but it should not
         // pass in silence either.
         println!("cargo:warning=no executable icon: {err}");
@@ -41,7 +123,8 @@ fn main() {
 /// Windows picks a size per context — 16px in the title bar, 32 in Alt-Tab,
 /// 256 for large thumbnails — and scales whatever is nearest if the size it
 /// wants is missing, which is what makes a single-size icon look muddy.
-fn write_ico(png: &str, ico: &std::path::Path) -> Result<(), Box<dyn std::error::Error>> {
+#[cfg(windows)]
+fn write_ico(png: &Path, ico: &Path) -> Result<(), Box<dyn std::error::Error>> {
     use image::{ExtendedColorType, codecs::ico};
 
     let source = image::open(png)?.to_rgba8();

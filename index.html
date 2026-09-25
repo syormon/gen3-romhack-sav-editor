@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+  The page for the browser build. Trunk reads the data-trunk links: it compiles
+  the crate to WebAssembly, writes the JavaScript that loads it, and copies the
+  icon. `trunk serve` runs it locally; the pages workflow publishes it.
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Save editor for Pokémon ROM hacks: SoulGold, Seaglass and Unbound. Runs entirely in your browser." />
+    <title>Pokémon Save Editor</title>
+
+    <link data-trunk rel="rust" data-wasm-opt="z" />
+    <link data-trunk rel="icon" href="assets/icon.png" />
+
+    <style>
+        /* Same slate as the app's own background, so the page does not flash
+           white while the WebAssembly loads. */
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+            background: #0f172a;
+            color: #94a3b8;
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
+
+        canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            outline: none;
+        }
+
+        #loading_text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-align: center;
+            padding: 16px;
+            pointer-events: none;
+        }
+
+        #loading_text code {
+            color: #facc15;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="editor_canvas"></canvas>
+    <div id="loading_text">
+        <p>Loading the editor…</p>
+        <noscript><p>This editor needs JavaScript and WebAssembly.</p></noscript>
+    </div>
+</body>
+</html>

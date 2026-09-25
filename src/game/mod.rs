@@ -136,13 +136,68 @@ pub struct GamePack {
     pub move_name_to_id: HashMap<String, u32>,
 }
 
+// ------------------------------------------------------------- pack files
+//
+// A pack is read from a folder on disk, or from the copy of `assets/` that
+// build.rs compiles into the binary. The browser build has no disk, so the
+// built-in copy is all it has; natively it means a release works even without
+// its `assets` folder, while a folder on disk still takes precedence so packs
+// can be edited and added without rebuilding.
+
+mod embedded {
+    include!(concat!(env!("OUT_DIR"), "/embedded_packs.rs"));
+}
+
+/// Stands in for a directory when a pack comes from the binary itself.
+const BUILT_IN: &str = "<built-in>";
+
+fn built_in_dir(folder: &str) -> PathBuf {
+    Path::new(BUILT_IN).join(folder)
+}
+
+/// The built-in pack a path refers to, if it is one.
+fn built_in_files(dir: &Path) -> Option<&'static [(&'static str, &'static [u8])]> {
+    if dir.parent()? != Path::new(BUILT_IN) {
+        return None;
+    }
+    let folder = dir.file_name()?.to_str()?;
+    embedded::PACKS
+        .iter()
+        .find(|(name, _)| *name == folder)
+        .map(|(_, files)| *files)
+}
+
+/// Reads one file of a pack, wherever the pack lives. `None` if it has no such
+/// file.
+pub fn read_pack_file(dir: &Path, file: &str) -> Option<Vec<u8>> {
+    if let Some(files) = built_in_files(dir) {
+        return files
+            .iter()
+            .find(|(name, _)| *name == file)
+            .map(|(_, bytes)| bytes.to_vec());
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        std::fs::read(dir.join(file)).ok()
+    }
+    #[cfg(target_arch = "wasm32")]
+    {
+        None
+    }
+}
+
+fn read_pack_text(dir: &Path, file: &str) -> Option<Result<String, String>> {
+    read_pack_file(dir, file)
+        .map(|bytes| String::from_utf8(bytes).map_err(|e| format!("{file}: not UTF-8 ({e})")))
+}
+
 fn read_map<T: for<'de> Deserialize<'de>>(
     dir: &Path,
     file: &str,
 ) -> Result<HashMap<u32, T>, String> {
-    let raw = match std::fs::read_to_string(dir.join(file)) {
-        Ok(raw) => raw,
-        Err(_) => return Ok(HashMap::new()), // optional table
+    let raw = match read_pack_text(dir, file) {
+        Some(raw) => raw?,
+        None => return Ok(HashMap::new()), // optional table
     };
     let parsed: HashMap<String, T> =
         serde_json::from_str(&raw).map_err(|e| format!("{file}: {e}"))?;
@@ -227,9 +282,8 @@ impl GamePack {
     pub fn load(dir: impl AsRef<Path>) -> Result<Self, String> {
         let dir = dir.as_ref().to_path_buf();
 
-        let manifest_path = dir.join(MANIFEST_NAME);
-        let raw = std::fs::read_to_string(&manifest_path)
-            .map_err(|e| format!("{}: {e}", manifest_path.display()))?;
+        let raw = read_pack_text(&dir, MANIFEST_NAME)
+            .ok_or_else(|| format!("{}: no {MANIFEST_NAME}", dir.display()))??;
         let manifest: Manifest =
             serde_json::from_str(&raw).map_err(|e| format!("{MANIFEST_NAME}: {e}"))?;
 
@@ -380,6 +434,7 @@ pub struct PackInfo {
 impl PackInfo {
     /// The folder under `assets/`, which is what `--game` accepts alongside
     /// the display name.
+    #[cfg_attr(target_arch = "wasm32", allow(dead_code))] // `--game` is native-only
     pub fn folder_name(&self) -> String {
         self.dir
             .file_name()
@@ -399,6 +454,7 @@ impl PackInfo {
 }
 
 /// Finds a pack by folder name or display name, ignoring case.
+#[cfg_attr(target_arch = "wasm32", allow(dead_code))] // `--game` is native-only
 pub fn find<'a>(packs: &'a [PackInfo], wanted: &str) -> Option<&'a PackInfo> {
     let wanted = wanted.trim().to_lowercase();
     packs
@@ -408,6 +464,7 @@ pub fn find<'a>(packs: &'a [PackInfo], wanted: &str) -> Option<&'a PackInfo> {
 }
 
 /// Directories searched for `<pack>/game.json`, nearest first.
+#[cfg(not(target_arch = "wasm32"))]
 pub fn search_roots() -> Vec<PathBuf> {
     let mut roots: Vec<PathBuf> = Vec::new();
     let mut push = |p: PathBuf| {
@@ -432,8 +489,44 @@ pub fn search_roots() -> Vec<PathBuf> {
     roots
 }
 
-/// Every pack found on the search path, by name, nearest root winning.
+fn pack_info(dir: PathBuf) -> PackInfo {
+    let (name, version) = match read_pack_text(&dir, MANIFEST_NAME)
+        .and_then(Result::ok)
+        .and_then(|raw| serde_json::from_str::<Manifest>(&raw).ok())
+    {
+        Some(m) => (m.name, m.version),
+        None => (
+            dir.file_name()
+                .unwrap_or_default()
+                .to_string_lossy()
+                .into_owned(),
+            String::new(),
+        ),
+    };
+    PackInfo { dir, name, version }
+}
+
+/// Every pack available: folders on the search path first, nearest root
+/// winning, then the built-in ones any folder did not already provide.
 pub fn discover() -> Vec<PackInfo> {
+    let mut found = discover_on_disk();
+    for (folder, _) in embedded::PACKS {
+        let info = pack_info(built_in_dir(folder));
+        if !found.iter().any(|p| p.name == info.name) {
+            found.push(info);
+        }
+    }
+    found.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+    found
+}
+
+#[cfg(target_arch = "wasm32")]
+fn discover_on_disk() -> Vec<PackInfo> {
+    Vec::new()
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn discover_on_disk() -> Vec<PackInfo> {
     let mut found: Vec<PackInfo> = Vec::new();
 
     for root in search_roots() {
@@ -445,27 +538,13 @@ pub fn discover() -> Vec<PackInfo> {
             if !dir.join(MANIFEST_NAME).is_file() {
                 continue;
             }
-            let (name, version) = match std::fs::read_to_string(dir.join(MANIFEST_NAME))
-                .ok()
-                .and_then(|raw| serde_json::from_str::<Manifest>(&raw).ok())
-            {
-                Some(m) => (m.name, m.version),
-                None => (
-                    dir.file_name()
-                        .unwrap_or_default()
-                        .to_string_lossy()
-                        .into_owned(),
-                    String::new(),
-                ),
-            };
-            if found.iter().any(|p| p.name == name) {
+            let info = pack_info(dir);
+            if found.iter().any(|p| p.name == info.name) {
                 continue; // a nearer root already provided this game
             }
-            found.push(PackInfo { dir, name, version });
+            found.push(info);
         }
     }
-
-    found.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
     found
 }
 
@@ -508,4 +587,58 @@ pub fn activate(dir: impl AsRef<Path>) -> Result<Arc<GamePack>, String> {
     let pack = Arc::new(GamePack::load(dir)?);
     set_current(pack.clone());
     Ok(pack)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The browser has nothing but the built-in packs, so if one of them fails
+    /// to load the web build has no such game — and nothing natively would
+    /// notice, because a folder on disk shadows it there.
+    #[test]
+    fn every_built_in_pack_loads_and_matches_its_folder() {
+        assert!(!embedded::PACKS.is_empty(), "build.rs embedded no packs");
+
+        let assets = Path::new(env!("CARGO_MANIFEST_DIR")).join("assets");
+        for (folder, files) in embedded::PACKS {
+            let built_in = GamePack::load(built_in_dir(folder))
+                .unwrap_or_else(|e| panic!("built-in {folder} failed to load: {e}"));
+            let on_disk = GamePack::load(assets.join(folder)).expect("disk copy loads");
+
+            assert_eq!(built_in.manifest.name, on_disk.manifest.name, "{folder}");
+            assert_eq!(built_in.species.len(), on_disk.species.len(), "{folder}");
+            assert_eq!(built_in.moves.len(), on_disk.moves.len(), "{folder}");
+            assert_eq!(built_in.items.len(), on_disk.items.len(), "{folder}");
+
+            // Byte-for-byte, so a stale build cannot pass for a current one.
+            for (name, bytes) in *files {
+                let disk = std::fs::read(assets.join(folder).join(name)).expect("disk file");
+                assert_eq!(*bytes, disk.as_slice(), "{folder}/{name} is out of date");
+            }
+        }
+    }
+
+    #[test]
+    fn a_built_in_path_is_never_looked_for_on_disk() {
+        let dir = built_in_dir("no-such-pack");
+        assert!(read_pack_file(&dir, MANIFEST_NAME).is_none());
+        assert!(GamePack::load(&dir).is_err());
+    }
+
+    /// A folder on disk must win over the built-in copy of the same game, or
+    /// editing a pack's JSON would silently do nothing.
+    #[test]
+    fn a_folder_on_disk_takes_precedence_over_the_built_in_copy() {
+        let packs = discover();
+        for (folder, _) in embedded::PACKS {
+            let name = pack_info(built_in_dir(folder)).name;
+            let hits: Vec<_> = packs.iter().filter(|p| p.name == name).collect();
+            assert_eq!(hits.len(), 1, "{name} listed {} times", hits.len());
+            assert!(
+                built_in_files(&hits[0].dir).is_none(),
+                "{name} should come from assets/, not the binary"
+            );
+        }
+    }
 }
