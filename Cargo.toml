@@ -1,6 +1,6 @@
 [package]
 name = "gen3-romhack-sav-editor"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 description = "Save editor for Pokémon ROM hacks; each game is a data pack under assets/"
 

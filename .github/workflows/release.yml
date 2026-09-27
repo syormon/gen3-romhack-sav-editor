@@ -1,29 +1,56 @@
-# Builds the desktop editor for Windows, Linux and macOS, and publishes them
-# as a GitHub Release.
-#
-#   git tag v0.2.0 && git push origin v0.2.0
-#
-# A tag push builds all three and attaches them to a release named after the
-# tag. Running it by hand from the Actions tab builds the same archives and
-# keeps them as workflow artifacts without publishing anything — useful for
-# checking a build before tagging it.
-
 name: Release
 
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+    paths: [Cargo.toml]
   workflow_dispatch:
 
 permissions:
-  contents: write # creating the release and uploading to it
+  contents: write # creating the release and its tag
+  pages: write # deploying the site
+  id-token: write # proving to Pages that the deployment came from here
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 env:
   CARGO_TERM_COLOR: always
   BIN: gen3-romhack-sav-editor
 
 jobs:
+  # Is this version new? A version is released once there is a v<version> tag.
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+      new: ${{ steps.check.outputs.new }}
+      go: ${{ steps.check.outputs.go }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          version=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then
+            new=false
+          else
+            new=true
+          fi
+          # Build when there is something to release, or when asked to.
+          if [ "$new" = true ] || [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; then
+            go=true
+          else
+            go=false
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "new=$new" >> "$GITHUB_OUTPUT"
+          echo "go=$go" >> "$GITHUB_OUTPUT"
+          echo "Cargo.toml says $version; new release: $new; building: $go"
+
   test:
+    needs: version
+    if: needs.version.outputs.go == 'true'
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -36,8 +63,8 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --locked
 
-  build:
-    needs: test
+  desktop:
+    needs: [version, test]
     strategy:
       fail-fast: false
       matrix:
@@ -53,6 +80,9 @@ jobs:
           - os: macos-latest
             name: macos-universal
     runs-on: ${{ matrix.os }}
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+      ARCHIVE: gen3-romhack-sav-editor-v${{ needs.version.outputs.version }}-${{ matrix.name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -80,7 +110,7 @@ jobs:
           Copy-Item "target/release/$env:BIN.exe" $dir
           Copy-Item -Recurse assets $dir
           Copy-Item README.md $dir
-          Compress-Archive -Path $dir -DestinationPath "dist/$env:BIN-${{ matrix.name }}.zip"
+          Compress-Archive -Path $dir -DestinationPath "dist/$env:ARCHIVE.zip"
 
       # -------------------------------------------------------------- Linux
       - if: runner.os == 'Linux'
@@ -91,7 +121,7 @@ jobs:
           mkdir -p "$dir"
           cp "target/release/$BIN" "$dir/"
           cp -r assets README.md "$dir/"
-          tar -czf "dist/$BIN-${{ matrix.name }}.tar.gz" -C dist "$BIN"
+          tar -czf "dist/$ARCHIVE.tar.gz" -C dist "$BIN"
 
       # -------------------------------------------------------------- macOS
       - if: runner.os == 'macOS'
@@ -112,21 +142,16 @@ jobs:
           mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
           mv "dist/$BIN" "$APP/Contents/MacOS/$BIN"
 
-          # An .icns from the same PNG the other platforms use. It is 256px, so
-          # stop at the sizes it can fill without upscaling.
+          # An .icns from the same 1024px PNG the other platforms use, at every
+          # size macOS asks for.
           mkdir icon.iconset
-          for size in 16 32 128 256; do
+          for size in 16 32 128 256 512; do
             sips -z $size $size assets/icon.png --out icon.iconset/icon_${size}x${size}.png >/dev/null
-          done
-          for size in 16 32 128; do
             double=$((size * 2))
             sips -z $double $double assets/icon.png --out icon.iconset/icon_${size}x${size}@2x.png >/dev/null
           done
           iconutil -c icns icon.iconset -o "$APP/Contents/Resources/AppIcon.icns"
 
-          # From Cargo.toml rather than the tag, so a manual run still gets a
-          # valid bundle version.
-          VERSION=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
           cat > "$APP/Contents/Info.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -156,7 +181,7 @@ jobs:
           # The assets folder goes next to the app rather than inside it: the
           # games are compiled in, and this copy is where users add their own.
           cp -r assets README.md dist/
-          (cd dist && zip -qry "$BIN-${{ matrix.name }}.zip" "Pokemon Save Editor.app" assets README.md)
+          (cd dist && zip -qry "$ARCHIVE.zip" "Pokemon Save Editor.app" assets README.md)
 
       - uses: actions/upload-artifact@v4
         with:
@@ -166,9 +191,38 @@ jobs:
             dist/*.tar.gz
           if-no-files-found: error
 
+  web:
+    needs: [version, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup toolchain install stable --profile minimal --target wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: web
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: trunk
+
+      # Pages serves a project site from /<repository>/, not from the root,
+      # so every URL Trunk writes into index.html needs that prefix.
+      - name: Build
+        run: trunk build --release --locked --public-url "/${{ github.event.repository.name }}/"
+
+      - uses: actions/configure-pages@v5
+      # Named per attempt: a re-run is another attempt of the same run and
+      # keeps the earlier attempt's artifact, and deploy-pages refuses to pick
+      # between two artifacts of the same name.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+          name: github-pages-${{ github.run_attempt }}
+
+  # Publish only once every platform has built, so a release is never missing
+  # one and the site never runs ahead of the downloads.
   release:
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs: build
+    needs: [version, desktop, web]
+    if: needs.version.outputs.new == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -178,9 +232,23 @@ jobs:
       - name: Publish
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: v${{ needs.version.outputs.version }}
         run: |
           ls -la dist
-          gh release create "$GITHUB_REF_NAME" dist/* \
+          gh release create "$TAG" dist/* \
             --repo "$GITHUB_REPOSITORY" \
-            --title "$GITHUB_REF_NAME" \
+            --target "$GITHUB_SHA" \
+            --title "$TAG" \
             --generate-notes
+
+  deploy:
+    needs: [desktop, web]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
