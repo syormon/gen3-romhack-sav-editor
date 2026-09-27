@@ -155,7 +155,7 @@ pub fn bag_modal(app: &mut EditorApp, ctx: &egui::Context) {
                                             } else {
                                                 let mut qty =
                                                     bag.items(active)[idx].quantity.max(1);
-                                                widgets::int_field(ui, &mut qty, 1, MAX_QTY, 60.0);
+                                                widgets::int_field(ui, &mut qty, 1, MAX_QTY);
                                                 bag.items_mut(active)[idx].quantity = qty;
                                             }
                                             ui.label(
@@ -190,7 +190,7 @@ pub fn bag_modal(app: &mut EditorApp, ctx: &egui::Context) {
                                     .hint_text("Type to search item… (e.g. Master Ball, Potion)"),
                             );
                             ui.label(RichText::new("Qty").size(11.0).color(theme::MUTED));
-                            widgets::int_field(ui, &mut bag.add_qty, 1, MAX_QTY, 60.0);
+                            widgets::int_field(ui, &mut bag.add_qty, 1, MAX_QTY);
                         });
                         ui.add_space(6.0);
 
@@ -270,47 +270,47 @@ pub fn bag_modal(app: &mut EditorApp, ctx: &egui::Context) {
     });
 
     // --------------------------------------------------------- apply changes
-    if let Some(idx) = pending_remove {
-        if let Some(bag) = app.bag.as_mut() {
-            let active = bag.active;
-            let list = bag.items_mut(active);
-            if idx < list.len() {
-                list.remove(idx);
-            }
+    if let Some(idx) = pending_remove
+        && let Some(bag) = app.bag.as_mut()
+    {
+        let active = bag.active;
+        let list = bag.items_mut(active);
+        if idx < list.len() {
+            list.remove(idx);
         }
     }
 
-    if let Some((item_id, qty)) = pending_add {
-        if let Some(bag) = app.bag.as_mut() {
-            let active = bag.active;
-            let capacity = pocket_capacity(active);
+    if let Some((item_id, qty)) = pending_add
+        && let Some(bag) = app.bag.as_mut()
+    {
+        let active = bag.active;
+        let capacity = pocket_capacity(active);
 
-            if bag.exists_anywhere(item_id, active, None) {
-                // Already carried: stack it if it is in this pocket, otherwise refuse.
-                let existing = bag.items_mut(active).iter_mut().find(|it| it.id == item_id);
-                match existing {
-                    Some(item) => item.quantity = (item.quantity + qty).min(MAX_QTY),
-                    None => {
-                        alert = Some((
-                            "Item already in bag".to_string(),
-                            format!(
-                                "\"{}\" is already present in another pocket of your bag!",
-                                get_item_name(item_id)
-                            ),
-                        ));
-                    }
+        if bag.exists_anywhere(item_id, active, None) {
+            // Already carried: stack it if it is in this pocket, otherwise refuse.
+            let existing = bag.items_mut(active).iter_mut().find(|it| it.id == item_id);
+            match existing {
+                Some(item) => item.quantity = (item.quantity + qty).min(MAX_QTY),
+                None => {
+                    alert = Some((
+                        "Item already in bag".to_string(),
+                        format!(
+                            "\"{}\" is already present in another pocket of your bag!",
+                            get_item_name(item_id)
+                        ),
+                    ));
                 }
-            } else if bag.items(active).len() >= capacity {
-                alert = Some((
-                    "Pocket full".to_string(),
-                    format!("Pocket reached max capacity ({capacity} slots)."),
-                ));
-            } else {
-                bag.items_mut(active).push(BagItem {
-                    id: item_id,
-                    quantity: qty.clamp(1, MAX_QTY),
-                });
             }
+        } else if bag.items(active).len() >= capacity {
+            alert = Some((
+                "Pocket full".to_string(),
+                format!("Pocket reached max capacity ({capacity} slots)."),
+            ));
+        } else {
+            bag.items_mut(active).push(BagItem {
+                id: item_id,
+                quantity: qty.clamp(1, MAX_QTY),
+            });
         }
     }
 

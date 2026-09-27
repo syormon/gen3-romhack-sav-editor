@@ -67,7 +67,7 @@ fn read_moves(record: &[u8]) -> [u32; 4] {
 fn write_moves(record: &mut [u8], moves: &[u32; 4]) {
     let mut packed: u64 = 0;
     for (i, m) in moves.iter().enumerate() {
-        packed |= u64::from(u64::from(*m) & 0x3FF) << (10 * i);
+        packed |= (u64::from(*m) & 0x3FF) << (10 * i);
     }
     for i in 0..MOVES_LEN {
         record[MOVES + i] = ((packed >> (8 * i)) & 0xFF) as u8;
@@ -113,11 +113,7 @@ pub fn unpack(record: &[u8]) -> Option<Pokemon> {
         *b = u32::from((pp_bonuses_byte >> (2 * i)) & 0x3);
     }
     // Current PP is not stored, so the games recompute it; report it full.
-    let mut pps = [0u32; 4];
-    for (i, pp) in pps.iter_mut().enumerate() {
-        let base = super::lookup::get_move_base_pp(moves[i]);
-        *pp = base + base / 5 * pp_bonuses[i];
-    }
+    let pps = std::array::from_fn(|i| super::lookup::max_pp(moves[i], pp_bonuses[i]));
 
     let experience = u32_le(record, EXPERIENCE);
     let nickname =
@@ -191,7 +187,7 @@ pub fn pack(record: &mut [u8], mon: &Pokemon) {
     super::charmap::write_gba_string(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
 
     record[LANGUAGE] = mon.language & 0x7;
-    record[FLAGS] = 0x02; // has species
+    record[FLAGS] = record_flags(record[FLAGS], mon.is_bad_egg, mon.is_egg);
 
     let ot_name = if mon.ot_name.trim().is_empty() {
         crate::game::current().behavior().default_ot_name.clone()

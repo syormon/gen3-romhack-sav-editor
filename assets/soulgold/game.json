@@ -4,6 +4,58 @@
   "notice": "Only works on version 1.14 save files.",
   "export_name": "Pokemon_SoulGold_edited.sav",
 
+  "layout": {
+    "total_boxes": 15,
+    "extra_boxes": {
+      "sectors": [[28, 29], [30, 31]],
+      "sector_checksum_sizes": [3968, 1324],
+      "markers": [
+        { "in": "storage", "offset": 34740, "text": "BX16" },
+        { "in": "extra", "sector": 0, "offset": 0, "text": "BX19" },
+        { "in": "extra", "sector": 1, "offset": 1324, "text": "BX19" }
+      ],
+      "boxes": [
+        {
+          "records": [
+            { "in": "storage", "offset": 34744, "length": 968 },
+            { "in": "extra", "sector": 1, "offset": 0, "length": 1312 }
+          ],
+          "name": { "in": "extra", "sector": 1, "offset": 1312 }
+        },
+        {
+          "records": [{ "in": "extra", "sector": 1, "offset": 1332, "length": 2280 }],
+          "name": { "in": "sb1", "offset": 15390 }
+        },
+        {
+          "records": [
+            { "in": "extra", "sector": 1, "offset": 3612, "length": 472 },
+            { "in": "sb1", "offset": 13582, "length": 1808 }
+          ],
+          "name": { "in": "sb1", "offset": 15399 }
+        },
+        {
+          "records": [{ "in": "extra", "sector": 0, "offset": 12, "length": 2280 }],
+          "name": { "in": "extra", "sector": 0, "offset": 2292 }
+        }
+      ],
+      "checksums": [
+        {
+          "at": { "in": "extra", "sector": 0, "offset": 8 },
+          "over": [{ "in": "extra", "sector": 0, "offset": 12, "length": 3880 }]
+        },
+        {
+          "at": { "in": "extra", "sector": 1, "offset": 1328 },
+          "over": [
+            { "in": "extra", "sector": 1, "offset": 1324, "length": 4 },
+            { "in": "extra", "sector": 1, "offset": 1332, "length": 2752 },
+            { "in": "sb1", "offset": 13582, "length": 1808 },
+            { "in": "sb1", "offset": 15390, "length": 20 }
+          ]
+        }
+      ]
+    }
+  },
+
   "sprites": {
     "national_dex_max_id": 905,
     "base_url": "https://eemeliri.github.io/soulgold/sprites/pokemon",

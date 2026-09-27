@@ -87,11 +87,6 @@ const TABLE: &[(u8, char)] = &[
     (0xAA, '9'),
 ];
 
-/// The built-in Latin table, used when a pack ships no `charmap.json`.
-pub fn builtin_table() -> &'static [(u8, char)] {
-    TABLE
-}
-
 fn decode_byte(b: u8) -> Option<char> {
     if crate::game::is_loaded() {
         let pack = crate::game::current();

@@ -2,7 +2,7 @@
 
 use eframe::egui::{self, RichText, Sense, Ui};
 
-use crate::engine::layout::{box_capacity, party_size, total_boxes};
+use crate::engine::layout::{box_capacity, party_size};
 use crate::engine::lookup::get_species_name;
 use crate::engine::save_parser::Pokemon;
 
@@ -11,7 +11,12 @@ use super::theme;
 use super::widgets;
 
 pub fn party_panel(app: &mut EditorApp, ui: &mut Ui) {
-    let party = app.save.as_ref().map(|s| s.party()).unwrap_or_default();
+    // By slot, so each card is the record the game has in that position.
+    let party: Vec<Option<Pokemon>> = match app.save.as_ref() {
+        Some(save) => (0..party_size()).map(|i| save.party_slot(i)).collect(),
+        None => return,
+    };
+    let party_len = party.iter().flatten().count();
     let selected = app.inspector.as_ref().map(|i| i.slot);
     let load_sprites = app.load_sprites;
     let mut actions: Vec<Action> = Vec::new();
@@ -28,7 +33,7 @@ pub fn party_panel(app: &mut EditorApp, ui: &mut Ui) {
                     .inner_margin(egui::Margin::symmetric(8, 2))
                     .show(ui, |ui| {
                         ui.label(
-                            RichText::new(format!("{} / {}", party.len(), party_size()))
+                            RichText::new(format!("{party_len} / {}", party_size()))
                                 .size(12.0)
                                 .color(theme::MUTED),
                         );
@@ -37,11 +42,11 @@ pub fn party_panel(app: &mut EditorApp, ui: &mut Ui) {
         });
         ui.add_space(6.0);
 
-        for i in 0..party_size() {
+        for (i, mon) in party.iter().enumerate() {
             let slot = SlotRef::party(i);
             slot_card(
                 ui,
-                party.get(i),
+                mon.as_ref(),
                 slot,
                 selected == Some(slot),
                 load_sprites,
@@ -58,7 +63,8 @@ pub fn party_panel(app: &mut EditorApp, ui: &mut Ui) {
 pub fn box_panel(app: &mut EditorApp, ui: &mut Ui) {
     // A game whose storage this editor cannot read declares no boxes; there is
     // then nothing to draw, and the paging arithmetic below has no valid range.
-    if total_boxes() == 0 || box_capacity() == 0 {
+    let total_boxes = app.save.as_ref().map_or(0, |s| s.box_count());
+    if total_boxes == 0 || box_capacity() == 0 {
         return;
     }
     let current_box = app.current_box;
@@ -96,7 +102,7 @@ pub fn box_panel(app: &mut EditorApp, ui: &mut Ui) {
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 if ui
                     .add_enabled(
-                        current_box + 1 < total_boxes(),
+                        current_box + 1 < total_boxes,
                         egui::Button::new(RichText::new("▶").strong()),
                     )
                     .clicked()
@@ -105,14 +111,10 @@ pub fn box_panel(app: &mut EditorApp, ui: &mut Ui) {
                 }
                 ui.with_layout(egui::Layout::top_down(egui::Align::Center), |ui| {
                     ui.label(
-                        RichText::new(format!(
-                            "{box_name}  ({}/{})",
-                            current_box + 1,
-                            total_boxes()
-                        ))
-                        .size(16.0)
-                        .strong()
-                        .color(theme::BLUE),
+                        RichText::new(format!("{box_name}  ({}/{})", current_box + 1, total_boxes))
+                            .size(16.0)
+                            .strong()
+                            .color(theme::BLUE),
                     );
                 });
             });
@@ -128,13 +130,13 @@ pub fn box_panel(app: &mut EditorApp, ui: &mut Ui) {
             .num_columns(columns)
             .spacing([spacing, spacing])
             .show(ui, |ui| {
-                for i in 0..box_capacity() {
+                for (i, mon) in mons.iter().enumerate() {
                     let slot = SlotRef::boxed(current_box, i);
                     ui.scope(|ui| {
                         ui.set_width(cell_width);
                         slot_card(
                             ui,
-                            mons[i].as_ref(),
+                            mon.as_ref(),
                             slot,
                             selected == Some(slot),
                             load_sprites,
@@ -152,7 +154,7 @@ pub fn box_panel(app: &mut EditorApp, ui: &mut Ui) {
     app.actions.append(&mut actions);
     if delta != 0 {
         let next = app.current_box as i32 + delta;
-        app.current_box = next.clamp(0, total_boxes() as i32 - 1) as usize;
+        app.current_box = next.clamp(0, total_boxes as i32 - 1) as usize;
         // The inspector points at a slot in the box we just left.
         if app.inspector.as_ref().is_some_and(|i| !i.slot.is_party()) {
             app.inspector = None;
@@ -228,13 +230,13 @@ fn slot_card(
             egui::StrokeKind::Inside,
         );
     }
-    if let Some(src) = click.dnd_release_payload::<SlotRef>() {
-        if *src != slot {
-            actions.push(Action::Move {
-                src: *src,
-                dst: slot,
-            });
-        }
+    if let Some(src) = click.dnd_release_payload::<SlotRef>()
+        && *src != slot
+    {
+        actions.push(Action::Move {
+            src: *src,
+            dst: slot,
+        });
     }
     if being_dragged {
         ui.painter().rect_stroke(

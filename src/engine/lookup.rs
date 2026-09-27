@@ -7,7 +7,7 @@
 
 use std::collections::HashSet;
 
-use crate::game::{self, MoveEntry, NamedId};
+use crate::game::{self, NamedId};
 
 pub use crate::game::move_key;
 
@@ -53,6 +53,23 @@ pub fn get_move_base_pp(move_id: u32) -> u32 {
     }
 }
 
+/// A move's PP with `bonus` PP Ups applied, as the games compute it: each
+/// adds a fifth of the base, rounded down.
+pub fn max_pp(move_id: u32, bonus: u32) -> u32 {
+    let base = get_move_base_pp(move_id);
+    base + base * bonus.min(3) / 5
+}
+
+/// How many ability slots a record can say. Gen 3 records keep one bit for it,
+/// so a species' hidden ability cannot be stored there.
+pub fn storable_ability_slots() -> u8 {
+    if game::current().layout().record_encoding.is_gen3() {
+        2
+    } else {
+        3
+    }
+}
+
 /// Looks up a move by name, tolerating punctuation and the pack's aliases.
 pub fn move_id_by_name(name: &str) -> Option<u32> {
     game::current()
@@ -71,7 +88,7 @@ pub fn alphabetical_item_list() -> Vec<NamedId> {
     game::current().items_alphabetical.clone()
 }
 
-pub fn all_moves_list() -> Vec<MoveEntry> {
+pub fn all_moves_list() -> Vec<NamedId> {
     game::current().moves_alphabetical.clone()
 }
 
@@ -357,18 +374,16 @@ pub fn classify_item_pocket(item_id: u32, name: &str) -> usize {
 
     // Then the pack's own mapping, when it names something other than the
     // catch-all pocket.
-    if let Some(mapped) = pack.item_pockets.get(&item_id) {
-        if let Some(index) = index_of(mapped) {
-            if index != default {
-                return index;
-            }
-        }
+    if let Some(index) = pack.item_pockets.get(&item_id).and_then(|m| index_of(m))
+        && index != default
+    {
+        return index;
     }
 
-    if MEDICINE_KEYWORDS.iter().any(|kw| n.contains(kw)) {
-        if let Some(index) = index_of("Medicine") {
-            return index;
-        }
+    if MEDICINE_KEYWORDS.iter().any(|kw| n.contains(kw))
+        && let Some(index) = index_of("Medicine")
+    {
+        return index;
     }
     default
 }
@@ -433,10 +448,6 @@ pub fn get_species_abilities(species_id: u32) -> Vec<AbilitySlot> {
 
 // ------------------------------------------------------------- species info
 
-pub fn is_never_shiny(species_id: u32) -> bool {
-    game::current().behavior().never_shiny.contains(&species_id)
-}
-
 pub fn get_suggested_encounter_level(species_id: u32) -> u8 {
     game::current().behavior().level_for_new_pokemon(species_id)
 }
@@ -475,12 +486,13 @@ pub fn get_suggested_moves_for_species(species_id: u32) -> [u32; 4] {
     let mut moves: Vec<u32> = Vec::new();
 
     for move_name in learnset {
-        if let Some(move_id) = move_id_by_name(&move_name) {
-            if move_id > 0 && !moves.contains(&move_id) {
-                moves.push(move_id);
-                if moves.len() >= 4 {
-                    break;
-                }
+        if let Some(move_id) = move_id_by_name(&move_name)
+            && move_id > 0
+            && !moves.contains(&move_id)
+        {
+            moves.push(move_id);
+            if moves.len() >= 4 {
+                break;
             }
         }
     }
@@ -593,10 +605,11 @@ pub fn sprite_candidates(species_id: u32, is_shiny: bool) -> Vec<String> {
         .get(&species_id)
         .and_then(|s| s.dex)
         .or_else(|| cfg.species_ids_are_dex_numbers.then_some(species_id));
-    if let Some(dex) = dex {
-        if cfg.national_dex_max_id > 0 && dex <= cfg.national_dex_max_id {
-            push_pokeapi(&mut urls, dex);
-        }
+    if let Some(dex) = dex
+        && cfg.national_dex_max_id > 0
+        && dex <= cfg.national_dex_max_id
+    {
+        push_pokeapi(&mut urls, dex);
     }
 
     let own_sprite = pack
@@ -611,22 +624,22 @@ pub fn sprite_candidates(species_id: u32, is_shiny: bool) -> Vec<String> {
         urls.push(format!("{base}/{stem}.{ext}"));
     }
 
-    if cfg.use_showdown_fallback {
-        if let Some(name) = pack.species.get(&species_id).map(|s| s.name.as_str()) {
-            let mut slugs = vec![showdown_slug(name)];
-            if let Some(first) = name.split_whitespace().next() {
-                let first = showdown_slug(first);
-                if first != slugs[0] {
-                    slugs.push(first);
-                }
+    if cfg.use_showdown_fallback
+        && let Some(name) = pack.species.get(&species_id).map(|s| s.name.as_str())
+    {
+        let mut slugs = vec![showdown_slug(name)];
+        if let Some(first) = name.split_whitespace().next() {
+            let first = showdown_slug(first);
+            if first != slugs[0] {
+                slugs.push(first);
             }
-            for slug in slugs.into_iter().filter(|s| !s.is_empty()) {
-                if is_shiny {
-                    urls.push(format!("{SHOWDOWN_BASE}/gen5-shiny/{slug}.png"));
-                }
-                urls.push(format!("{SHOWDOWN_BASE}/dex/{slug}.png"));
-                urls.push(format!("{SHOWDOWN_BASE}/gen5/{slug}.png"));
+        }
+        for slug in slugs.into_iter().filter(|s| !s.is_empty()) {
+            if is_shiny {
+                urls.push(format!("{SHOWDOWN_BASE}/gen5-shiny/{slug}.png"));
             }
+            urls.push(format!("{SHOWDOWN_BASE}/dex/{slug}.png"));
+            urls.push(format!("{SHOWDOWN_BASE}/gen5/{slug}.png"));
         }
     }
 

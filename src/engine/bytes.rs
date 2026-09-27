@@ -31,6 +31,30 @@ pub fn set_u32_le(b: &mut [u8], o: usize, v: u32) {
     }
 }
 
+/// Writes `value` into the bits of a u16 that `mask` selects, leaving the
+/// others as they were.
+pub fn set_u16_bits(b: &mut [u8], o: usize, mask: u16, value: u16) {
+    let kept = u16_le(b, o) & !mask;
+    set_u16_le(b, o, kept | (value & mask));
+}
+
+/// The same for a u32.
+pub fn set_u32_bits(b: &mut [u8], o: usize, mask: u32, value: u32) {
+    let kept = u32_le(b, o) & !mask;
+    set_u32_le(b, o, kept | (value & mask));
+}
+
+/// A party record's mail slot when it holds no mail (`MAIL_NONE`). Slot 0 is a
+/// real mail slot, so a zeroed record reads as carrying someone's letter.
+pub const NO_MAIL: u8 = 0xFF;
+
+/// The flag byte every record format here shares: bad egg, has species, is
+/// egg in the low three bits. The rest belong to the game (pokeemerald uses
+/// one for its Ruby/Sapphire box lock), so they are carried over untouched.
+pub fn record_flags(existing: u8, is_bad_egg: bool, is_egg: bool) -> u8 {
+    (existing & !0x07) | u8::from(is_bad_egg) | 0x02 | (u8::from(is_egg) << 2)
+}
+
 /// JavaScript's `x || fallback` for numbers: 0 counts as "unset".
 pub fn nz<T: PartialEq + Default>(value: T, fallback: T) -> T {
     if value == T::default() {

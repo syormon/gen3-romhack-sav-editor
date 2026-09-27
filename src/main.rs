@@ -5,7 +5,7 @@
 //! tables. See `src/game/mod.rs` for the format, and the README for how to add
 //! one.
 //!
-//!     pokemon-save-editor [--game <folder|name>] [save.sav]
+//!     gen3-romhack-sav-editor [--game <folder|name>] [save.sav]
 //!
 //! A save is loaded first, then the editor asks which game wrote it. It has to
 //! ask: two games' saves are both 128 KB of otherwise indistinguishable bytes,
@@ -16,15 +16,16 @@
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-#[allow(dead_code)]
 mod engine;
 mod game;
 mod ui;
 
+#[cfg(not(target_arch = "wasm32"))]
 use eframe::egui;
 
-/// Fallback window icon, used before a game is chosen and for packs that ship
-/// no `icon.png`.
+/// The program's icon. Compiled in, so the window has it whatever `assets/`
+/// holds; build.rs makes the Windows .exe icon from the same file.
+#[cfg(not(target_arch = "wasm32"))]
 const ICON_PNG: &[u8] = include_bytes!("../assets/icon.png");
 
 /// The browser entry point: attach to the page's canvas and run.
@@ -120,16 +121,16 @@ fn main() -> eframe::Result<()> {
         None => None,
     };
 
-    if let Some(dir) = &preselected {
-        if let Err(err) = game::activate(dir) {
-            eprintln!("{err}");
-            rfd::MessageDialog::new()
-                .set_title("Could not load game data")
-                .set_description(&err)
-                .set_level(rfd::MessageLevel::Error)
-                .show();
-            std::process::exit(1);
-        }
+    if let Some(dir) = &preselected
+        && let Err(err) = game::activate(dir)
+    {
+        eprintln!("{err}");
+        rfd::MessageDialog::new()
+            .set_title("Could not load game data")
+            .set_description(&err)
+            .set_level(rfd::MessageLevel::Error)
+            .show();
+        std::process::exit(1);
     }
 
     let options = eframe::NativeOptions {
@@ -154,17 +155,9 @@ fn main() -> eframe::Result<()> {
     )
 }
 
-/// The active pack's own `icon.png`, or the bundled fallback.
-///
-/// The window icon is set from this at startup and again whenever the game
-/// changes, via `ViewportCommand::Icon`.
-pub fn load_icon() -> egui::IconData {
-    let pack_icon =
-        game::current_opt().and_then(|pack| game::read_pack_file(&pack.dir, "icon.png"));
-
-    if let Some(icon) = pack_icon.as_deref().and_then(decode_icon) {
-        return icon;
-    }
+/// The window icon. The browser build takes its icon from index.html instead.
+#[cfg(not(target_arch = "wasm32"))]
+fn load_icon() -> egui::IconData {
     decode_icon(ICON_PNG).unwrap_or_else(|| {
         // Only reachable if the bundled PNG stops decoding, which a test
         // guards against. Say so rather than handing over a blank icon: a
@@ -184,6 +177,7 @@ pub fn load_icon() -> egui::IconData {
 /// a usable icon. winit also drops an `IconData` whose buffer length does not
 /// match its dimensions, so that is checked here instead of being discovered
 /// as a missing icon at runtime.
+#[cfg(not(target_arch = "wasm32"))]
 fn decode_icon(bytes: &[u8]) -> Option<egui::IconData> {
     let img = image::load_from_memory(bytes).ok()?.to_rgba8();
     let (width, height) = img.dimensions();
@@ -215,7 +209,7 @@ mod tests {
             "winit silently ignores an icon whose buffer does not match its size"
         );
         assert!(
-            icon.rgba.chunks_exact(4).any(|px| px[3] > 0),
+            icon.rgba.as_chunks::<4>().0.iter().any(|px| px[3] > 0),
             "every pixel is transparent, which is the same as having no icon"
         );
     }

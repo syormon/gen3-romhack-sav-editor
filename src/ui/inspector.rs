@@ -6,8 +6,8 @@ use eframe::egui::{self, RichText, Ui};
 use crate::engine::experience::experience_for_level;
 use crate::engine::lookup::{
     NATURES_LIST, all_moves_list, all_species_list, alphabetical_item_list, get_item_name,
-    get_move_base_pp, get_move_name, get_species_abilities, get_species_name, learnset_move_ids,
-    pokeballs, tera_types,
+    get_move_name, get_species_abilities, get_species_name, learnset_move_ids, max_pp, pokeballs,
+    storable_ability_slots, tera_types,
 };
 use crate::engine::personality::{
     make_personality_non_shiny, make_personality_shiny, set_personality_nature,
@@ -67,14 +67,16 @@ pub fn inspector_panel(app: &mut EditorApp, ui: &mut Ui) {
                     .on_hover_text("Toggle shiny (rewrites the personality value)")
                     .clicked()
                 {
-                    if shiny {
-                        insp.mon.personality =
-                            make_personality_non_shiny(insp.mon.personality, insp.mon.ot_id);
-                        insp.mon.shiny_modifier = 0;
+                    let threshold = crate::game::current().behavior().shiny_threshold;
+                    let (pid, ot) = (insp.mon.personality, insp.mon.ot_id);
+                    insp.mon.personality = if shiny {
+                        make_personality_non_shiny(pid, ot, threshold)
                     } else {
-                        insp.mon.personality =
-                            make_personality_shiny(insp.mon.personality, insp.mon.ot_id);
-                    }
+                        make_personality_shiny(pid, ot, threshold)
+                    };
+                    // Some formats keep a bit that inverts the result; with it
+                    // cleared, the personality value alone decides.
+                    insp.mon.shiny_modifier = 0;
                 }
             });
 
@@ -128,17 +130,14 @@ pub fn inspector_panel(app: &mut EditorApp, ui: &mut Ui) {
                 }
             });
         });
-        if cancel {
-            if let Some(insp) = app.inspector.as_mut() {
-                insp.confirm_release = false;
-            }
+        if cancel && let Some(insp) = app.inspector.as_mut() {
+            insp.confirm_release = false;
         }
     }
 
     if release {
         if let Some(slot) = app.inspector.as_ref().map(|i| i.slot) {
             app.release_mon(slot);
-            app.toast("Pokémon released");
         }
         return;
     }
@@ -149,12 +148,10 @@ pub fn inspector_panel(app: &mut EditorApp, ui: &mut Ui) {
     if apply {
         app.commit_inspector();
         // Re-read the slot so the panel shows exactly what landed in the save.
-        if let Some(slot) = app.inspector.as_ref().map(|i| i.slot) {
-            if let Some(updated) = app.mon_at(slot) {
-                if let Some(insp) = app.inspector.as_mut() {
-                    insp.mon = updated;
-                }
-            }
+        if let Some(updated) = app.inspector.as_ref().and_then(|i| app.mon_at(i.slot))
+            && let Some(insp) = app.inspector.as_mut()
+        {
+            insp.mon = updated;
         }
         app.toast("Changes applied");
     }
@@ -193,6 +190,7 @@ fn core_details(ui: &mut Ui, insp: &mut super::app::Inspector) {
         ui.add_space(6.0);
         field_label(ui, "Ability");
         let abilities = get_species_abilities(insp.mon.species);
+        let storable = storable_ability_slots();
         let selected = abilities
             .iter()
             .find(|a| a.slot == insp.mon.ability_num)
@@ -203,12 +201,15 @@ fn core_details(ui: &mut Ui, insp: &mut super::app::Inspector) {
             .selected_text(RichText::new(selected).size(12.0))
             .show_ui(ui, |ui| {
                 for ability in &abilities {
-                    let label = if ability.available {
-                        ability.name.clone()
-                    } else {
+                    let fits = ability.slot < storable;
+                    let label = if !ability.available {
                         format!("{} (None)", ability.name)
+                    } else if !fits {
+                        format!("{} (not storable in this game's saves)", ability.name)
+                    } else {
+                        ability.name.clone()
                     };
-                    ui.add_enabled_ui(ability.available, |ui| {
+                    ui.add_enabled_ui(ability.available && fits, |ui| {
                         if ui
                             .selectable_label(
                                 insp.mon.ability_num == ability.slot,
@@ -262,7 +263,7 @@ fn core_details(ui: &mut Ui, insp: &mut super::app::Inspector) {
             ui.vertical(|ui| {
                 field_label(ui, "Level");
                 let mut level = u32::from(insp.mon.level);
-                widgets::int_field(ui, &mut level, 1, 100, 60.0);
+                widgets::int_field(ui, &mut level, 1, 100);
                 let level = level as u8;
                 if level != insp.mon.level {
                     // Level is derived from experience (boxed Pokémon store no
@@ -370,7 +371,7 @@ fn moves_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
                 ui.horizontal(|ui| {
                     ui.vertical(|ui| {
                         field_label(ui, "PP");
-                        widgets::int_field(ui, &mut insp.mon.pps[i], 0, 99, 50.0);
+                        widgets::int_field(ui, &mut insp.mon.pps[i], 0, 99);
                     });
                     ui.vertical(|ui| {
                         field_label(ui, "PP Up (+0-3)");
@@ -391,12 +392,6 @@ fn moves_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
             ui.add_space(6.0);
         }
     });
-}
-
-/// `Math.floor(basePp * (1 + 0.2 * bonus))`
-fn max_pp(move_id: u32, bonus: u32) -> u32 {
-    let base = get_move_base_pp(move_id) as f64;
-    (base * (1.0 + 0.2 * bonus as f64)).floor() as u32
 }
 
 fn stats_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
@@ -424,10 +419,10 @@ fn stats_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
                 field_label(ui, "EV (0-252)");
                 ui.end_row();
 
-                for idx in 0..6 {
-                    ui.label(RichText::new(STAT_LABELS[idx]).size(12.0));
-                    widgets::int_field(ui, &mut insp.mon.ivs[idx], 0, 31, 56.0);
-                    widgets::int_field(ui, &mut insp.mon.evs[idx], 0, 252, 56.0);
+                for (idx, label) in STAT_LABELS.iter().enumerate() {
+                    ui.label(RichText::new(*label).size(12.0));
+                    widgets::int_field(ui, &mut insp.mon.ivs[idx], 0, 31);
+                    widgets::int_field(ui, &mut insp.mon.evs[idx], 0, 252);
                     ui.end_row();
                 }
             });

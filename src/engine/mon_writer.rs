@@ -57,7 +57,7 @@ pub fn create_default_pokemon(species_id: u32, trainer: &TrainerInfo, rng: &mut 
     // back from it will not be the level we asked for.
     let exp = super::experience::experience_for_level(species_id, level);
 
-    Pokemon {
+    let mut mon = Pokemon {
         personality,
         ot_id: (sid << 16) | tid,
         nickname: String::new(),
@@ -99,7 +99,10 @@ pub fn create_default_pokemon(species_id: u32, trainer: &TrainerInfo, rng: &mut 
         speed: Some(25),
         sp_attack: Some(25),
         sp_defense: Some(25),
-    }
+    };
+    // The placeholders above stand only for a pack without base stats.
+    super::stats::refresh(&mut mon);
+    mon
 }
 
 pub fn clear_pokemon_slot(target: &mut [u8], offset: usize, is_party: bool) {
@@ -115,15 +118,27 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
     }
     let b = &mut target[offset..offset + size];
     let pack = crate::game::current();
+    // A party record whose battle half is still zero has just been made, by
+    // creation or by joining the party from a box.
+    let new_party_record = is_party && b[box_mon_size().min(size)..].iter().all(|x| *x == 0);
     if !is_party && boxes_are_cfru_compact() {
         super::cfru::pack(b, mon);
         return;
     }
     if pack.layout().record_encoding.is_gen3() {
         super::gen3::pack(b, mon, is_party);
+        if new_party_record {
+            b[super::gen3::MAIL] = NO_MAIL;
+        }
         return;
     }
     let r = pack.record();
+    let new_record = b[..8].iter().all(|x| *x == 0);
+
+    // Every field below is written into just the bits the editor models. The
+    // web original rebuilt whole words, which reset whatever shared them: the
+    // origin game beside the met level, a flag beside the shiny bit, a
+    // Pokémon's mail. A record written back unchanged must be byte-identical.
 
     set_u32_le(b, r.personality, nz(mon.personality, 1));
     set_u32_le(b, r.ot_id, mon.ot_id);
@@ -147,7 +162,7 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
     write_gba_string(&mut b[r.nickname..r.nickname + nick_len], &game_nick);
 
     b[r.language] = (mon.language & 0x7) | ((mon.hidden_nature_modifier & 0x1F) << 3);
-    b[r.flags] = 0x02; // hasSpecies = true
+    b[r.flags] = record_flags(b[r.flags], mon.is_bad_egg, mon.is_egg);
 
     let ot_name = if mon.ot_name.trim().is_empty() {
         pack.behavior().default_ot_name.clone()
@@ -156,7 +171,12 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
     };
     let ot_len = r.ot_name_length;
     write_gba_string(&mut b[r.ot_name..r.ot_name + ot_len], &ot_name);
-    set_u16_le(b, r.shiny_word, u16::from(mon.shiny_modifier & 0x1) << 14);
+    set_u16_bits(
+        b,
+        r.shiny_word,
+        1 << 14,
+        u16::from(mon.shiny_modifier) << 14,
+    );
 
     let sec = &mut b[r.substructure..];
     let tera = nz(mon.tera_type, 1);
@@ -172,7 +192,7 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
         r.held_item,
         ((mon.held_item & 0x3FF) as u16) | (((ball_id & 0x3F) as u16) << 10),
     );
-    set_u32_le(sec, r.experience, mon.experience & 0xFF_FFFF);
+    set_u32_bits(sec, r.experience, 0xFF_FFFF, mon.experience);
 
     let mut pp_bonuses = 0u8;
     for i in 0..4 {
@@ -182,21 +202,14 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
     sec[r.friendship] = mon.friendship; // see the note in gen3::pack
 
     for i in 0..4 {
-        set_u16_le(sec, r.moves + i * 2, (mon.moves[i] & 0x7FF) as u16);
+        set_u16_bits(sec, r.moves + i * 2, 0x7FF, mon.moves[i] as u16);
     }
-
     // The ability slot lives in the top bits of move 4's word.
-    let move4 = r.moves + 6;
-    let m3_orig = u16_le(sec, move4);
     let ability_num = u16::from(mon.ability_num.min(2));
-    set_u16_le(
-        sec,
-        move4,
-        (m3_orig & !0x3000) | ((ability_num & 0x3) << 12),
-    );
+    set_u16_bits(sec, r.moves + 6, 0x3000, ability_num << 12);
 
     for i in 0..4 {
-        sec[r.pps + i] = (mon.pps[i] & 0x7F) as u8;
+        sec[r.pps + i] = (sec[r.pps + i] & 0x80) | (mon.pps[i] & 0x7F) as u8;
     }
 
     for i in 0..6 {
@@ -205,7 +218,13 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
 
     sec[r.pokerus] = mon.pokerus;
     sec[r.met_location] = mon.met_location;
-    set_u16_le(sec, r.met_level, ((mon.met_level & 0x7F) as u16) | (4 << 7));
+    // The rest of the met word is the origin game and the OT's gender. A new
+    // record says Emerald (3), which SoulGold's own Pokémon carry; the web
+    // original stamped FireRed (4) over every record it wrote.
+    if new_record {
+        set_u16_le(sec, r.met_level, 3 << 7);
+    }
+    set_u16_bits(sec, r.met_level, 0x7F, mon.met_level as u16);
 
     let iv_word = (mon.ivs[0] & 0x1F)
         | ((mon.ivs[1] & 0x1F) << 5)
@@ -213,12 +232,17 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
         | ((mon.ivs[3] & 0x1F) << 15)
         | ((mon.ivs[4] & 0x1F) << 20)
         | ((mon.ivs[5] & 0x1F) << 25);
-    set_u32_le(sec, r.ivs, iv_word & !(1 << 30));
+    // The top two bits are not IVs. Keep them as they were: the web original
+    // cleared bit 30, which hatches any egg the editor writes back.
+    let kept = u32_le(sec, r.ivs) & 0xC000_0000;
+    set_u32_le(sec, r.ivs, iv_word | kept);
 
     if is_party && b.len() >= mon_size() {
         set_u32_le(b, r.status, mon.status.unwrap_or(0));
         b[r.level] = nz(mon.level, 5).clamp(1, 100);
-        b[r.level + 1] = 0;
+        if new_party_record {
+            b[r.level + 1] = NO_MAIL;
+        }
 
         let max_hp = nz(mon.max_hp.unwrap_or(0), 40);
         set_u16_le(b, r.hp, mon.hp.unwrap_or(max_hp));

@@ -46,6 +46,8 @@ const OT_NAME_LEN: usize = 7;
 // Party tail.
 const STATUS: usize = 0x50;
 const LEVEL: usize = 0x54;
+/// Which of the player's mail slots the Pokémon's held mail is in.
+pub const MAIL: usize = 0x55;
 const HP: usize = 0x56;
 const MAX_HP: usize = 0x58;
 const ATTACK: usize = 0x5A;
@@ -321,7 +323,7 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
     super::charmap::write_gba_string(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
 
     record[LANGUAGE] = mon.language & 0x7;
-    record[FLAGS] = 0x02; // has species
+    record[FLAGS] = record_flags(record[FLAGS], mon.is_bad_egg, mon.is_egg);
 
     let ot_name = if mon.ot_name.trim().is_empty() {
         crate::game::current().behavior().default_ot_name.clone()
@@ -411,7 +413,7 @@ mod tests {
         ensure_pack();
         for order in 0..24u32 {
             // A personality with this remainder picks that substructure order.
-            let personality = 0x3A17_0000 + order + (24 - (0x3A17_0000u32 % 24)) % 24;
+            let personality = 0x3A17_0000 + order;
             assert_eq!(personality % 24, order % 24);
 
             let mut mon = sample_mon(25, 50, "Sparky");
@@ -465,7 +467,7 @@ mod tests {
         );
 
         assert!(
-            unpack_as(&vec![0u8; PARTY_SIZE], true, true).is_none(),
+            unpack_as(&[0u8; PARTY_SIZE], true, true).is_none(),
             "empty slot"
         );
     }

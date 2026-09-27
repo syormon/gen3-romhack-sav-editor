@@ -35,7 +35,7 @@ pub fn export_updated_save(
         } else {
             (base_counter + 2, base_counter + 1)
         }
-    } else if base_counter % 2 == 0 {
+    } else if base_counter.is_multiple_of(2) {
         (base_counter, base_counter + 1)
     } else {
         (base_counter + 1, base_counter + 2)
@@ -65,10 +65,15 @@ pub fn export_updated_save(
             if u32_le(&raw, at + 0xFF8) != sector_signature() {
                 continue;
             }
+            // A damaged sector can carry any id; check it before using it as
+            // an index, or one bad footer makes the save impossible to export.
             let sid = u16_le(&raw, at + 0xFF4) as usize;
-            let newer = source[sid]
-                .is_none_or(|prev| u32_le(&raw, at + 0xFFC) >= u32_le(&raw, prev + 0xFFC));
-            if sid < sectors_per_slot() && newer {
+            let Some(current) = source.get(sid) else {
+                continue;
+            };
+            let newer =
+                current.is_none_or(|prev| u32_le(&raw, at + 0xFFC) >= u32_le(&raw, prev + 0xFFC));
+            if newer {
                 source[sid] = Some(at);
             }
         }
@@ -82,9 +87,9 @@ pub fn export_updated_save(
     // keep live data in the bytes past that point — zero-filling them would
     // quietly discard part of the save.
     let mut sector_data: Vec<Vec<u8>> = Vec::with_capacity(sectors_per_slot());
-    for sid in 0..sectors_per_slot() {
-        let mut sec = match source[sid] {
-            Some(at) => raw[at..at + sector_size()].to_vec(),
+    for (sid, at) in source.iter().enumerate() {
+        let mut sec = match at {
+            Some(at) => raw[*at..at + sector_size()].to_vec(),
             None => vec![0u8; sector_size()],
         };
         if sid == 0 {
@@ -102,8 +107,8 @@ pub fn export_updated_save(
     }
 
     for (slot, counter) in [(active_slot, active_counter), (backup_slot, backup_counter)] {
-        for sid in 0..sectors_per_slot() {
-            let mut sec = sector_data[sid].clone();
+        for (sid, data) in sector_data.iter().enumerate() {
+            let mut sec = data.clone();
             let exp_size = sector_checksum_size(sid);
             let chk = calc_sector_checksum(&sec[..exp_size], exp_size);
 

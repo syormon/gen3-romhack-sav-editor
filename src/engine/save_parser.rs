@@ -105,6 +105,10 @@ pub struct GameSave {
     pub sb1: Vec<u8>,
     pub sb2: Vec<u8>,
     pub storage: Vec<u8>,
+    /// Records of the boxes kept outside the storage block, one box after
+    /// another; empty when the game or this save has none.
+    pub extra: Vec<u8>,
+    pub extra_names: Vec<String>,
     pub active_slot: usize,
     pub save_counter: u32,
     pub encryption_key: u32,
@@ -130,11 +134,19 @@ impl GameSave {
             sb1: vec![0; sb1_size()],
             sb2: vec![0; sb2_size()],
             storage: vec![0; storage_size()],
+            extra: Vec::new(),
+            extra_names: Vec::new(),
             active_slot: 0,
             save_counter: 0,
             encryption_key: 0,
         };
         save.parse_active_slot();
+        if let Some(loaded) =
+            super::extra_boxes::load(&save.buffer, &save.sb1, &save.storage, save.active_slot)
+        {
+            save.extra = loaded.records;
+            save.extra_names = loaded.names;
+        }
 
         if !save.sb2.iter().any(|&b| b != 0) {
             return Err(format!(
@@ -172,21 +184,27 @@ impl GameSave {
             self.encryption_key = encryption_key_offset().map_or(0, |at| u32_le(&self.sb2, at));
         }
 
-        let mut sb1_pos = 0;
-        for sid in 1..=4 {
-            if let Some(off) = sector_map[sid] {
-                let chunk = sector_data_size().min(sb1_size() - sb1_pos);
-                copy_from(&self.buffer, off, &mut self.sb1, sb1_pos, chunk);
-                sb1_pos += chunk;
-            }
-        }
-
-        let mut stor_pos = 0;
-        for sid in storage_sectors_start()..=storage_sectors_end() {
-            if let Some(off) = sector_map[sid] {
-                let chunk = sector_data_size().min(storage_size() - stor_pos);
-                copy_from(&self.buffer, off, &mut self.storage, stor_pos, chunk);
-                stor_pos += chunk;
+        // Each sector's data has a fixed place in its block, which is also where
+        // the writer puts it back. Packing them one after another instead would
+        // shift everything after a missing sector — and the export would then
+        // write that shifted data into the wrong sectors.
+        let blocks = [
+            (1..=4, &mut self.sb1),
+            (
+                storage_sectors_start()..=storage_sectors_end(),
+                &mut self.storage,
+            ),
+        ];
+        for (sectors, block) in blocks {
+            let first = *sectors.start();
+            for sid in sectors {
+                let start = (sid - first) * sector_data_size();
+                let Some(off) = sector_map[sid] else { continue };
+                if start >= block.len() {
+                    continue;
+                }
+                let chunk = sector_data_size().min(block.len() - start);
+                copy_from(&self.buffer, off, block, start, chunk);
             }
         }
     }
@@ -312,25 +330,35 @@ impl GameSave {
         }
     }
 
-    /// Party members, packed to the front exactly like `getParty()`.
+    /// Party members, in slot order.
     pub fn party(&self) -> Vec<Pokemon> {
-        let count = (u32_le(&self.sb1, party_count_offset()) as usize).min(party_size());
-        (0..count)
-            .filter_map(|i| {
-                let offset = party_offset() + i * mon_size();
-                unpack_mon(&self.sb1[offset..offset + mon_size()], true)
-            })
-            .filter(|mon| mon.species > 0)
+        (0..party_size())
+            .filter_map(|i| self.party_slot(i))
             .collect()
     }
 
-    pub fn box_pokemon(&self, box_index: usize, slot_index: usize) -> Option<Pokemon> {
-        if box_index >= total_boxes() || slot_index >= box_capacity() {
+    /// The party member in slot `index`, counting as the game does: only the
+    /// first `count` slots are the party, whatever the rest hold.
+    ///
+    /// Indexed by slot rather than by position in `party()`, so a record that
+    /// fails to decode cannot shift every later one onto the wrong slot.
+    pub fn party_slot(&self, index: usize) -> Option<Pokemon> {
+        let count = (u32_le(&self.sb1, party_count_offset()) as usize).min(party_size());
+        if index >= count {
             return None;
         }
-        let linear_index = box_index * box_capacity() + slot_index;
-        let offset = storage_boxes_offset() + linear_index * box_mon_size();
-        unpack_mon(&self.storage[offset..offset + box_mon_size()], false)
+        super::slots::unpack_party_record(&self.sb1, index)
+    }
+
+    pub fn box_pokemon(&self, box_index: usize, slot_index: usize) -> Option<Pokemon> {
+        let slot = super::slots::SlotRef::boxed(box_index, slot_index);
+        unpack_mon(self.record(slot)?, false)
+    }
+
+    /// Boxes in this save: the storage block's, then any kept elsewhere.
+    pub fn box_count(&self) -> usize {
+        let per_box = box_capacity() * box_mon_size();
+        total_boxes() + self.extra.len().checked_div(per_box).unwrap_or(0)
     }
 
     pub fn box_names(&self) -> Vec<String> {
@@ -345,68 +373,40 @@ impl GameSave {
                 }
                 decode_gba_string(&self.storage[off..off + width], width)
             })
+            .chain(self.extra_names.iter().cloned())
             .collect()
     }
 
-    pub fn set_box_name(&mut self, box_index: usize, name: &str) {
-        let width = box_name_length();
-        let off = storage_box_names_offset() + box_index * width;
-        // `width - 1` would underflow for a game with no box names, and the
-        // slice would be out of range.
-        if box_index >= total_boxes() || width == 0 || off + width > self.storage.len() {
-            return;
+    /// The whole save file with every edit applied, ready to write out.
+    pub fn export(&self) -> Vec<u8> {
+        let (mut sb1, mut storage) = (self.sb1.clone(), self.storage.clone());
+        super::extra_boxes::store_in_blocks(&self.extra, &mut sb1, &mut storage);
+        let mut file = super::save_writer::export_updated_save(
+            &self.buffer,
+            self.active_slot,
+            &sb1,
+            &self.sb2,
+            &storage,
+        );
+        if !self.extra.is_empty() {
+            super::extra_boxes::store_in_sectors(
+                &mut file,
+                self.active_slot,
+                &self.extra,
+                &sb1,
+                &storage,
+            );
         }
-        let trimmed: String = name.chars().take(width - 1).collect();
-        let encoded = encode_gba_string(&trimmed, width);
-        self.storage[off..off + width].copy_from_slice(&encoded);
+        file
     }
 
-    pub fn box_wallpapers(&self) -> Vec<u8> {
-        (0..total_boxes())
-            .map(|b| {
-                self.storage
-                    .get(storage_box_wallpapers_offset() + b)
-                    .copied()
-                    .unwrap_or(0)
-            })
-            .collect()
-    }
-
-    pub fn set_box_wallpaper(&mut self, box_index: usize, wallpaper_idx: u8) {
-        if box_index < total_boxes() {
-            if let Some(slot) = self
-                .storage
-                .get_mut(storage_box_wallpapers_offset() + box_index)
-            {
-                *slot = wallpaper_idx;
-            }
-        }
-    }
-
-    pub fn current_box(&self) -> usize {
-        self.storage
-            .get(storage_current_box())
-            .copied()
-            .unwrap_or(0) as usize
-    }
-
-    pub fn set_current_box(&mut self, box_idx: usize) {
-        if box_idx < total_boxes() {
-            self.storage[storage_current_box()] = box_idx as u8;
-        }
-    }
-
-    /// Rewrites the party count from the slots that actually hold data, as
-    /// `updatePartyCount()` does after every move or release.
+    /// Rewrites the party count from the slots that actually hold data.
     pub fn refresh_party_count(&mut self) {
-        let mut count = 0u32;
-        for i in 0..party_size() {
-            let off = party_offset() + i * mon_size();
-            if u32_le(&self.sb1, off) != 0 || u32_le(&self.sb1, off + 4) != 0 {
-                count += 1;
-            }
-        }
-        set_u32_le(&mut self.sb1, party_count_offset(), count);
+        let count = (0..party_size())
+            .map(super::slots::SlotRef::party)
+            .filter(|slot| super::slots::party_slot_is_occupied(&self.sb1, *slot))
+            .count();
+        set_u32_le(&mut self.sb1, party_count_offset(), count as u32);
     }
 }
 
@@ -417,7 +417,6 @@ fn copy_from(src: &[u8], src_off: usize, dst: &mut [u8], dst_off: usize, len: us
     }
 }
 
-/// `unpackMon` from the TypeScript source.
 /// How new a slot is, or `None` if the game has never written it.
 ///
 /// The counter alone is not enough: an unwritten slot is erased flash, every
@@ -439,6 +438,7 @@ pub fn slot_counter(buffer: &[u8], slot: usize) -> Option<u32> {
     newest
 }
 
+/// `unpackMon` from the TypeScript source.
 pub fn unpack_mon(b: &[u8], is_party: bool) -> Option<Pokemon> {
     if b.len() < box_mon_size() {
         return None;
@@ -488,7 +488,7 @@ pub fn unpack_mon(b: &[u8], is_party: bool) -> Option<Pokemon> {
 
     let pp_bonuses_byte = sec[r.pp_bonuses];
     let pp_bonuses = [
-        u32::from((pp_bonuses_byte >> 0) & 0x3),
+        u32::from(pp_bonuses_byte & 0x3),
         u32::from((pp_bonuses_byte >> 2) & 0x3),
         u32::from((pp_bonuses_byte >> 4) & 0x3),
         u32::from((pp_bonuses_byte >> 6) & 0x3),

@@ -7,59 +7,14 @@ use web_time::Instant;
 
 use eframe::egui::{self, RichText};
 
-use crate::engine::layout::*;
-use crate::engine::mon_writer::{Rng, clear_pokemon_slot, pack_and_write_pokemon};
+use crate::engine::layout::pocket_count;
+use crate::engine::mon_writer::Rng;
 use crate::engine::save_parser::{BagItem, GameSave, Pokemon, TrainerInfo};
-use crate::engine::save_writer::export_updated_save;
+pub use crate::engine::slots::SlotRef;
 
 use super::theme;
 use super::widgets::{self, color_button};
 use super::{bag, inspector, party_box, trainer};
-
-#[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
-pub enum SlotKind {
-    Party,
-    Box,
-}
-
-/// Identifies one storage slot: a party position, or a slot in a given box.
-#[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
-pub struct SlotRef {
-    pub kind: SlotKind,
-    pub index: usize,
-    pub box_index: usize,
-}
-
-impl SlotRef {
-    pub fn party(index: usize) -> Self {
-        Self {
-            kind: SlotKind::Party,
-            index,
-            box_index: 0,
-        }
-    }
-
-    pub fn boxed(box_index: usize, index: usize) -> Self {
-        Self {
-            kind: SlotKind::Box,
-            index,
-            box_index,
-        }
-    }
-
-    pub fn is_party(self) -> bool {
-        self.kind == SlotKind::Party
-    }
-
-    /// Byte offset within the buffer this slot lives in (sb1 or storage).
-    pub fn offset(self) -> usize {
-        if self.is_party() {
-            party_offset() + self.index * mon_size()
-        } else {
-            storage_boxes_offset() + (self.box_index * box_capacity() + self.index) * box_mon_size()
-        }
-    }
-}
 
 pub struct Toast {
     pub text: String,
@@ -95,9 +50,9 @@ pub struct PendingSave {
     pub choice: Option<usize>,
     /// Why the chosen game could not read the file.
     pub error: Option<String>,
-    /// The save and game that were open before, so Cancel puts them back
-    /// instead of throwing away the session.
-    pub restore: Option<(SaveFile, std::path::PathBuf)>,
+    /// The game that was active before, and the save that was open under it,
+    /// so Cancel puts them back instead of throwing away the session.
+    pub restore: Option<(Option<SaveFile>, std::path::PathBuf)>,
 }
 
 /// Working state for the "Add New Pokémon" dialog.
@@ -185,7 +140,7 @@ pub enum Action {
 }
 
 pub struct EditorApp {
-    /// Games found on disk, for the header's picker.
+    /// Every game available — folders on disk and the built-in ones.
     pub packs: Vec<crate::game::PackInfo>,
     /// Problems reported by the active pack, shown once after loading.
     pub pack_warnings: Vec<String>,
@@ -277,11 +232,7 @@ impl EditorApp {
         self.trainer_modal = None;
         self.current_box = 0;
         self.pack_warnings = pack.warnings();
-
-        ctx.send_viewport_cmd(egui::ViewportCommand::Title(window_title()));
-        ctx.send_viewport_cmd(egui::ViewportCommand::Icon(Some(std::sync::Arc::new(
-            crate::load_icon(),
-        ))));
+        sync_window(ctx);
 
         match reopen {
             Some(file) => self.load_file(file),
@@ -305,8 +256,8 @@ impl EditorApp {
 
     // ---------------------------------------------------------------- loading
 
-    /// Reads a save from disk. Which game it belongs to is asked afterwards, if
-    /// it is not already settled — the file has to be in hand before there is
+    /// Opens a save under the active game, or asks which game it belongs to
+    /// when none is chosen yet — the file has to be in hand before there is
     /// anything to ask about.
     fn load_file(&mut self, file: SaveFile) {
         if crate::game::is_loaded() {
@@ -335,12 +286,14 @@ impl EditorApp {
             return self.open_save(file);
         }
 
+        let restore = match self.pending_save.take() {
+            // Still answering for an earlier file: Cancel goes back to what was
+            // open before that one, not to its unconfirmed preview.
+            Some(earlier) => earlier.restore,
+            None => crate::game::current_opt().map(|pack| (self.loaded.clone(), pack.dir.clone())),
+        };
         let current = crate::game::current_opt()
             .and_then(|pack| self.packs.iter().position(|p| p.dir == pack.dir));
-        let restore = self
-            .loaded
-            .clone()
-            .zip(current.map(|i| self.packs[i].dir.clone()));
 
         self.pending_save = Some(PendingSave {
             name: file.name,
@@ -454,10 +407,10 @@ impl EditorApp {
     /// Commit whatever modal is open, mirroring `commitActiveModals()`.
     pub fn commit_active_modals(&mut self) {
         self.commit_inspector();
-        if let Some(form) = self.trainer_modal.clone() {
-            if let Some(save) = self.save.as_mut() {
-                save.set_trainer_info(&form);
-            }
+        if let Some(form) = self.trainer_modal.clone()
+            && let Some(save) = self.save.as_mut()
+        {
+            save.set_trainer_info(&form);
         }
         self.commit_bag();
     }
@@ -466,16 +419,7 @@ impl EditorApp {
         let (Some(insp), Some(save)) = (self.inspector.as_ref(), self.save.as_mut()) else {
             return;
         };
-        let slot = insp.slot;
-        let buffer = if slot.is_party() {
-            &mut save.sb1
-        } else {
-            &mut save.storage
-        };
-        pack_and_write_pokemon(buffer, slot.offset(), &insp.mon, slot.is_party());
-        if slot.is_party() {
-            save.refresh_party_count();
-        }
+        save.apply_edit(insp.slot, &insp.mon);
     }
 
     pub fn commit_bag(&mut self) {
@@ -488,114 +432,38 @@ impl EditorApp {
     }
 
     pub fn mon_at(&self, slot: SlotRef) -> Option<Pokemon> {
-        let save = self.save.as_ref()?;
-        if slot.is_party() {
-            save.party().get(slot.index).cloned()
-        } else {
-            save.box_pokemon(slot.box_index, slot.index)
-        }
+        self.save.as_ref()?.mon_at(slot)
     }
 
-    /// Port of `swapOrMovePokemon`.
+    /// Drag and drop: moves a Pokémon, swapping with whatever is there.
     fn move_mon(&mut self, src: SlotRef, dst: SlotRef) {
-        if src == dst {
-            return;
-        }
         let Some(save) = self.save.as_mut() else {
             return;
         };
-
-        let party_len: usize = save.party().len();
-        let src_mon = if src.is_party() {
-            save.party().get(src.index).cloned()
-        } else {
-            save.box_pokemon(src.box_index, src.index)
-        };
-        let dst_mon = if dst.is_party() {
-            save.party().get(dst.index).cloned()
-        } else {
-            save.box_pokemon(dst.box_index, dst.index)
-        };
-
-        let Some(src_mon) = src_mon else { return };
-
-        if src.is_party() && !dst.is_party() && party_len <= 1 && dst_mon.is_none() {
-            self.alert(
-                "Party cannot be empty",
-                "Cannot move your last Pokémon to the storage box!",
-            );
-            return;
+        match save.move_mon(src, dst) {
+            Ok(()) => self.inspector = None,
+            Err(reason) => self.alert("Party cannot be empty", reason),
         }
-        let save = self.save.as_mut().expect("checked above");
-
-        match dst_mon {
-            // Occupied destination: swap the two slots.
-            Some(dst_mon) => {
-                write_mon(save, dst, &src_mon);
-                write_mon(save, src, &dst_mon);
-            }
-            // Empty destination: move, then close the gap in the party.
-            None => {
-                write_mon(save, dst, &src_mon);
-                let src_buffer = if src.is_party() {
-                    &mut save.sb1
-                } else {
-                    &mut save.storage
-                };
-                clear_pokemon_slot(src_buffer, src.offset(), src.is_party());
-
-                if src.is_party() {
-                    let remaining = save.party();
-                    for i in 0..party_size() {
-                        let off = party_offset() + i * mon_size();
-                        match remaining.get(i) {
-                            Some(mon) => pack_and_write_pokemon(&mut save.sb1, off, mon, true),
-                            None => clear_pokemon_slot(&mut save.sb1, off, true),
-                        }
-                    }
-                }
-            }
-        }
-
-        save.refresh_party_count();
-        self.inspector = None;
     }
 
-    /// Port of the inspector's Release button.
     pub fn release_mon(&mut self, slot: SlotRef) {
-        let Some(party_len) = self.save.as_ref().map(|s| s.party().len()) else {
+        let Some(save) = self.save.as_mut() else {
             return;
         };
-
-        if slot.is_party() && party_len <= 1 {
-            self.alert("Party cannot be empty", "Cannot release your last Pokémon!");
-            return;
-        }
-        let save = self.save.as_mut().expect("checked above");
-
-        let buffer = if slot.is_party() {
-            &mut save.sb1
-        } else {
-            &mut save.storage
-        };
-        clear_pokemon_slot(buffer, slot.offset(), slot.is_party());
-
-        if slot.is_party() {
-            // Shift the rest of the party up one slot.
-            for i in slot.index..party_size() - 1 {
-                let curr_off = party_offset() + i * mon_size();
-                let next_off = party_offset() + (i + 1) * mon_size();
-                let next: Vec<u8> = save.sb1[next_off..next_off + mon_size()].to_vec();
-                save.sb1[curr_off..curr_off + mon_size()].copy_from_slice(&next);
+        match save.release_mon(slot) {
+            Ok(()) => {
+                self.inspector = None;
+                self.toast("Pokémon released");
             }
-            clear_pokemon_slot(&mut save.sb1, party_offset() + 5 * mon_size(), true);
-            save.refresh_party_count();
+            Err(reason) => {
+                if let Some(insp) = self.inspector.as_mut() {
+                    insp.confirm_release = false;
+                }
+                self.alert("Party cannot be empty", reason);
+            }
         }
-
-        self.inspector = None;
     }
 
-    /// Port of `submitAddPokemon`.
     pub fn create_mon(&mut self, slot: SlotRef, species_id: u32) {
         let Some(save) = self.save.as_mut() else {
             return;
@@ -603,10 +471,7 @@ impl EditorApp {
         let trainer = save.trainer_info();
         let mon =
             crate::engine::mon_writer::create_default_pokemon(species_id, &trainer, &mut self.rng);
-        write_mon(save, slot, &mon);
-        if slot.is_party() {
-            save.refresh_party_count();
-        }
+        save.create_mon(slot, &mon);
     }
 
     fn export(&mut self) {
@@ -615,13 +480,7 @@ impl EditorApp {
             return;
         };
 
-        let updated = export_updated_save(
-            &save.buffer,
-            save.active_slot,
-            &save.sb1,
-            &save.sb2,
-            &save.storage,
-        );
+        let updated = save.export();
 
         let file_name = crate::game::current().manifest.export_file_name();
 
@@ -841,15 +700,13 @@ impl EditorApp {
                     crate::game::current().manifest.name
                 ),
             );
-        } else if open_bag {
-            if let Some(save) = self.save.as_ref() {
-                self.bag = Some(BagModal {
-                    pockets: (0..pocket_count()).map(|p| save.pocket_items(p)).collect(),
-                    active: 0,
-                    search: String::new(),
-                    add_qty: 1,
-                });
-            }
+        } else if open_bag && let Some(save) = self.save.as_ref() {
+            self.bag = Some(BagModal {
+                pockets: (0..pocket_count()).map(|p| save.pocket_items(p)).collect(),
+                active: 0,
+                search: String::new(),
+                add_qty: 1,
+            });
         }
     }
 
@@ -1049,25 +906,26 @@ impl EditorApp {
             let pack = crate::game::current();
             self.pack_warnings = pack.warnings();
             self.pending_save = None;
-            ctx.send_viewport_cmd(egui::ViewportCommand::Title(window_title()));
-            ctx.send_viewport_cmd(egui::ViewportCommand::Icon(Some(std::sync::Arc::new(
-                crate::load_icon(),
-            ))));
+            sync_window(ctx);
             self.toast(format!("Opened as {}", pack.manifest.name));
         } else if cancel || ctx.input(|i| i.key_pressed(egui::Key::Escape)) {
             let restore = self.pending_save.take().and_then(|p| p.restore);
             self.save = None;
             self.loaded = None;
             match restore {
-                // Put back the save that was open before this one was picked.
-                Some((file, dir)) => {
-                    if crate::game::activate(&dir).is_ok() {
-                        self.load_file(file);
+                // Put back the game, and the save if there was one, that were
+                // open before this file was picked.
+                Some((file, dir)) => match crate::game::activate(&dir) {
+                    Ok(_) => {
+                        if let Some(file) = file {
+                            self.load_file(file);
+                        }
                     }
-                }
+                    Err(_) => crate::game::clear(),
+                },
                 None => crate::game::clear(),
             }
-            ctx.send_viewport_cmd(egui::ViewportCommand::Title(window_title()));
+            sync_window(ctx);
         }
     }
 
@@ -1169,10 +1027,10 @@ impl EditorApp {
 
             ui.add_space(14.0);
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                if color_button(ui, "Create Pokémon", theme::GREEN).clicked() || submit {
-                    if let Some(m) = matched {
-                        create = Some(m.id);
-                    }
+                if (color_button(ui, "Create Pokémon", theme::GREEN).clicked() || submit)
+                    && let Some(m) = matched
+                {
+                    create = Some(m.id);
                 }
                 if color_button(ui, "Cancel", theme::BORDER).clicked() {
                     close = true;
@@ -1206,6 +1064,11 @@ pub fn window_title() -> String {
     }
 }
 
+/// Points the window's title at whichever game is now active.
+fn sync_window(ctx: &egui::Context) {
+    ctx.send_viewport_cmd(egui::ViewportCommand::Title(window_title()));
+}
+
 /// Reads a save from disk into the form the editor holds it in.
 #[cfg(not(target_arch = "wasm32"))]
 fn read_disk_file(path: &std::path::Path) -> Result<SaveFile, String> {
@@ -1218,23 +1081,12 @@ fn read_disk_file(path: &std::path::Path) -> Result<SaveFile, String> {
     Ok(SaveFile { name, bytes })
 }
 
-/// Writes a Pokémon into the buffer that backs `slot`.
-pub fn write_mon(save: &mut GameSave, slot: SlotRef, mon: &Pokemon) {
-    let is_party = slot.is_party();
-    let buffer = if is_party {
-        &mut save.sb1
-    } else {
-        &mut save.storage
-    };
-    pack_and_write_pokemon(buffer, slot.offset(), mon, is_party);
-}
-
 /// `Number.prototype.toLocaleString()` for the money and coin readouts.
 pub fn thousands(value: u32) -> String {
     let digits = value.to_string();
     let mut out = String::with_capacity(digits.len() + digits.len() / 3);
     for (i, c) in digits.chars().enumerate() {
-        if i > 0 && (digits.len() - i) % 3 == 0 {
+        if i > 0 && (digits.len() - i).is_multiple_of(3) {
             out.push(',');
         }
         out.push(c);

@@ -4,7 +4,7 @@
 //! active game pack's manifest, so a different hack only needs a different
 //! `game.json` — see `src/game/manifest.rs` for the fields and their defaults.
 
-use crate::game::{self, PocketDef};
+use crate::game;
 
 #[inline]
 pub fn sector_size() -> usize {
@@ -139,11 +139,6 @@ pub fn box_capacity() -> usize {
 }
 
 #[inline]
-pub fn storage_current_box() -> usize {
-    game::current().layout().storage_current_box
-}
-
-#[inline]
 pub fn storage_boxes_offset() -> usize {
     game::current().layout().storage_boxes
 }
@@ -159,11 +154,6 @@ pub fn box_name_length() -> usize {
 }
 
 #[inline]
-pub fn storage_box_wallpapers_offset() -> usize {
-    game::current().layout().storage_box_wallpapers
-}
-
-#[inline]
 pub fn storage_sectors_start() -> usize {
     game::current().layout().storage_sectors.0
 }
@@ -171,17 +161,6 @@ pub fn storage_sectors_start() -> usize {
 #[inline]
 pub fn storage_sectors_end() -> usize {
     game::current().layout().storage_sectors.1
-}
-
-/// Nickname field width, in characters and bytes.
-#[inline]
-pub fn nickname_length() -> usize {
-    game::current().record().nickname_length
-}
-
-#[inline]
-pub fn ot_name_length() -> usize {
-    game::current().record().ot_name_length
 }
 
 /// Bytes covered by a sector's checksum.
@@ -198,10 +177,6 @@ pub fn sector_checksum_size(sector: usize) -> usize {
 #[inline]
 pub fn pocket_count() -> usize {
     game::current().layout().pockets.len()
-}
-
-pub fn pockets() -> Vec<PocketDef> {
-    game::current().layout().pockets.clone()
 }
 
 pub fn pocket_name(index: usize) -> String {
@@ -234,8 +209,4 @@ pub fn pocket_offset(index: usize) -> usize {
         .pocket(index)
         .map(|p| p.offset)
         .unwrap_or(0)
-}
-
-pub fn pocket_index(name: &str) -> Option<usize> {
-    game::current().layout().pocket_index(name)
 }

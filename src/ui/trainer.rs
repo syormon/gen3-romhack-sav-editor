@@ -3,6 +3,7 @@
 use eframe::egui::{self, RichText};
 
 use crate::engine::charmap::is_encodable;
+use crate::engine::layout::{max_coins, max_money, player_name_length};
 
 use super::app::EditorApp;
 use super::theme;
@@ -28,7 +29,7 @@ pub fn trainer_modal(app: &mut EditorApp, ctx: &egui::Context) {
         ui.add(
             egui::TextEdit::singleline(&mut form.name)
                 .desired_width(f32::INFINITY)
-                .char_limit(7),
+                .char_limit(player_name_length()),
         );
         // Only characters the in-game charmap can represent survive a save.
         let unsupported: String = form.name.chars().filter(|c| !is_encodable(*c)).collect();
@@ -58,11 +59,11 @@ pub fn trainer_modal(app: &mut EditorApp, ctx: &egui::Context) {
             });
             ui.vertical(|ui| {
                 field_label(ui, "Money ($)");
-                widgets::int_field(ui, &mut form.money, 0, 999_999, 110.0);
+                widgets::int_field(ui, &mut form.money, 0, max_money());
             });
             ui.vertical(|ui| {
                 field_label(ui, "Coins");
-                widgets::int_field(ui, &mut form.coins, 0, 9_999, 90.0);
+                widgets::int_field(ui, &mut form.coins, 0, max_coins());
             });
         });
 
@@ -85,8 +86,8 @@ pub fn trainer_modal(app: &mut EditorApp, ctx: &egui::Context) {
     });
 
     if save {
-        if let (Some(form), Some(state)) = (app.trainer_modal.clone(), app.save.as_mut()) {
-            state.set_trainer_info(&form);
+        if let (Some(form), Some(state)) = (app.trainer_modal.as_ref(), app.save.as_mut()) {
+            state.set_trainer_info(form);
         }
         app.trainer_modal = None;
         app.toast("Trainer updated");

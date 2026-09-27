@@ -108,11 +108,9 @@ pub struct Layout {
     pub total_boxes: usize,
     pub box_capacity: usize,
     pub storage_sectors: (usize, usize),
-    pub storage_current_box: usize,
     pub storage_boxes: usize,
     pub storage_box_names: usize,
     pub box_name_length: usize,
-    pub storage_box_wallpapers: usize,
 
     /// How the Pokémon record is stored. `gen3_shuffled` has its field
     /// positions fixed by the format, so `record` is ignored for it.
@@ -120,13 +118,107 @@ pub struct Layout {
     /// How boxed records are stored, when a game packs them more tightly than
     /// its party records.
     pub box_encoding: BoxEncoding,
+    /// Boxes kept outside the storage block, numbered after its last box.
+    pub extra_boxes: Option<ExtraBoxes>,
 }
 
+/// Boxes a hack keeps outside the storage block, in whatever space it found.
+///
+/// SoulGold stores 15 boxes in the storage block and four more in the spare
+/// ends of other sectors, some of them split across two places. Each box here
+/// lists the pieces its records occupy, in order; the editor joins them into
+/// one run of `box_capacity` records and splits them back out on export.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ExtraBoxes {
+    /// Sectors outside the two save slots that these boxes use, each as the
+    /// pair `[copy that goes with slot 0, copy that goes with slot 1]`. An
+    /// `extra` area's `sector` is an index into this list.
+    pub sectors: Vec<[usize; 2]>,
+    /// How many bytes of each of those sectors its footer checksum covers.
+    pub sector_checksum_sizes: Vec<usize>,
+    /// Bytes a save must hold for these boxes to be there at all — a save
+    /// from an older version of the game has none of them.
+    #[serde(default)]
+    pub markers: Vec<Marker>,
+    pub boxes: Vec<ExtraBox>,
+    /// Checksums the hack keeps over its own blocks.
+    #[serde(default)]
+    pub checksums: Vec<BlockChecksum>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ExtraBox {
+    /// Where the box's records are, in order.
+    pub records: Vec<Span>,
+    /// Where its name is, `box_name_length` bytes.
+    pub name: Place,
+}
+
+/// Which buffer an extra-box offset is relative to.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Area {
+    /// The assembled storage block.
+    Storage,
+    /// The assembled SaveBlock1.
+    Sb1,
+    /// One of `ExtraBoxes::sectors`.
+    Extra,
+}
+
+/// A position in an area.
+#[derive(Debug, Clone, Copy, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Place {
+    #[serde(rename = "in")]
+    pub area: Area,
+    /// For `extra`: which of the sectors.
+    #[serde(default)]
+    pub sector: usize,
+    pub offset: usize,
+}
+
+/// A run of bytes in an area.
+#[derive(Debug, Clone, Copy, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Span {
+    #[serde(rename = "in")]
+    pub area: Area,
+    #[serde(default)]
+    pub sector: usize,
+    pub offset: usize,
+    pub length: usize,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Marker {
+    #[serde(rename = "in")]
+    pub area: Area,
+    #[serde(default)]
+    pub sector: usize,
+    pub offset: usize,
+    /// The ASCII bytes expected there.
+    pub text: String,
+}
+
+/// A u32 stored at `at` over the bytes of `over`, joined in order: the sector
+/// checksum's 16-bit fold in the low half and its complement in the high.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct BlockChecksum {
+    pub at: Place,
+    pub over: Vec<Span>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Default)]
 #[serde(rename_all = "snake_case")]
 pub enum RecordEncoding {
     /// Substructure stored in order, unencrypted (pokeemerald-expansion hacks
     /// that removed the obfuscation, including SoulGold).
+    #[default]
     Plain,
     /// Vanilla Gen 3: four 12-byte substructures permuted by the personality
     /// value and XOR-encrypted, as Emerald-based hacks use. See
@@ -161,12 +253,6 @@ impl RecordEncoding {
     /// and checksummed.
     pub fn is_obfuscated(self) -> bool {
         matches!(self, Self::Gen3Shuffled)
-    }
-}
-
-impl Default for RecordEncoding {
-    fn default() -> Self {
-        Self::Plain
     }
 }
 
@@ -293,20 +379,18 @@ impl Default for Layout {
             total_boxes: 14,
             box_capacity: 30,
             storage_sectors: (5, 13),
-            storage_current_box: 0x0000,
             storage_boxes: 0x0004,
             storage_box_names: 0x859C,
             box_name_length: 9,
-            storage_box_wallpapers: 0x8623,
 
             record_encoding: RecordEncoding::Plain,
             box_encoding: BoxEncoding::default(),
+            extra_boxes: None,
         }
     }
 }
 
 impl Layout {
-    /// Bytes covered by a sector's checksum.
     /// How many bytes of a sector its stored checksum covers.
     ///
     /// An explicit `sector_sizes` entry always wins, including for sector 0:
@@ -328,6 +412,116 @@ impl Layout {
 
     pub fn pocket_index(&self, name: &str) -> Option<usize> {
         self.pockets.iter().position(|p| p.name == name)
+    }
+
+    /// Checks that every offset and size fits the structure it points into.
+    ///
+    /// A pack is a hand-edited JSON file, and the engine indexes save data
+    /// with these numbers directly, so a typo would otherwise surface as a
+    /// crash the moment a save is opened — in the browser, as a dead page.
+    pub fn validate(&self, record: &RecordLayout) -> Result<(), String> {
+        let mut problems: Vec<String> = Vec::new();
+        let mut require = |ok: bool, problem: String| {
+            if !ok {
+                problems.push(problem);
+            }
+        };
+
+        // The sector footer (id, checksum, signature, counter) is at 0xFF4.
+        const FOOTER: usize = 0xFF4;
+        require(
+            self.sector_size >= 0x1000,
+            format!("sector_size {} is below 4096", self.sector_size),
+        );
+        require(
+            (1..=FOOTER).contains(&self.sector_data_size),
+            format!(
+                "sector_data_size {} runs into the sector footer",
+                self.sector_data_size
+            ),
+        );
+        for entry in &self.sector_sizes {
+            require(
+                entry.size <= FOOTER,
+                format!(
+                    "sector_sizes: sector {} size {} runs into the footer",
+                    entry.sector, entry.size
+                ),
+            );
+        }
+        let (first, last) = self.storage_sectors;
+        require(
+            4 < first && first <= last && last < self.sectors_per_slot,
+            format!(
+                "storage_sectors ({first}, {last}) must follow sectors 0-4 and end before sector {}",
+                self.sectors_per_slot
+            ),
+        );
+        require(
+            self.sb2_size <= self.sector_data_size,
+            format!("sb2_size {} does not fit one sector", self.sb2_size),
+        );
+        require(
+            self.sb1_size <= 4 * self.sector_data_size,
+            format!("sb1_size {} does not fit sectors 1-4", self.sb1_size),
+        );
+        let storage_sectors = (last + 1).saturating_sub(first);
+        require(
+            self.storage_size <= storage_sectors * self.sector_data_size,
+            format!(
+                "storage_size {} does not fit the storage sectors",
+                self.storage_size
+            ),
+        );
+
+        require(
+            self.player_name + self.player_name_length < self.sb2_size
+                && self.player_gender < self.sb2_size,
+            "the player name or gender lies outside sb2".to_string(),
+        );
+        require(
+            self.party + self.party_size * self.mon_size <= self.sb1_size,
+            "the party does not fit in sb1".to_string(),
+        );
+        require(
+            self.storage_boxes + self.total_boxes * self.box_capacity * self.box_mon_size
+                <= self.storage_size,
+            "the boxes do not fit in storage".to_string(),
+        );
+        require(
+            self.box_mon_size <= self.mon_size,
+            format!(
+                "box_mon_size {} is larger than mon_size {}",
+                self.box_mon_size, self.mon_size
+            ),
+        );
+
+        let (party_min, box_min) = match (self.record_encoding.is_gen3(), self.box_encoding) {
+            (true, BoxEncoding::CfruCompact) => (100, 58),
+            (true, BoxEncoding::SameAsParty) => (100, 80),
+            (false, _) => (record.party_end(), record.box_end()),
+        };
+        require(
+            self.mon_size >= party_min && self.box_mon_size >= box_min,
+            format!(
+                "records need mon_size >= {party_min} and box_mon_size >= {box_min}, not {} and {}",
+                self.mon_size, self.box_mon_size
+            ),
+        );
+
+        if let Some(extra) = &self.extra_boxes {
+            self.validate_extra_boxes(extra, &mut problems);
+        }
+
+        if problems.is_empty() {
+            Ok(())
+        } else {
+            Err(format!(
+                "{} has problems:\n  {}",
+                super::MANIFEST_NAME,
+                problems.join("\n  ")
+            ))
+        }
     }
 }
 
@@ -383,18 +577,151 @@ pub struct RecordLayout {
     pub gen3_ball: Gen3Ball,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Default)]
 #[serde(rename_all = "snake_case")]
 pub enum Gen3Ball {
     /// Bits 11-14 of the origins word.
+    #[default]
     OriginsBits,
     /// u16 at Growth+10, as an item id.
     GrowthU16,
 }
 
-impl Default for Gen3Ball {
-    fn default() -> Self {
-        Self::OriginsBits
+impl Layout {
+    /// The bytes an area holds, for range checks.
+    fn area_len(&self, area: Area) -> usize {
+        match area {
+            Area::Storage => self.storage_size,
+            Area::Sb1 => self.sb1_size,
+            // Everything before the sector footer.
+            Area::Extra => 0xFF4,
+        }
+    }
+
+    fn validate_extra_boxes(&self, extra: &ExtraBoxes, problems: &mut Vec<String>) {
+        let mut require = |ok: bool, problem: String| {
+            if !ok {
+                problems.push(format!("extra_boxes: {problem}"));
+            }
+        };
+        let slots_end = 2 * self.sectors_per_slot;
+        let file_sectors = self.min_save_size / self.sector_size.max(1);
+        for pair in &extra.sectors {
+            require(
+                pair.iter().all(|s| (slots_end..file_sectors).contains(s)) && pair[0] != pair[1],
+                format!("sectors {pair:?} must be two different sectors after the save slots"),
+            );
+        }
+        require(
+            extra.sector_checksum_sizes.len() == extra.sectors.len()
+                && extra.sector_checksum_sizes.iter().all(|n| *n <= 0xFF4),
+            "sector_checksum_sizes needs one size, up to 4084, per sector".to_string(),
+        );
+
+        // Inside its area, and in storage past the last regular box so an
+        // extra box can never overlap one.
+        let boxes_end =
+            self.storage_boxes + self.total_boxes * self.box_capacity * self.box_mon_size;
+        let fits = |area: Area, sector: usize, offset: usize, length: usize| {
+            offset + length <= self.area_len(area)
+                && (area != Area::Extra || sector < extra.sectors.len())
+                && (area != Area::Storage || offset >= boxes_end)
+        };
+        let per_box = self.box_capacity * self.box_mon_size;
+        for (i, b) in extra.boxes.iter().enumerate() {
+            let number = self.total_boxes + i + 1;
+            for r in &b.records {
+                require(
+                    fits(r.area, r.sector, r.offset, r.length),
+                    format!(
+                        "box {number}'s records at {:?}+{:#x} do not fit",
+                        r.area, r.offset
+                    ),
+                );
+            }
+            let n = &b.name;
+            require(
+                fits(n.area, n.sector, n.offset, self.box_name_length),
+                format!(
+                    "box {number}'s name at {:?}+{:#x} does not fit",
+                    n.area, n.offset
+                ),
+            );
+            let total: usize = b.records.iter().map(|s| s.length).sum();
+            require(
+                total == per_box,
+                format!("box {number}'s records add up to {total} bytes, not {per_box}"),
+            );
+        }
+        for m in &extra.markers {
+            require(
+                fits(m.area, m.sector, m.offset, m.text.len()),
+                format!("marker at {:?}+{:#x} does not fit", m.area, m.offset),
+            );
+        }
+        for c in &extra.checksums {
+            let spans_fit = c
+                .over
+                .iter()
+                .all(|s| fits(s.area, s.sector, s.offset, s.length));
+            require(
+                fits(c.at.area, c.at.sector, c.at.offset, 4) && spans_fit,
+                format!(
+                    "checksum at {:?}+{:#x} or what it covers does not fit",
+                    c.at.area, c.at.offset
+                ),
+            );
+        }
+    }
+}
+
+impl RecordLayout {
+    /// One past the last byte a boxed record's fields use.
+    fn box_end(&self) -> usize {
+        let sub = self.substructure;
+        [
+            self.personality + 4,
+            self.ot_id + 4,
+            self.nickname + self.nickname_length,
+            self.language + 1,
+            self.flags + 1,
+            self.ot_name + self.ot_name_length,
+            self.shiny_word + 2,
+            sub + self.species + 2,
+            sub + self.held_item + 2,
+            sub + self.experience + 4,
+            sub + self.pp_bonuses + 1,
+            sub + self.friendship + 1,
+            sub + self.moves + 8,
+            sub + self.pps + 4,
+            sub + self.evs + 6,
+            sub + self.pokerus + 1,
+            sub + self.met_location + 1,
+            sub + self.met_level + 2,
+            sub + self.ivs + 4,
+        ]
+        .into_iter()
+        .max()
+        .unwrap_or(0)
+    }
+
+    /// The same for a party record, which adds the battle stats.
+    fn party_end(&self) -> usize {
+        [
+            self.box_end(),
+            self.status + 4,
+            self.level + 2,
+            self.hp + 2,
+            self.max_hp + 2,
+            self.attack + 2,
+            self.defense + 2,
+            self.speed + 2,
+            self.sp_attack + 2,
+            self.sp_defense + 2,
+        ]
+        .into_iter()
+        .max()
+        .unwrap_or(0)
     }
 }
 

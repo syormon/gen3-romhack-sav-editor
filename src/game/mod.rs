@@ -9,7 +9,7 @@
 //!   species.json       everything per species, keyed by internal id:
 //!                      { "1": { "name": "Bulbasaur", "type": "Grass",
 //!                               "growth": "medium-slow",
-//!                               "abilities": [65, 0, 34], "innates": [269],
+//!                               "abilities": [65, 0, 34],
 //!                               "sprite": "bulbasaur",
 //!                               "stats": { "hp": 45, ... },
 //!                               "learnset": ["Tackle", ...] } }
@@ -19,7 +19,6 @@
 //!   item_pockets.json  { "1": "PokeBalls", ... }
 //!   abilities.json     { "1": "Stench", ... }
 //!   charmap.json       { "187": "A", ... }        (optional)
-//!   icon.png                                      (optional)
 //! ```
 //!
 //! Only `game.json` and `species.json` are required, and within a species only
@@ -41,15 +40,16 @@ use serde::Deserialize;
 // module's surface even when the binary itself never names them.
 #[allow(unused_imports)]
 pub use manifest::{
-    Behavior, BoxEncoding, Gen3Ball, Layout, Manifest, PocketDef, PocketRegion, RecordEncoding,
-    RecordLayout,
+    Area, Behavior, BoxEncoding, ExtraBoxes, Gen3Ball, Layout, Manifest, PocketDef, PocketRegion,
+    RecordEncoding, RecordLayout, Span,
 };
 
 pub const MANIFEST_NAME: &str = "game.json";
 
-/// One species, as `species.json` describes it. Only `name` is required.
+/// One species, as `species.json` describes it. Only `name` is required, and
+/// fields the editor has no use for (a hack's innate abilities, say) are
+/// ignored rather than refused.
 #[derive(Debug, Clone, Deserialize)]
-#[allow(dead_code)] // `innates` and `stats` are carried for packs that have them
 pub struct Species {
     pub name: String,
     /// Primary type, used to pick a default tera type.
@@ -62,8 +62,6 @@ pub struct Species {
     /// Ability ids: slot 1, slot 2, hidden.
     #[serde(default)]
     pub abilities: Vec<u32>,
-    #[serde(default)]
-    pub innates: Vec<u32>,
     /// This species' National Dex number, when it has one.
     ///
     /// Only needed by games whose internal species ids are their own
@@ -75,6 +73,7 @@ pub struct Species {
     /// Sprite file stem, joined with `sprites.base_url` from the manifest.
     #[serde(default)]
     pub sprite: Option<String>,
+    /// Base stats, which a party member's battle stats are computed from.
     #[serde(default)]
     pub stats: Option<BaseStats>,
     /// Moves this species can learn. Empty means "inherit from the base form".
@@ -83,7 +82,6 @@ pub struct Species {
 }
 
 #[derive(Debug, Clone, Copy, Deserialize)]
-#[allow(dead_code)]
 pub struct BaseStats {
     #[serde(default)]
     pub hp: u32,
@@ -105,14 +103,6 @@ pub struct NamedId {
     pub name: String,
 }
 
-#[derive(Clone, Debug)]
-#[allow(dead_code)] // `base_pp` is offered to UI code that wants it
-pub struct MoveEntry {
-    pub id: u32,
-    pub name: String,
-    pub base_pp: u32,
-}
-
 /// One game's data, ready to use.
 pub struct GamePack {
     pub dir: PathBuf,
@@ -132,7 +122,7 @@ pub struct GamePack {
     // Derived once at load time.
     pub species_sorted: Vec<NamedId>,
     pub items_alphabetical: Vec<NamedId>,
-    pub moves_alphabetical: Vec<MoveEntry>,
+    pub moves_alphabetical: Vec<NamedId>,
     pub move_name_to_id: HashMap<String, u32>,
 }
 
@@ -286,6 +276,7 @@ impl GamePack {
             .ok_or_else(|| format!("{}: no {MANIFEST_NAME}", dir.display()))??;
         let manifest: Manifest =
             serde_json::from_str(&raw).map_err(|e| format!("{MANIFEST_NAME}: {e}"))?;
+        manifest.layout.validate(&manifest.record)?;
 
         let species: HashMap<u32, Species> = read_map(&dir, "species.json")?;
         if species.is_empty() {
@@ -331,27 +322,15 @@ impl GamePack {
             .collect();
         items_alphabetical.sort_by(by_name_then_id);
 
-        let base_pp = |id: u32| -> u32 {
-            match move_pps.get(&id) {
-                Some(&pp) if pp != 0 => pp,
-                _ => 20,
-            }
-        };
-        let mut moves_alphabetical: Vec<MoveEntry> = moves
+        let mut moves_alphabetical: Vec<NamedId> = moves
             .iter()
             .filter(|(id, _)| **id > 0)
-            .map(|(id, name)| MoveEntry {
+            .map(|(id, name)| NamedId {
                 id: *id,
                 name: name.clone(),
-                base_pp: base_pp(*id),
             })
             .collect();
-        moves_alphabetical.sort_by(|a, b| {
-            a.name
-                .to_lowercase()
-                .cmp(&b.name.to_lowercase())
-                .then(a.id.cmp(&b.id))
-        });
+        moves_alphabetical.sort_by(by_name_then_id);
 
         let mut move_name_to_id: HashMap<String, u32> = moves
             .iter()
@@ -516,7 +495,7 @@ pub fn discover() -> Vec<PackInfo> {
             found.push(info);
         }
     }
-    found.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+    found.sort_by_key(|p| p.name.to_lowercase());
     found
 }
 

@@ -224,15 +224,14 @@ impl SearchPicker {
 }
 
 /// A clamped integer field, standing in for `<input type="number" min max>`.
-pub fn int_field(ui: &mut Ui, value: &mut u32, min: u32, max: u32, width: f32) -> Response {
-    let mut v = *value as i64;
+pub fn int_field(ui: &mut Ui, value: &mut u32, min: u32, max: u32) -> Response {
+    let mut v = i64::from(*value);
     let response = ui.add(
         egui::DragValue::new(&mut v)
-            .range(min as i64..=max as i64)
+            .range(i64::from(min)..=i64::from(max))
             .speed(1.0)
             .update_while_editing(false),
     );
-    let _ = width;
-    *value = v.clamp(min as i64, max as i64) as u32;
+    *value = v.clamp(i64::from(min), i64::from(max)) as u32;
     response
 }

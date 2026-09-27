@@ -15,6 +15,15 @@ use super::save_writer::export_updated_save;
 
 /// Tests run against the bundled SoulGold pack; loading it is global, so this
 /// is done once for the whole test binary.
+/// The record's nickname width, in characters and bytes.
+fn nickname_len() -> usize {
+    crate::game::current().record().nickname_length
+}
+
+fn pocket_index(name: &str) -> Option<usize> {
+    crate::game::current().layout().pocket_index(name)
+}
+
 pub fn ensure_pack() {
     use std::sync::Once;
     static INIT: Once = Once::new();
@@ -214,7 +223,7 @@ fn unnicknamed_pokemon_store_the_species_name_verbatim() {
 
     let mut mon = sample_mon(227, 30, ""); // Skarmory, no nickname
     pack_and_write_pokemon(&mut buf, 0, &mon, true);
-    let stored = decode_gba_string(&buf[8..8 + nickname_length()], nickname_length());
+    let stored = decode_gba_string(&buf[8..8 + nickname_len()], nickname_len());
     assert_eq!(stored, "Skarmory", "not uppercased");
     assert_eq!(
         stored,
@@ -226,7 +235,7 @@ fn unnicknamed_pokemon_store_the_species_name_verbatim() {
     mon.nickname = "Steely".to_string();
     pack_and_write_pokemon(&mut buf, 0, &mon, true);
     assert_eq!(
-        decode_gba_string(&buf[8..8 + nickname_length()], nickname_length()),
+        decode_gba_string(&buf[8..8 + nickname_len()], nickname_len()),
         "Steely"
     );
 
@@ -235,7 +244,7 @@ fn unnicknamed_pokemon_store_the_species_name_verbatim() {
     mon.species = 6; // Charizard
     pack_and_write_pokemon(&mut buf, 0, &mon, true);
     assert_eq!(
-        decode_gba_string(&buf[8..8 + nickname_length()], nickname_length()),
+        decode_gba_string(&buf[8..8 + nickname_len()], nickname_len()),
         "Charizard"
     );
 }
@@ -249,12 +258,12 @@ fn twelve_character_names_are_not_clipped() {
     // Crabominable is exactly 12 characters.
     let name = get_species_name(740);
     assert_eq!(name, "Crabominable");
-    assert_eq!(name.chars().count(), nickname_length());
+    assert_eq!(name.chars().count(), nickname_len());
 
     let mon = sample_mon(740, 40, "");
     pack_and_write_pokemon(&mut buf, 0, &mon, true);
     assert_eq!(
-        decode_gba_string(&buf[8..8 + nickname_length()], nickname_length()),
+        decode_gba_string(&buf[8..8 + nickname_len()], nickname_len()),
         "Crabominable",
         "the old 10-character clip turned this into \"Crabominab\""
     );
@@ -539,7 +548,7 @@ fn shiny_toggle_keeps_nature_and_ability_bit() {
     let nature = mon.personality % 25;
     let ability_bit = mon.personality & 1;
 
-    let shiny_pid = make_personality_shiny(mon.personality, ot);
+    let shiny_pid = make_personality_shiny(mon.personality, ot, 8);
     assert_eq!(shiny_pid % 25, nature);
     assert_eq!(shiny_pid & 1, ability_bit);
 
@@ -547,7 +556,7 @@ fn shiny_toggle_keeps_nature_and_ability_bit() {
     shiny.personality = shiny_pid;
     assert!(shiny.is_shiny());
 
-    let plain_pid = make_personality_non_shiny(shiny_pid, ot);
+    let plain_pid = make_personality_non_shiny(shiny_pid, ot, 8);
     let mut plain = shiny.clone();
     plain.personality = plain_pid;
     plain.shiny_modifier = 0;
@@ -819,4 +828,421 @@ fn party_count_tracks_occupied_slots() {
     clear_pokemon_slot(&mut save.sb1, party_offset() + 2 * mon_size(), true);
     save.refresh_party_count();
     assert_eq!(save.party().len(), 2);
+}
+
+// ------------------------------------------------------------ moving slots
+
+use super::slots::SlotRef;
+
+/// A byte of the boxed record that the editor does not model (in SoulGold's
+/// layout, part of the substructure between the EVs and Pokérus), used to
+/// tell whether a record was carried or rebuilt.
+const UNMODELLED: usize = 32 + 30;
+
+fn species_in_party(save: &GameSave) -> Vec<Option<u32>> {
+    (0..party_size())
+        .map(|i| save.party_slot(i).map(|m| m.species))
+        .collect()
+}
+
+/// Dragging a party member onto an empty party slot further down used to
+/// delete it: the move wrote it past the end of the party, and closing the gap
+/// then cleared everything past the end.
+#[test]
+fn moving_within_the_party_never_loses_a_pokemon() {
+    ensure_pack();
+    let mut save = build_save();
+    assert_eq!(
+        species_in_party(&save),
+        [Some(25), Some(6), Some(151), None, None, None]
+    );
+
+    save.move_mon(SlotRef::party(0), SlotRef::party(5)).unwrap();
+    assert_eq!(
+        species_in_party(&save),
+        [Some(6), Some(151), Some(25), None, None, None],
+        "moved to the end of the party, not lost"
+    );
+    assert_eq!(u32_le(&save.sb1, party_count_offset()), 3);
+
+    // Swapping two members keeps both.
+    save.move_mon(SlotRef::party(0), SlotRef::party(2)).unwrap();
+    assert_eq!(
+        species_in_party(&save),
+        [Some(25), Some(151), Some(6), None, None, None]
+    );
+}
+
+/// A box Pokémon dropped on an empty party slot used to land in that exact
+/// slot, leaving a gap: the game reads `count` records from slot 0, so it saw
+/// an empty record as a party member and never saw the new one.
+#[test]
+fn a_pokemon_joining_the_party_goes_to_the_end() {
+    ensure_pack();
+    let mut save = build_save();
+
+    save.move_mon(SlotRef::boxed(0, 0), SlotRef::party(5))
+        .unwrap();
+    assert_eq!(
+        species_in_party(&save),
+        [Some(25), Some(6), Some(151), Some(149), None, None]
+    );
+    assert_eq!(u32_le(&save.sb1, party_count_offset()), 4);
+    assert!(save.box_pokemon(0, 0).is_none(), "the box slot is emptied");
+
+    // It arrives with real battle stats, not placeholders.
+    let joined = save.party_slot(3).expect("new member");
+    let expected = super::stats::calculate(&joined).expect("base stats");
+    assert_eq!(joined.max_hp, Some(expected[0]));
+    assert_eq!(joined.hp, joined.max_hp, "at full health");
+    assert_eq!(joined.attack, Some(expected[1]));
+    assert_eq!(joined.level, 55);
+
+    // Creating a Pokémon in a far slot fills the next free one instead.
+    let trainer = save.trainer_info();
+    let mon = create_default_pokemon(1, &trainer, &mut Rng::from_clock());
+    save.create_mon(SlotRef::party(5), &mon);
+    assert_eq!(save.party_slot(4).map(|m| m.species), Some(1));
+    assert_eq!(u32_le(&save.sb1, party_count_offset()), 5);
+}
+
+#[test]
+fn releasing_a_party_member_closes_the_gap() {
+    ensure_pack();
+    let mut save = build_save();
+    save.release_mon(SlotRef::party(0)).unwrap();
+    assert_eq!(
+        species_in_party(&save),
+        [Some(6), Some(151), None, None, None, None]
+    );
+
+    save.release_mon(SlotRef::party(0)).unwrap();
+    assert_eq!(
+        save.release_mon(SlotRef::party(0)),
+        Err(super::slots::LAST_POKEMON),
+        "the last party member stays"
+    );
+    assert_eq!(
+        save.move_mon(SlotRef::party(0), SlotRef::boxed(0, 1)),
+        Err(super::slots::LAST_POKEMON),
+        "nor can it be moved to an empty box slot"
+    );
+    // Swapping it with a boxed Pokémon is fine: the party is never empty.
+    save.move_mon(SlotRef::party(0), SlotRef::boxed(0, 0))
+        .unwrap();
+    assert_eq!(save.party_slot(0).map(|m| m.species), Some(149));
+}
+
+/// A move copies the record. Rebuilding it from the modelled fields dropped
+/// everything else (ribbons, contest stats, markings) and, on a swap, handed
+/// each Pokémon the other one's.
+#[test]
+fn moved_pokemon_keep_the_bytes_the_editor_does_not_model() {
+    ensure_pack();
+    let mut save = build_save();
+    let box_a = SlotRef::boxed(0, 0);
+    let box_b = SlotRef::boxed(0, 29);
+    save.storage[box_a.offset() + UNMODELLED] = 0xAA;
+    save.storage[box_b.offset() + UNMODELLED] = 0xBB;
+    save.sb1[SlotRef::party(1).offset() + UNMODELLED] = 0xCC;
+
+    save.move_mon(box_a, box_b).unwrap();
+    assert_eq!(save.storage[box_b.offset() + UNMODELLED], 0xAA);
+    assert_eq!(save.storage[box_a.offset() + UNMODELLED], 0xBB);
+
+    // Across the party/box boundary too, where the record changes shape.
+    save.move_mon(SlotRef::party(1), box_a).unwrap();
+    assert_eq!(save.storage[box_a.offset() + UNMODELLED], 0xCC);
+    assert_eq!(save.sb1[SlotRef::party(1).offset() + UNMODELLED], 0xBB);
+    assert_eq!(save.box_pokemon(0, 0).map(|m| m.species), Some(6));
+}
+
+/// Apply on an untouched Pokémon must change nothing, stats included; an edit
+/// to its level must bring the stats along.
+#[test]
+fn applying_an_edit_refreshes_stats_only_when_they_depend_on_it() {
+    ensure_pack();
+    let mut save = build_save();
+    let slot = SlotRef::party(0);
+    let before = save.sb1.clone();
+
+    let mon = save.mon_at(slot).expect("party member");
+    save.apply_edit(slot, &mon);
+    assert_eq!(save.sb1, before, "no edit, no change");
+
+    let mut levelled = mon.clone();
+    levelled.level = 90;
+    levelled.experience = super::experience::experience_for_level(25, 90);
+    save.apply_edit(slot, &levelled);
+    let after = save.mon_at(slot).expect("still there");
+    let expected = super::stats::calculate(&after).expect("base stats");
+    assert_eq!(after.max_hp, Some(expected[0]));
+    assert_eq!(after.speed, Some(expected[3]));
+    // Sparky was built at 40 of 99 HP; the 59 HP of damage carries over.
+    assert_eq!(after.hp, Some(expected[0] - 59));
+}
+
+// ------------------------------------------------------------------- eggs
+
+/// Writing a record used to reset its flag byte, which in SoulGold's layout
+/// is where the egg flag lives, so opening an egg and exporting hatched it.
+#[test]
+fn an_egg_stays_an_egg_when_written_back() {
+    ensure_pack();
+    let mut egg = sample_mon(25, 1, "");
+    egg.is_egg = true;
+    let mut record = vec![0u8; box_mon_size()];
+    pack_and_write_pokemon(&mut record, 0, &egg, false);
+    let read = unpack_mon(&record, false).expect("decodes");
+    assert!(read.is_egg);
+
+    let before = record.clone();
+    pack_and_write_pokemon(&mut record, 0, &read, false);
+    assert_eq!(record, before, "written back unchanged");
+
+    // The same in the Gen 3 record, where the flag byte mirrors the IV bit.
+    let mut gen3 = vec![0u8; super::gen3::PARTY_SIZE];
+    super::gen3::pack_as(&mut gen3, &egg, true, true);
+    assert_eq!(gen3[0x13] & 0x04, 0x04, "egg bit set in the flag byte");
+    let read = super::gen3::unpack_as(&gen3, true, true).expect("decodes");
+    assert!(read.is_egg);
+}
+
+// ------------------------------------------------------------- damaged saves
+
+/// Export indexed its sector table with a sector's id before checking it, so
+/// one damaged footer made a save impossible to export.
+#[test]
+fn a_sector_with_an_impossible_id_does_not_stop_the_export() {
+    ensure_pack();
+    let save = build_save();
+    let mut bytes = save.buffer.clone();
+    // Sector 7 of the backup slot now claims to be sector 900.
+    set_u16_le(
+        &mut bytes,
+        (sectors_per_slot() + 7) * sector_size() + 0xFF4,
+        900,
+    );
+    let reread = GameSave::from_bytes(bytes).expect("parses");
+    let out = export_updated_save(
+        &reread.buffer,
+        reread.active_slot,
+        &reread.sb1,
+        &reread.sb2,
+        &reread.storage,
+    );
+    assert_eq!(GameSave::from_bytes(out).expect("reloads").party().len(), 3);
+}
+
+/// A missing sector must leave a hole where it was, not shift the sectors
+/// after it down into its place: the export writes each part of the block
+/// back to a fixed sector, so a shifted read became a corrupted write.
+#[test]
+fn a_missing_sector_does_not_shift_the_ones_after_it() {
+    ensure_pack();
+    let save = build_save();
+    let mut bytes = save.buffer.clone();
+
+    // Break sector 2's signature in the slot that will be read.
+    let at = (save.active_slot * sectors_per_slot() + 2) * sector_size() + 0xFF8;
+    set_u32_le(&mut bytes, at, 0);
+    let reread = GameSave::from_bytes(bytes).expect("parses");
+
+    let sds = sector_data_size();
+    assert_eq!(
+        reread.sb1[2 * sds..3 * sds],
+        save.sb1[2 * sds..3 * sds],
+        "sector 3's data stays where sector 3's data goes"
+    );
+}
+
+/// A pack's numbers index the save directly, so ones that do not fit must be
+/// refused when the pack loads rather than crash the editor later.
+#[test]
+fn a_manifest_whose_offsets_do_not_fit_is_refused() {
+    let record = crate::game::RecordLayout::default();
+    let good = crate::game::Layout::default();
+    assert!(good.validate(&record).is_ok());
+
+    let mut bad = good.clone();
+    bad.storage_sectors = (5, 40);
+    assert!(bad.validate(&record).is_err(), "storage past the slot");
+
+    let mut bad = good.clone();
+    bad.party = bad.sb1_size;
+    assert!(bad.validate(&record).is_err(), "party past sb1");
+
+    let mut bad_record = record.clone();
+    bad_record.ivs = 200;
+    assert!(good.validate(&bad_record).is_err(), "field past the record");
+}
+
+// --------------------------------------------------- bits the writer does not own
+
+/// Measured from a real SoulGold 1.1.4 save: every Pokémon rewritten unchanged
+/// used to come back different, because the writer rebuilt whole words — the
+/// origin game beside the met level became FireRed, a flag beside the shiny
+/// bit was cleared, and a party member's "no mail" became mail slot 0.
+#[test]
+fn rewriting_a_record_keeps_the_bits_it_does_not_model() {
+    ensure_pack();
+    let r = crate::game::current().record().clone();
+    let mon = sample_mon(25, 42, "SPARKY");
+    let mut record = vec![0u8; mon_size()];
+    pack_and_write_pokemon(&mut record, 0, &mon, true);
+
+    // Values taken from the real save.
+    record[r.shiny_word + 1] |= 0x80;
+    let met = r.substructure + r.met_level;
+    record[met + 1] = 0x01; // origin bits: Emerald
+    record[met] |= 0x80;
+    record[r.level + 1] = 0xFF;
+    let before = record.clone();
+
+    let read = unpack_mon(&record, true).expect("decodes");
+    pack_and_write_pokemon(&mut record, 0, &read, true);
+    assert_eq!(
+        record, before,
+        "a record written back unchanged is identical"
+    );
+}
+
+#[test]
+fn a_new_record_says_no_mail_and_emerald() {
+    ensure_pack();
+    let r = crate::game::current().record().clone();
+    let mut record = vec![0u8; mon_size()];
+    pack_and_write_pokemon(&mut record, 0, &sample_mon(25, 42, ""), true);
+    assert_eq!(
+        record[r.level + 1],
+        NO_MAIL,
+        "slot 0 would be someone's mail"
+    );
+    let met = u16_le(&record, r.substructure + r.met_level);
+    assert_eq!(
+        met >> 7,
+        3,
+        "origin game Emerald, as the game's own records are"
+    );
+}
+
+/// SoulGold's storage block names 15 boxes ("Box1".."Box15") and has 15
+/// wallpaper bytes, so it holds 15 boxes, not the 14 the web original showed.
+/// Boxes 16-19 live outside it and are not read yet.
+#[test]
+fn the_soulgold_pack_keeps_its_measured_box_count() {
+    ensure_pack();
+    let l = crate::game::current().layout().clone();
+    assert_eq!(l.total_boxes, 15);
+    assert_eq!(
+        l.storage_boxes + l.total_boxes * l.box_capacity * l.box_mon_size,
+        l.storage_box_names,
+        "the name table starts where the last box ends"
+    );
+}
+
+// ------------------------------------------------------ boxes outside storage
+
+/// The fold behind every checksum in these saves, written out independently of
+/// the engine's copy.
+fn fold16(data: &[u8]) -> u16 {
+    let mut padded = data.to_vec();
+    padded.resize(data.len().div_ceil(4) * 4, 0);
+    let sum = padded.chunks(4).fold(0u32, |acc, w| {
+        acc.wrapping_add(u32::from_le_bytes([w[0], w[1], w[2], w[3]]))
+    });
+    ((sum >> 16).wrapping_add(sum) & 0xFFFF) as u16
+}
+
+/// A synthetic save carrying SoulGold's extra-box sectors and markers, as a
+/// version of the game with 19 boxes writes them.
+fn save_with_extra_boxes() -> GameSave {
+    let save = build_save();
+    let mut storage = save.storage.clone();
+    storage[34740..34744].copy_from_slice(b"BX16");
+    let mut bytes = export_updated_save(
+        &save.buffer,
+        save.active_slot,
+        &save.sb1,
+        &save.sb2,
+        &storage,
+    );
+    for sector in 28..32 {
+        let at = sector * sector_size();
+        set_u16_le(&mut bytes, at + 0xFF4, sector as u16);
+        set_u32_le(&mut bytes, at + 0xFF8, sector_signature());
+    }
+    for at in [28 * 4096, 29 * 4096, 30 * 4096 + 1324, 31 * 4096 + 1324] {
+        bytes[at..at + 4].copy_from_slice(b"BX19");
+    }
+    GameSave::from_bytes(bytes).expect("parses")
+}
+
+#[test]
+fn a_save_without_the_extra_sectors_has_just_the_storage_boxes() {
+    ensure_pack();
+    assert_eq!(build_save().box_count(), 15, "no markers, no extra boxes");
+    assert_eq!(save_with_extra_boxes().box_count(), 19);
+}
+
+/// Box 16's slot 13 starts in the storage block and ends in sector 30; box
+/// 18's slot 7 starts in sector 30 and ends in SaveBlock1. A Pokémon put in
+/// either must come back whole, with every checksum over it rewritten.
+#[test]
+fn a_pokemon_in_a_split_slot_survives_an_export() {
+    ensure_pack();
+    let mut save = save_with_extra_boxes();
+    let trainer = save.trainer_info();
+    let mut rng = Rng::from_clock();
+    let a = create_default_pokemon(25, &trainer, &mut rng);
+    let b = create_default_pokemon(6, &trainer, &mut rng);
+    save.create_mon(SlotRef::boxed(15, 12), &a);
+    save.create_mon(SlotRef::boxed(17, 6), &b);
+    // And a move out of a regular box into the last one.
+    save.move_mon(SlotRef::boxed(0, 0), SlotRef::boxed(18, 29))
+        .unwrap();
+
+    let out = save.export();
+    let reread = GameSave::from_bytes(out.clone()).expect("reloads");
+    let at = |s: &GameSave, b, i| s.box_pokemon(b, i).map(|m| (m.species, m.personality));
+    assert_eq!(at(&reread, 15, 12), Some((a.species, a.personality)));
+    assert_eq!(at(&reread, 17, 6), Some((b.species, b.personality)));
+    assert_eq!(at(&reread, 18, 29).map(|(s, _)| s), Some(149));
+    assert!(reread.box_pokemon(0, 0).is_none());
+
+    // Both copies of the extra sectors carry valid checksums.
+    let slot = reread.active_slot;
+    let sb1_start = |sid: usize| {
+        (0..sectors_per_slot())
+            .map(|i| (slot * sectors_per_slot() + i) * sector_size())
+            .find(|at| u16_le(&out, at + 0xFF4) as usize == sid)
+            .unwrap()
+    };
+    let sb1: Vec<u8> = (1..=4)
+        .flat_map(|sid| out[sb1_start(sid)..sb1_start(sid) + sector_data_size()].to_vec())
+        .collect();
+    let complement = |f: u16| (u32::from(!f) << 16) | u32::from(f);
+    for (block, trailer) in [(28, 30), (29, 31)] {
+        let a = &out[block * 4096..block * 4096 + 4096];
+        let t = &out[trailer * 4096..trailer * 4096 + 4096];
+        assert_eq!(
+            u32_le(a, 8),
+            complement(fold16(&a[12..12 + 3880])),
+            "box 19 block"
+        );
+        let mut covered = b"BX19".to_vec();
+        covered.extend_from_slice(&t[1332..4084]);
+        covered.extend_from_slice(&sb1[13582..15410]);
+        assert_eq!(u32_le(t, 1328), complement(fold16(&covered)), "boxes 17-18");
+        assert_eq!(
+            u16_le(a, 0xFF6),
+            fold16(&a[..3968]),
+            "sector {block} footer"
+        );
+        assert_eq!(
+            u16_le(t, 0xFF6),
+            fold16(&t[..1324]),
+            "sector {trailer} footer"
+        );
+    }
 }

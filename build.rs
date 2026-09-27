@@ -42,8 +42,8 @@ fn main() {
 /// Writes `PACKS: &[(folder, &[(file, bytes)])]`, one entry per folder under
 /// `assets/` that holds a `game.json`.
 ///
-/// Only `.json` and `.png` files are taken, so stray files an editor or the OS
-/// leaves behind do not end up inside the binary.
+/// Only `.json` files are taken, so stray files an editor or the OS leaves
+/// behind do not end up inside the binary.
 fn embed_packs(assets: &Path, out: &Path) {
     let mut packs: Vec<(String, Vec<(String, PathBuf)>)> = Vec::new();
 
@@ -64,12 +64,7 @@ fn embed_packs(assets: &Path, out: &Path) {
             .unwrap_or_default()
             .into_iter()
             .filter(|p| p.is_file())
-            .filter(|p| {
-                matches!(
-                    p.extension().and_then(|e| e.to_str()),
-                    Some("json") | Some("png")
-                )
-            })
+            .filter(|p| p.extension().and_then(|e| e.to_str()) == Some("json"))
             .filter_map(|p| {
                 let name = p.file_name()?.to_str()?.to_string();
                 Some((name, p))
@@ -80,8 +75,11 @@ fn embed_packs(assets: &Path, out: &Path) {
     }
 
     let mut code = String::from(
-        "/// Every game pack under `assets/`, compiled in by build.rs.\n\
-         pub static PACKS: &[(&str, &[(&str, &[u8])])] = &[\n",
+        "/// One pack: its folder under `assets/`, and its files by name.\n\
+         pub type Pack = (&'static str, &'static [(&'static str, &'static [u8])]);\n\
+         \n\
+         /// Every game pack under `assets/`, compiled in by build.rs.\n\
+         pub static PACKS: &[Pack] = &[\n",
     );
     for (folder, files) in &packs {
         code.push_str(&format!("    ({folder:?}, &[\n"));
