@@ -51,9 +51,13 @@ jobs:
         run: trunk build --release --locked --public-url "/${{ github.event.repository.name }}/"
 
       - uses: actions/configure-pages@v5
+      # Named per attempt: a re-run is another attempt of the same run and
+      # keeps the earlier attempt's artifact, and deploy-pages refuses to pick
+      # between two artifacts of the same name.
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+          name: github-pages-${{ github.run_attempt }}
 
   deploy:
     needs: build
@@ -64,3 +68,5 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
