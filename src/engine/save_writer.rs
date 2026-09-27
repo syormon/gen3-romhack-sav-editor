@@ -4,14 +4,6 @@
 use super::bytes::*;
 use super::layout::*;
 
-fn calc_sector_checksum(data: &[u8], size: usize) -> u16 {
-    let mut chk: u32 = 0;
-    for i in 0..(size / 4) {
-        chk = chk.wrapping_add(u32_le(data, i * 4));
-    }
-    (((chk >> 16) + chk) & 0xFFFF) as u16
-}
-
 pub fn export_updated_save(
     original: &[u8],
     active_slot: usize,
@@ -110,7 +102,7 @@ pub fn export_updated_save(
         for (sid, data) in sector_data.iter().enumerate() {
             let mut sec = data.clone();
             let exp_size = sector_checksum_size(sid);
-            let chk = calc_sector_checksum(&sec[..exp_size], exp_size);
+            let chk = fold_checksum(&sec[..exp_size]);
 
             set_u16_le(&mut sec, 0xFF4, sid as u16);
             set_u16_le(&mut sec, 0xFF6, chk);

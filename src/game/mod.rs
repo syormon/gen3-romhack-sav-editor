@@ -13,8 +13,7 @@
 //!                               "sprite": "bulbasaur",
 //!                               "stats": { "hp": 45, ... },
 //!                               "learnset": ["Tackle", ...] } }
-//!   moves.json         { "1": "Pound", ... }
-//!   move_pps.json      { "1": 35, ... }
+//!   moves.json         { "1": { "name": "Pound", "pp": 35 }, ... }
 //!   items.json         { "1": "Poke Ball", ... }
 //!   item_pockets.json  { "1": "PokeBalls", ... }
 //!   abilities.json     { "1": "Stench", ... }
@@ -95,6 +94,16 @@ pub struct BaseStats {
     pub sp_attack: u32,
     #[serde(default)]
     pub sp_defense: u32,
+}
+
+/// One move, as `moves.json` describes it.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct MoveData {
+    name: String,
+    /// Base PP. Missing or 0 reads as 20.
+    #[serde(default)]
+    pp: u32,
 }
 
 #[derive(Clone, Debug)]
@@ -286,8 +295,10 @@ impl GamePack {
             ));
         }
 
-        let moves: HashMap<u32, String> = read_map(&dir, "moves.json")?;
-        let move_pps: HashMap<u32, u32> = read_map(&dir, "move_pps.json")?;
+        let move_data: HashMap<u32, MoveData> = read_map(&dir, "moves.json")?;
+        let move_pps: HashMap<u32, u32> = move_data.iter().map(|(id, m)| (*id, m.pp)).collect();
+        let moves: HashMap<u32, String> =
+            move_data.into_iter().map(|(id, m)| (id, m.name)).collect();
         let items: HashMap<u32, String> = read_map(&dir, "items.json")?;
         let item_pockets: HashMap<u32, String> = read_map(&dir, "item_pockets.json")?;
         let abilities: HashMap<u32, String> = read_map(&dir, "abilities.json")?;

@@ -43,17 +43,6 @@ fn sector_offsets(cfg: &ExtraBoxes, slot: usize) -> Vec<usize> {
         .collect()
 }
 
-/// The 16-bit fold every checksum here is built from: the sum of the data as
-/// little-endian u32s, with its two halves added together.
-fn fold(data: &[u8]) -> u16 {
-    let sum = data.chunks(4).fold(0u32, |acc, chunk| {
-        let mut word = [0u8; 4];
-        word[..chunk.len()].copy_from_slice(chunk);
-        acc.wrapping_add(u32::from_le_bytes(word))
-    });
-    ((sum >> 16).wrapping_add(sum) & 0xFFFF) as u16
-}
-
 /// What the extra boxes hold in a save, read from the slot the game would load.
 pub struct Loaded {
     /// Every extra box's records, one box after another.
@@ -162,7 +151,7 @@ pub fn store_in_sectors(
                 };
                 covered.extend_from_slice(bytes.unwrap_or_default());
             }
-            let low = fold(&covered);
+            let low = fold_checksum(&covered);
             let value = (u32::from(!low) << 16) | u32::from(low);
             let at = checksum.at;
             if at.area == Area::Extra {
@@ -176,7 +165,7 @@ pub fn store_in_sectors(
             .zip(&cfg.sector_checksum_sizes)
         {
             file[at..at + data.len()].copy_from_slice(data);
-            let checksum = fold(&data[..(*size).min(data.len())]);
+            let checksum = fold_checksum(&data[..(*size).min(data.len())]);
             set_u16_le(file, at + 0xFF6, checksum);
         }
     }
@@ -196,21 +185,4 @@ fn pieces<'a>(
             at += span.length;
             Some((span, piece))
         })
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// The sector footers and the hack's block checksums share this fold.
-    #[test]
-    fn fold_matches_the_sector_checksum() {
-        let mut data = vec![0u8; 16];
-        data[0..4].copy_from_slice(&0x0001_FFFFu32.to_le_bytes());
-        data[4..8].copy_from_slice(&0x0000_0002u32.to_le_bytes());
-        // 0x0001FFFF + 2 = 0x00020001; folded: 0x0002 + 0x0001.
-        assert_eq!(fold(&data), 0x0003);
-        // A trailing partial word counts as zero-padded.
-        assert_eq!(fold(&[1, 0, 0]), 1);
-    }
 }

@@ -31,6 +31,18 @@ pub fn set_u32_le(b: &mut [u8], o: usize, v: u32) {
     }
 }
 
+/// The Gen 3 sector checksum: the data summed as little-endian u32s (a short
+/// last word counts as zero-padded), with the sum's two halves added together.
+/// Hacks reuse it for their own blocks.
+pub fn fold_checksum(data: &[u8]) -> u16 {
+    let sum = data.chunks(4).fold(0u32, |acc, chunk| {
+        let mut word = [0u8; 4];
+        word[..chunk.len()].copy_from_slice(chunk);
+        acc.wrapping_add(u32::from_le_bytes(word))
+    });
+    ((sum >> 16).wrapping_add(sum) & 0xFFFF) as u16
+}
+
 /// Writes `value` into the bits of a u16 that `mask` selects, leaving the
 /// others as they were.
 pub fn set_u16_bits(b: &mut [u8], o: usize, mask: u16, value: u16) {
@@ -61,5 +73,21 @@ pub fn nz<T: PartialEq + Default>(value: T, fallback: T) -> T {
         fallback
     } else {
         value
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fold_checksum_adds_the_halves_of_the_word_sum() {
+        let mut data = vec![0u8; 16];
+        data[0..4].copy_from_slice(&0x0001_FFFFu32.to_le_bytes());
+        data[4..8].copy_from_slice(&0x0000_0002u32.to_le_bytes());
+        // 0x0001FFFF + 2 = 0x00020001; folded: 0x0002 + 0x0001.
+        assert_eq!(fold_checksum(&data), 0x0003);
+        // A short last word counts as zero-padded.
+        assert_eq!(fold_checksum(&[1, 0, 0]), 1);
     }
 }

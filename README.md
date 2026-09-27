@@ -9,8 +9,9 @@ The following editors were helpful in understanding how to read each romhack:
 | Game | Existing Editor |  Record format | State |
 | ---- | --------------- | -------------- | ----- |
 | SoulGold | https://github.com/jozeton-app/soul-gold-web | `plain` | 100% |
-| Unbound | https://github.com/Zannael/PUSE | `gen3_shuffled` | 100% |
-| Seaglass | https://github.com/Ehsan516/seaglass-save-editor | `gen3_plain` + `cfru_compact` boxes | 100% |
+| Unbound | https://github.com/Zannael/PUSE | `gen3_plain` + `cfru_compact` boxes | 100% |
+| Seaglass | https://github.com/Ehsan516/seaglass-save-editor | `gen3_shuffled` | 100% |
+| FireRed Rocket Edition | - | - | 0% |
 
 
 ## Adding a new game
@@ -20,15 +21,14 @@ The editor core is built to be agnostic. Every game folder under `assets/` is co
 | --- | --- | --- |
 | `game.json` | manifest | **required**; see sub-section |
 | `species.json` | one entry per species | **required**; see sub-section |
-| `moves.json` | `{"1": "Pound"}` | |
-| `move_pps.json` | `{"1": 35}` | missing entries report 20 PP |
+| `moves.json` | `{"1": {"name": "Pound", "pp": 35}}` | base PP; a missing or 0 `pp` reads as 20 |
 | `items.json` | `{"1": "Poke Ball"}` | |
 | `item_pockets.json` | `{"1": "PokeBalls"}` | values match pocket names in the manifest |
 | `abilities.json` | `{"1": "Stench"}` | |
 | `charmap.json` | `{"187": "A"}` | optional; overrides the built-in text encoding |
 | species `dex` | `{"496": {"dex": 443}}` | National Dex number, for games that renumber species |
 
-> Run `cargo run --example validate_game` afterwards; it will checksthe save layout for self-consistency
+> Run `cargo run --example validate_game` afterwards; it will check the save layout for self-consistency
 
 > Only `game.json` and `species.json` are required; anything missing still opens but will show blanks. 
 

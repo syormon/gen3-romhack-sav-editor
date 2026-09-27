@@ -1246,3 +1246,21 @@ fn a_pokemon_in_a_split_slot_survives_an_export() {
         );
     }
 }
+
+// ------------------------------------------------------------------ shininess
+
+/// SoulGold's shiny odds default to 1 in 256, not vanilla's 1 in 8,192: a
+/// shiny value under 256 is shiny. Values from a real save, where the
+/// Umbreon (239) is shiny in game and the Terrakion (522) is not.
+#[test]
+fn soulgold_uses_its_own_shiny_odds() {
+    ensure_pack();
+    let mut mon = sample_mon(197, 87, "");
+    mon.ot_id = 0xEF6F_1335;
+    mon.shiny_modifier = 0;
+
+    mon.personality = 0x0035_FC80;
+    assert!(mon.is_shiny(), "Umbreon, shiny value 239");
+    mon.personality = 0x873A_796A;
+    assert!(!mon.is_shiny(), "Terrakion, shiny value 522");
+}

@@ -65,6 +65,7 @@
   },
 
   "behavior": {
+    "shiny_threshold": 256,
     "never_shiny": [1435],
     "new_level": 10,
     "new_level_species": [
