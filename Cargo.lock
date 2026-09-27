@@ -844,6 +844,7 @@ dependencies = [
  "egui-wgpu",
  "egui-winit",
  "egui_glow",
+ "glow",
  "glutin",
  "glutin-winit",
  "image",
@@ -1280,7 +1281,7 @@ dependencies = [
 
 [[package]]
 name = "gen3-romhack-sav-editor"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "eframe",
  "egui_extras",

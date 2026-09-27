@@ -1,11 +1,10 @@
 [package]
 name = "gen3-romhack-sav-editor"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "Save editor for Pokémon ROM hacks; each game is a data pack under assets/"
 
 [dependencies]
-eframe = "0.36"
 egui_extras = { version = "0.36", features = ["image", "http"] }
 image = { version = "0.25", default-features = false, features = ["png"] }
 serde = { version = "1", features = ["derive"] }
@@ -15,7 +14,18 @@ rfd = "0.15"
 # on native and a working one on the web.
 web-time = "1"
 
+# The desktop builds draw with wgpu, eframe's default.
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+eframe = "0.36"
+
 [target.'cfg(target_arch = "wasm32")'.dependencies]
+eframe = { version = "0.36", default-features = false, features = [
+    "accesskit",
+    "default_fonts",
+    "glow",
+    "links",
+    "web_screen_reader",
+] }
 wasm-bindgen-futures = "0.4"
 js-sys = "0.3"
 web-sys = { version = "0.3", features = [
