@@ -54,6 +54,16 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      # Cargo.lock records this program's own version as well, so a version
+      # bump pushed without a build leaves it behind, and --locked refuses to
+      # run. Copy the version across, as Cargo would; the dependencies stay
+      # pinned and checked by --locked.
+      - name: Sync Cargo.lock with the version
+        shell: bash
+        run: |
+          VERSION_NOW=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2) \
+            perl -0pi -e 's/(name = "\Q$ENV{BIN}\E"\r?\nversion = ")[^"]*/${1}$ENV{VERSION_NOW}/' Cargo.lock
+          grep -A1 "^name = \"$BIN\"" Cargo.lock
       - run: rustup toolchain install stable --profile minimal
       - name: Linux libraries for eframe
         run: |
@@ -85,6 +95,16 @@ jobs:
       ARCHIVE: gen3-romhack-sav-editor-v${{ needs.version.outputs.version }}-${{ matrix.name }}
     steps:
       - uses: actions/checkout@v4
+      # Cargo.lock records this program's own version as well, so a version
+      # bump pushed without a build leaves it behind, and --locked refuses to
+      # run. Copy the version across, as Cargo would; the dependencies stay
+      # pinned and checked by --locked.
+      - name: Sync Cargo.lock with the version
+        shell: bash
+        run: |
+          VERSION_NOW=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2) \
+            perl -0pi -e 's/(name = "\Q$ENV{BIN}\E"\r?\nversion = ")[^"]*/${1}$ENV{VERSION_NOW}/' Cargo.lock
+          grep -A1 "^name = \"$BIN\"" Cargo.lock
 
       - run: rustup toolchain install stable --profile minimal
       - if: runner.os == 'macOS'
@@ -195,6 +215,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Cargo.lock records this program's own version as well, so a version
+      # bump pushed without a build leaves it behind, and --locked refuses to
+      # run. Copy the version across, as Cargo would; the dependencies stay
+      # pinned and checked by --locked.
+      - name: Sync Cargo.lock with the version
+        shell: bash
+        run: |
+          VERSION_NOW=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2) \
+            perl -0pi -e 's/(name = "\Q$ENV{BIN}\E"\r?\nversion = ")[^"]*/${1}$ENV{VERSION_NOW}/' Cargo.lock
+          grep -A1 "^name = \"$BIN\"" Cargo.lock
       - run: rustup toolchain install stable --profile minimal --target wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
         with:
