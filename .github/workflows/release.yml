@@ -99,29 +99,28 @@ jobs:
         with:
           key: ${{ matrix.name }}
 
+      # Each release is just the program. The games and the icon are compiled
+      # into it, so it needs nothing beside it; an assets/ folder placed next
+      # to it is only read to override or add a game.
+
       # ------------------------------------------------------------ Windows
       - if: runner.os == 'Windows'
-        name: Build and package
+        name: Build
         shell: pwsh
         run: |
           cargo build --release --locked
-          $dir = "dist/$env:BIN"
-          New-Item -ItemType Directory -Force $dir | Out-Null
-          Copy-Item "target/release/$env:BIN.exe" $dir
-          Copy-Item -Recurse assets $dir
-          Copy-Item README.md $dir
-          Compress-Archive -Path $dir -DestinationPath "dist/$env:ARCHIVE.zip"
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item "target/release/$env:BIN.exe" "dist/$env:ARCHIVE.exe"
 
       # -------------------------------------------------------------- Linux
+      # In a tarball rather than bare: a file downloaded from a release loses
+      # its executable bit, and tar keeps it.
       - if: runner.os == 'Linux'
-        name: Build and package
+        name: Build
         run: |
           cargo build --release --locked
-          dir="dist/$BIN"
-          mkdir -p "$dir"
-          cp "target/release/$BIN" "$dir/"
-          cp -r assets README.md "$dir/"
-          tar -czf "dist/$ARCHIVE.tar.gz" -C dist "$BIN"
+          mkdir -p dist
+          tar -czf "dist/$ARCHIVE.tar.gz" -C target/release "$BIN"
 
       # -------------------------------------------------------------- macOS
       - if: runner.os == 'macOS'
@@ -178,15 +177,15 @@ jobs:
           codesign --force --deep --sign - "$APP"
           codesign --verify --verbose "$APP"
 
-          # The assets folder goes next to the app rather than inside it: the
-          # games are compiled in, and this copy is where users add their own.
-          cp -r assets README.md dist/
-          (cd dist && zip -qry "$ARCHIVE.zip" "Pokemon Save Editor.app" assets README.md)
+          # A .app is a folder, so it ships zipped. ditto keeps the signature
+          # and the bundle's attributes intact, where plain zip may not.
+          ditto -c -k --keepParent "$APP" "dist/$ARCHIVE.zip"
 
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: |
+            dist/*.exe
             dist/*.zip
             dist/*.tar.gz
           if-no-files-found: error

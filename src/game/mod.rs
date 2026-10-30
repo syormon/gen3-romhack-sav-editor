@@ -422,9 +422,8 @@ pub struct PackInfo {
 }
 
 impl PackInfo {
-    /// The folder under `assets/`, which is what `--game` accepts alongside
-    /// the display name.
-    #[cfg_attr(target_arch = "wasm32", allow(dead_code))] // `--game` is native-only
+    /// The folder under `assets/`: what `--game` accepts alongside the display
+    /// name, and what a save's file name is matched against.
     pub fn folder_name(&self) -> String {
         self.dir
             .file_name()
@@ -451,6 +450,45 @@ pub fn find<'a>(packs: &'a [PackInfo], wanted: &str) -> Option<&'a PackInfo> {
         .iter()
         .find(|p| p.folder_name().to_lowercase() == wanted)
         .or_else(|| packs.iter().find(|p| p.name.to_lowercase() == wanted))
+}
+
+/// The game a save's file name points to, if it names exactly one.
+///
+/// Only a hint, for pre-selecting the answer when asking which game wrote the
+/// save — a file can be called anything. A game matches when its folder name
+/// appears in the file name, ignoring case, accents, spaces and punctuation,
+/// so "Pokémon Unbound (v2.1.1.1).sav" and "unbound.sav" both point to
+/// `unbound`, and "Soul Gold.sav" to `soulgold`.
+pub fn guess_from_file_name(packs: &[PackInfo], file_name: &str) -> Option<usize> {
+    let name = loose_key(file_name);
+    let mut matches = packs.iter().enumerate().filter(|(_, p)| {
+        let folder = loose_key(&p.folder_name());
+        !folder.is_empty() && name.contains(&folder)
+    });
+    let first = matches.next().map(|(i, _)| i);
+    // Two games named in one file name is no hint at all.
+    if matches.next().is_some() {
+        None
+    } else {
+        first
+    }
+}
+
+/// Lowercase letters and digits only, with accented letters folded to their
+/// base letter so "Pokémon" and "Pokemon" compare equal.
+fn loose_key(text: &str) -> String {
+    text.chars()
+        .flat_map(char::to_lowercase)
+        .map(|c| match c {
+            'à' | 'á' | 'â' | 'ä' | 'ã' | 'å' => 'a',
+            'è' | 'é' | 'ê' | 'ë' => 'e',
+            'ì' | 'í' | 'î' | 'ï' => 'i',
+            'ò' | 'ó' | 'ô' | 'ö' | 'õ' => 'o',
+            'ù' | 'ú' | 'û' | 'ü' => 'u',
+            other => other,
+        })
+        .filter(char::is_ascii_alphanumeric)
+        .collect()
 }
 
 /// Directories searched for `<pack>/game.json`, nearest first.
@@ -607,6 +645,33 @@ mod tests {
                 assert_eq!(*bytes, disk.as_slice(), "{folder}/{name} is out of date");
             }
         }
+    }
+
+    #[test]
+    fn a_file_name_hints_at_the_game_it_names() {
+        let pack = |folder: &str, name: &str| PackInfo {
+            dir: built_in_dir(folder),
+            name: name.to_string(),
+            version: String::new(),
+        };
+        let packs = [
+            pack("seaglass", "Pokémon Emerald Seaglass"),
+            pack("soulgold", "Pokémon SoulGold"),
+            pack("unbound", "Pokémon Unbound"),
+        ];
+        let guess = |file: &str| guess_from_file_name(&packs, file);
+
+        assert_eq!(guess("Pokémon Unbound (v2.1.1.1).sav"), Some(2));
+        assert_eq!(guess("unbound.sav"), Some(2));
+        assert_eq!(guess("Soul Gold (v1.1.4).sav"), Some(1));
+        assert_eq!(guess("SEAGLASS_v3.sav"), Some(0));
+        assert_eq!(guess("my save.sav"), None, "names no game");
+        assert_eq!(
+            guess("Pokemon Emerald.sav"),
+            None,
+            "Emerald is not Seaglass"
+        );
+        assert_eq!(guess("unbound vs soulgold.sav"), None, "names two games");
     }
 
     #[test]

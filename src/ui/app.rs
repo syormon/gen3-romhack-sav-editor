@@ -263,13 +263,7 @@ impl EditorApp {
         if crate::game::is_loaded() {
             self.open_save(file);
         } else {
-            self.pending_save = Some(PendingSave {
-                name: file.name,
-                bytes: file.bytes,
-                choice: None,
-                error: None,
-                restore: None,
-            });
+            self.load_file_and_ask(file);
         }
     }
 
@@ -278,8 +272,9 @@ impl EditorApp {
     ///
     /// A new file is exactly the moment the answer can change — there is
     /// nothing tying the next save to the game the last one came from. The
-    /// current game is pre-selected, so staying put is one click, and the
-    /// preview behind the dialog shows straight away when it is wrong.
+    /// game its file name mentions is pre-selected, or else the current one,
+    /// so the likely answer is one click, and the preview behind the dialog
+    /// shows straight away when it is wrong.
     fn load_file_and_ask(&mut self, file: SaveFile) {
         // With a single game installed there is nothing to ask.
         if self.packs.len() < 2 && crate::game::is_loaded() {
@@ -294,6 +289,7 @@ impl EditorApp {
         };
         let current = crate::game::current_opt()
             .and_then(|pack| self.packs.iter().position(|p| p.dir == pack.dir));
+        let hinted = crate::game::guess_from_file_name(&self.packs, &file.name);
 
         self.pending_save = Some(PendingSave {
             name: file.name,
@@ -302,7 +298,7 @@ impl EditorApp {
             error: None,
             restore,
         });
-        if let Some(index) = current {
+        if let Some(index) = hinted.or(current) {
             self.preview_with_game(index);
         }
     }
