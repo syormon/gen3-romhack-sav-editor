@@ -191,9 +191,10 @@ fn core_details(ui: &mut Ui, insp: &mut super::app::Inspector) {
         field_label(ui, "Ability");
         let abilities = get_species_abilities(insp.mon.species);
         let storable = storable_ability_slots();
+        let current_slot = insp.mon.ability_slot();
         let selected = abilities
             .iter()
-            .find(|a| a.slot == insp.mon.ability_num)
+            .find(|a| a.slot == current_slot)
             .map(|a| a.name.clone())
             .unwrap_or_else(|| "None".to_string());
         egui::ComboBox::from_id_salt("ability")
@@ -212,12 +213,12 @@ fn core_details(ui: &mut Ui, insp: &mut super::app::Inspector) {
                     ui.add_enabled_ui(ability.available && fits, |ui| {
                         if ui
                             .selectable_label(
-                                insp.mon.ability_num == ability.slot,
+                                current_slot == ability.slot,
                                 RichText::new(label).size(12.0),
                             )
                             .clicked()
                         {
-                            insp.mon.ability_num = ability.slot;
+                            insp.mon.set_ability_slot(ability.slot);
                         }
                     });
                 }

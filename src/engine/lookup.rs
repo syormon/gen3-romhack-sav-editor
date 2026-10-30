@@ -61,12 +61,33 @@ pub fn max_pp(move_id: u32, bonus: u32) -> u32 {
 }
 
 /// How many ability slots a record can say. Gen 3 records keep one bit for it,
-/// so a species' hidden ability cannot be stored there.
+/// so a species' hidden ability cannot be stored there — unless the game spends
+/// that bit on the hidden ability and picks between the others some other way.
 pub fn storable_ability_slots() -> u8 {
-    if game::current().layout().record_encoding.is_gen3() {
+    let pack = game::current();
+    if pack.layout().record_encoding.is_gen3() && !pack.behavior().hidden_ability_flag {
         2
     } else {
         3
+    }
+}
+
+/// The slot a game with `hidden_ability_flag` reads, following its own lookup:
+/// the record's bit asks for the hidden ability, the personality's low bit
+/// picks between the other two, and either falls through when the species
+/// leaves that slot empty.
+pub fn flagged_ability_slot(
+    hidden_bit: bool,
+    personality: u32,
+    has_second: bool,
+    has_hidden: bool,
+) -> u8 {
+    if hidden_bit && has_hidden {
+        2
+    } else if personality & 1 != 0 && has_second {
+        1
+    } else {
+        0
     }
 }
 

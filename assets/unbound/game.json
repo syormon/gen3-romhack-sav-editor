@@ -93,6 +93,7 @@
     "default_ot_name": "Trainer",
     "met_location": 255,
     "shiny_threshold": 16,
+    "hidden_ability_flag": true,
     "pokeballs": [
       {
         "id": 1,

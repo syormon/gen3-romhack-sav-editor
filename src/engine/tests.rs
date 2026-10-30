@@ -452,6 +452,31 @@ fn the_unbound_pack_keeps_its_measured_layout() {
     );
     // 52% of a known all-shiny collection passes at 8; all of it passes at 16.
     assert_eq!(pack.behavior().shiny_threshold, 16);
+    // The ROM's GetAbility: the bit picks the hidden ability, not ability 2.
+    assert!(pack.behavior().hidden_ability_flag);
+}
+
+/// Serperior has abilities [Overgrow, none, Contrary] and Mienfoo fills all
+/// three, which between them cover every way a CFRU game can fall through.
+#[test]
+fn a_flagged_ability_follows_the_games_own_lookup() {
+    use crate::engine::lookup::flagged_ability_slot as slot;
+
+    assert_eq!(slot(true, 0, false, true), 2, "the bit asks for Contrary");
+    assert_eq!(slot(true, 1, false, true), 2);
+    assert_eq!(slot(false, 1, false, true), 0, "no ability 2 to pick");
+    assert_eq!(slot(false, 0, true, true), 0);
+    assert_eq!(
+        slot(false, 1, true, true),
+        1,
+        "the personality picks ability 2"
+    );
+    assert_eq!(
+        slot(true, 1, true, false),
+        1,
+        "no hidden ability to ask for"
+    );
+    assert_eq!(slot(true, 0, true, false), 0);
 }
 
 /// A hack that renumbers its species must not address sprites by that number.
@@ -577,7 +602,8 @@ fn nature_can_be_set_without_disturbing_the_rest_of_the_pid() {
     for nature in 0..25 {
         let updated = set_personality_nature(pid, nature);
         assert_eq!(updated % 25, nature);
-        assert_eq!(updated / 25, pid / 25);
+        assert_eq!(updated & 1, pid & 1, "the ability bit stays");
+        assert!(updated.abs_diff(pid) < 50, "only a neighbouring block");
     }
 }
 

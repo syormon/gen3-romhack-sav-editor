@@ -3,7 +3,8 @@
 use super::bytes::*;
 use super::charmap::{decode_gba_string, encode_gba_string};
 use super::layout::*;
-use super::lookup::get_species_name;
+use super::lookup::{flagged_ability_slot, get_species_abilities, get_species_name};
+use super::personality::set_personality_ability_bit;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Pokemon {
@@ -32,6 +33,8 @@ pub struct Pokemon {
     pub met_level: u32,
     pub level: u8,
     pub friendship: u8,
+    /// The record's ability field, as stored. What it means varies by game, so
+    /// read `ability_slot` to find out which ability this is.
     pub ability_num: u8,
 
     /// Only present for party members; box mons carry no battle stats.
@@ -66,6 +69,38 @@ impl Pokemon {
 
     pub fn nature(&self) -> u32 {
         self.personality % 25
+    }
+
+    /// Which of the species' three ability slots this Pokémon uses.
+    pub fn ability_slot(&self) -> u8 {
+        if !crate::game::current().behavior().hidden_ability_flag {
+            return self.ability_num;
+        }
+        let slots = get_species_abilities(self.species);
+        flagged_ability_slot(
+            self.ability_num != 0,
+            self.personality,
+            slots[1].available,
+            slots[2].available,
+        )
+    }
+
+    pub fn set_ability_slot(&mut self, slot: u8) {
+        let pack = crate::game::current();
+        let behavior = pack.behavior();
+        if !behavior.hidden_ability_flag {
+            self.ability_num = slot;
+            return;
+        }
+        self.ability_num = u8::from(slot == 2);
+        if slot < 2 {
+            self.personality = set_personality_ability_bit(
+                self.personality,
+                self.ot_id,
+                behavior.shiny_threshold,
+                u32::from(slot),
+            );
+        }
     }
 
     pub fn display_name(&self) -> String {

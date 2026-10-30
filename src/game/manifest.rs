@@ -814,6 +814,10 @@ pub struct Behavior {
     pub shiny_threshold: u32,
     /// Species that never read as shiny (SoulGold's Shadow Lugia).
     pub never_shiny: Vec<u32>,
+    /// CFRU's reading of the record's ability bit: set, the Pokémon has its
+    /// hidden ability, and abilities 1 and 2 come from the personality's low
+    /// bit. Otherwise the record's field is the slot itself.
+    pub hidden_ability_flag: bool,
     /// Level given to a newly created Pokémon.
     pub new_level: u8,
     /// Per-species overrides for the level above.
@@ -881,6 +885,7 @@ impl Default for Behavior {
         Self {
             shiny_threshold: 8,
             never_shiny: Vec::new(),
+            hidden_ability_flag: false,
             new_level: 5,
             new_level_species: Vec::new(),
             new_level_ranges: Vec::new(),

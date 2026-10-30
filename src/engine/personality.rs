@@ -40,14 +40,39 @@ pub fn make_personality_non_shiny(current_pid: u32, ot_id: u32, threshold: u32) 
     search(current_pid, ot_id, 0x8000).unwrap_or(current_pid)
 }
 
-/// Rewrites just the nature, keeping the rest of the PID.
+/// Rewrites just the nature, keeping the ability bit and otherwise staying as
+/// close to the old PID as it can.
 pub fn set_personality_nature(current_pid: u32, target_nature: u32) -> u32 {
     let target = target_nature % 25;
     let base = current_pid - current_pid % 25;
-    // The last block of 25 below u32::MAX is incomplete; step down a block
-    // there rather than wrapping round to a PID with some other nature.
-    base.checked_add(target)
-        .unwrap_or_else(|| base - 25 + target)
+    // 25 is odd, so a neighbouring block has the other parity. The last block
+    // below u32::MAX is incomplete, so stepping down has to stay an option
+    // rather than wrapping round to a PID with some other nature.
+    [
+        Some(base),
+        base.checked_add(25),
+        base.checked_sub(25),
+        base.checked_sub(50),
+    ]
+    .into_iter()
+    .flatten()
+    .filter_map(|block| block.checked_add(target))
+    .find(|pid| pid & 1 == current_pid & 1)
+    .unwrap_or(current_pid)
+}
+
+/// Rewrites just the ability bit, keeping the nature, whether it reads as shiny
+/// under `threshold`, and the rest of the low byte, which the gender test
+/// compares.
+pub fn set_personality_ability_bit(current_pid: u32, ot_id: u32, threshold: u32, bit: u32) -> u32 {
+    if current_pid & 1 == bit & 1 {
+        return current_pid;
+    }
+    let shiny = shiny_xor(current_pid, ot_id) < threshold;
+    (1..=0xFF_FFFFu32)
+        .map(|step| current_pid.wrapping_add(step << 8) ^ 1)
+        .find(|pid| pid % 25 == current_pid % 25 && (shiny_xor(*pid, ot_id) < threshold) == shiny)
+        .unwrap_or(current_pid)
 }
 
 #[cfg(test)]
@@ -78,7 +103,31 @@ mod tests {
     fn setting_the_nature_near_the_top_of_the_range_does_not_wrap() {
         for pid in [u32::MAX, u32::MAX - 3, 0, 24, 25] {
             for nature in 0..25 {
-                assert_eq!(set_personality_nature(pid, nature) % 25, nature, "{pid:#x}");
+                let changed = set_personality_nature(pid, nature);
+                assert_eq!(changed % 25, nature, "{pid:#x}");
+                assert_eq!(changed & 1, pid & 1, "{pid:#x}: ability bit kept");
+            }
+        }
+    }
+
+    #[test]
+    fn changing_the_ability_bit_keeps_the_rest_of_the_pokemon() {
+        let ot = 0x1234_ABCD;
+        let threshold = 16;
+        let plain = 0x1357_9BDF;
+        let shiny = make_personality_shiny(plain, ot, threshold);
+        for pid in [plain, shiny, plain ^ 1, shiny ^ 1, u32::MAX, 0] {
+            let was_shiny = shiny_xor(pid, ot) < threshold;
+            for bit in [0, 1] {
+                let changed = set_personality_ability_bit(pid, ot, threshold, bit);
+                assert_eq!(changed & 1, bit, "{pid:#x}");
+                assert_eq!(changed % 25, pid % 25, "{pid:#x}: nature kept");
+                assert_eq!(changed & 0xFE, pid & 0xFE, "{pid:#x}: gender byte kept");
+                assert_eq!(
+                    shiny_xor(changed, ot) < threshold,
+                    was_shiny,
+                    "{pid:#x}: shininess kept"
+                );
             }
         }
     }
