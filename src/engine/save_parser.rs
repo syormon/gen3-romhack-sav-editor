@@ -104,6 +104,9 @@ impl Pokemon {
     }
 
     pub fn display_name(&self) -> String {
+        if self.is_egg {
+            return "Egg".to_string();
+        }
         let nick = self.nickname.trim();
         if nick.is_empty() {
             get_species_name(self.species)
@@ -176,9 +179,13 @@ impl GameSave {
             encryption_key: 0,
         };
         save.parse_active_slot();
-        if let Some(loaded) =
-            super::extra_boxes::load(&save.buffer, &save.sb1, &save.storage, save.active_slot)
-        {
+        if let Some(loaded) = super::extra_boxes::load(
+            &save.buffer,
+            &save.sb1,
+            &save.sb2,
+            &save.storage,
+            save.active_slot,
+        ) {
             save.extra = loaded.records;
             save.extra_names = loaded.names;
         }
@@ -286,23 +293,25 @@ impl GameSave {
         set_u16_le(&mut self.sb1, coins_offset(), store_coins);
     }
 
-    /// Where a pocket's slots start, and in which buffer.
+    /// Each run of a pocket's slots: which buffer, where it starts, how many.
     ///
-    /// `None` when the pocket does not fit the buffer it names, so a bad
-    /// manifest reads as an empty pocket rather than panicking.
-    fn pocket_span(&self, pocket: usize) -> Option<(crate::game::PocketRegion, usize, usize)> {
-        let (offset, count) = (pocket_offset(pocket), pocket_capacity(pocket));
-        let region = pocket_region(pocket);
-        let base = match region {
-            crate::game::PocketRegion::SaveBlock1 => bag_offset() + offset,
-            _ => offset,
-        };
-        let len = match region {
-            crate::game::PocketRegion::SaveBlock1 => self.sb1.len(),
-            crate::game::PocketRegion::Storage => self.storage.len(),
-            crate::game::PocketRegion::File => self.buffer.len(),
-        };
-        (base + count * 4 <= len).then_some((region, base, count))
+    /// Empty when a run does not fit the buffer it names, so a bad manifest
+    /// reads as an empty pocket rather than panicking.
+    fn pocket_spans(&self, pocket: usize) -> Vec<(crate::game::PocketRegion, usize, usize)> {
+        let spans: Vec<_> = pocket_parts(pocket)
+            .into_iter()
+            .map(|(region, offset, count)| {
+                let base = match region {
+                    crate::game::PocketRegion::SaveBlock1 => bag_offset() + offset,
+                    _ => offset,
+                };
+                (region, base, count)
+            })
+            .collect();
+        let fits = spans
+            .iter()
+            .all(|(region, base, count)| base + count * 4 <= self.pocket_buffer(*region).len());
+        if fits { spans } else { Vec::new() }
     }
 
     fn pocket_buffer(&self, region: crate::game::PocketRegion) -> &[u8] {
@@ -322,44 +331,42 @@ impl GameSave {
     }
 
     pub fn pocket_items(&self, pocket: usize) -> Vec<BagItem> {
-        let Some((region, base, count)) = self.pocket_span(pocket) else {
-            return Vec::new();
-        };
         let enc_hword = (self.encryption_key & 0xFFFF) as u16;
-        let buf = self.pocket_buffer(region);
-
-        (0..count)
-            .filter_map(|i| {
-                let id = u16_le(buf, base + i * 4);
-                if id == 0 {
-                    return None;
-                }
-                let raw_qty = u16_le(buf, base + i * 4 + 2);
-                Some(BagItem {
-                    id: u32::from(id),
-                    quantity: u32::from(raw_qty ^ enc_hword),
+        self.pocket_spans(pocket)
+            .into_iter()
+            .flat_map(|(region, base, count)| {
+                let buf = self.pocket_buffer(region);
+                (0..count).filter_map(move |i| {
+                    let id = u16_le(buf, base + i * 4);
+                    if id == 0 {
+                        return None;
+                    }
+                    let raw_qty = u16_le(buf, base + i * 4 + 2);
+                    Some(BagItem {
+                        id: u32::from(id),
+                        quantity: u32::from(raw_qty ^ enc_hword),
+                    })
                 })
             })
             .collect()
     }
 
     pub fn set_pocket_items(&mut self, pocket: usize, items: &[BagItem]) {
-        let Some((region, base, count)) = self.pocket_span(pocket) else {
-            return;
-        };
         let enc_hword = (self.encryption_key & 0xFFFF) as u16;
-        let buf = self.pocket_buffer_mut(region);
-
-        for i in 0..count {
-            match items.get(i) {
-                Some(item) => {
-                    let enc_qty = (item.quantity as u16) ^ enc_hword;
-                    set_u16_le(buf, base + i * 4, item.id as u16);
-                    set_u16_le(buf, base + i * 4 + 2, enc_qty);
-                }
-                None => {
-                    set_u16_le(buf, base + i * 4, 0);
-                    set_u16_le(buf, base + i * 4 + 2, 0);
+        let mut items = items.iter();
+        for (region, base, count) in self.pocket_spans(pocket) {
+            let buf = self.pocket_buffer_mut(region);
+            for i in 0..count {
+                match items.next() {
+                    Some(item) => {
+                        let enc_qty = (item.quantity as u16) ^ enc_hword;
+                        set_u16_le(buf, base + i * 4, item.id as u16);
+                        set_u16_le(buf, base + i * 4 + 2, enc_qty);
+                    }
+                    None => {
+                        set_u16_le(buf, base + i * 4, 0);
+                        set_u16_le(buf, base + i * 4 + 2, 0);
+                    }
                 }
             }
         }
@@ -402,7 +409,7 @@ impl GameSave {
                 // A game whose box names this editor has not located declares a
                 // width of 0; the UI then falls back to "Box N".
                 let width = box_name_length();
-                let off = storage_box_names_offset() + b * width;
+                let off = storage_box_name_offset(b);
                 if width == 0 || off + width > self.storage.len() {
                     return String::new();
                 }
@@ -414,13 +421,15 @@ impl GameSave {
 
     /// The whole save file with every edit applied, ready to write out.
     pub fn export(&self) -> Vec<u8> {
-        let (mut sb1, mut storage) = (self.sb1.clone(), self.storage.clone());
-        super::extra_boxes::store_in_blocks(&self.extra, &mut sb1, &mut storage);
+        let mut sb1 = self.sb1.clone();
+        let mut sb2 = self.sb2.clone();
+        let mut storage = self.storage.clone();
+        super::extra_boxes::store_in_blocks(&self.extra, &mut sb1, &mut sb2, &mut storage);
         let mut file = super::save_writer::export_updated_save(
             &self.buffer,
             self.active_slot,
             &sb1,
-            &self.sb2,
+            &sb2,
             &storage,
         );
         if !self.extra.is_empty() {
@@ -429,6 +438,7 @@ impl GameSave {
                 self.active_slot,
                 &self.extra,
                 &sb1,
+                &sb2,
                 &storage,
             );
         }

@@ -7,11 +7,12 @@
 //!
 //! ```text
 //!   0x00 personality (u32)     0x24 PP bonuses      0x2C EVs (6)
-//!   0x04 OT id (u32)           0x25 friendship      0x32 unmodelled (4)
-//!   0x08 nickname (10)         0x26 ball            0x36 IV word (u32)
+//!   0x04 OT id (u32)           0x25 friendship      0x32 Pokérus
+//!   0x08 nickname (10)         0x26 ball            0x33 met location
 //!   0x12 language  0x13 flags  0x27 moves: 4 x 10 bits in 5 bytes
-//!   0x14 OT name (7)           0x2C
-//!   0x1B markings              = 0x3A (58) total
+//!   0x14 OT name (7)           0x2C                 0x34 met word (u16)
+//!   0x1B markings                                   0x36 IV word (u32)
+//!                              = 0x3A (58) total
 //!   0x1C species (u16)
 //!   0x1E held item (u16)
 //!   0x20 experience (u32)
@@ -23,10 +24,11 @@
 //! ids are moves the species can actually learn (91.8% against learnsets, where
 //! every other offset scores under 17%).
 //!
-//! There is no room for current PP, so the games recompute it; this module
-//! reports full PP for each move. Bytes 0x32..0x35 carry met data whose
-//! meanings are not yet pinned down, so `pack` leaves them exactly as it found
-//! them.
+//! The rest was then confirmed against the routines in the Unbound ROM that
+//! convert a record each way (0x08A0478C unpacks, 0x08A049A4 packs). There is
+//! no room for current PP, ribbons or contest stats: unpacking refills PP and
+//! zeroes the others, so the games lose them on the way into a box too. The
+//! met word keeps its Gen 3 layout, origin game and OT gender included.
 
 use super::bytes::*;
 use super::save_parser::Pokemon;
@@ -49,7 +51,17 @@ const BALL: usize = 0x26;
 const MOVES: usize = 0x27;
 const MOVES_LEN: usize = 5;
 const EVS: usize = 0x2C;
+const POKERUS: usize = 0x32;
+const MET_LOCATION: usize = 0x33;
+const MET_WORD: usize = 0x34;
 const IVS: usize = 0x36;
+
+/// The bytes before the species: identity, names, flags and markings.
+const HEADER: usize = 0x1C;
+/// Pokérus through the IV word, kept whole in both record shapes.
+const MISC: usize = 8;
+/// Where those bytes are in a party record.
+const PARTY_MISC: usize = 0x44;
 
 /// Four 10-bit move ids, little-endian, low field first.
 fn read_moves(record: &[u8]) -> [u32; 4] {
@@ -72,6 +84,19 @@ fn write_moves(record: &mut [u8], moves: &[u32; 4]) {
     for i in 0..MOVES_LEN {
         record[MOVES + i] = ((packed >> (8 * i)) & 0xFF) as u8;
     }
+}
+
+/// Copies what a boxed record and a party record hold in the same form, for a
+/// move between the two. `pack` then fills in the rest, but these bytes also
+/// carry what it does not model: markings, the origin game and the OT's gender.
+pub fn carry_over(src: &[u8], src_is_party: bool, dst: &mut [u8]) {
+    dst[..HEADER].copy_from_slice(&src[..HEADER]);
+    let (from, to) = if src_is_party {
+        (PARTY_MISC, POKERUS)
+    } else {
+        (POKERUS, PARTY_MISC)
+    };
+    dst[to..to + MISC].copy_from_slice(&src[from..from + MISC]);
 }
 
 pub fn unpack(record: &[u8]) -> Option<Pokemon> {
@@ -150,9 +175,9 @@ pub fn unpack(record: &[u8]) -> Option<Pokemon> {
         evs,
         ivs,
         pp_bonuses,
-        pokerus: 0,
-        met_location: 0,
-        met_level: 0,
+        pokerus: record[POKERUS],
+        met_location: record[MET_LOCATION],
+        met_level: u32::from(u16_le(record, MET_WORD) & 0x7F),
         level: super::experience::level_from_experience(species, experience),
         friendship: record[FRIENDSHIP],
         ability_num: ((iv_word >> 31) & 1) as u8,
@@ -184,7 +209,7 @@ pub fn pack(record: &mut [u8], mon: &Pokemon) {
             nick.to_string()
         }
     };
-    super::charmap::write_gba_string(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
+    super::charmap::write_name(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
 
     record[LANGUAGE] = mon.language & 0x7;
     record[FLAGS] = record_flags(record[FLAGS], mon.is_bad_egg, mon.is_egg);
@@ -194,7 +219,7 @@ pub fn pack(record: &mut [u8], mon: &Pokemon) {
     } else {
         mon.ot_name.clone()
     };
-    super::charmap::write_gba_string(&mut record[OT_NAME..OT_NAME + OT_NAME_LEN], &ot_name);
+    super::charmap::write_name(&mut record[OT_NAME..OT_NAME + OT_NAME_LEN], &ot_name);
 
     set_u16_le(record, SPECIES, mon.species as u16);
     set_u16_le(record, HELD_ITEM, mon.held_item as u16);
@@ -213,6 +238,10 @@ pub fn pack(record: &mut [u8], mon: &Pokemon) {
         record[EVS + i] = mon.evs[i].min(252) as u8;
     }
 
+    record[POKERUS] = mon.pokerus;
+    record[MET_LOCATION] = mon.met_location;
+    set_u16_bits(record, MET_WORD, 0x7F, (mon.met_level & 0x7F) as u16);
+
     let mut iv_word = 0u32;
     for i in 0..6 {
         iv_word |= (mon.ivs[i] & 0x1F) << (5 * i);
@@ -229,6 +258,46 @@ pub fn pack(record: &mut [u8], mon: &Pokemon) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A boxed Vanillish from a real save, and the fields its tail bytes hold.
+    #[test]
+    fn met_data_survives_and_the_rest_of_its_word_is_kept() {
+        crate::engine::tests::ensure_pack();
+        let mut record = vec![0u8; BOX_SIZE];
+        record[4] = 1;
+        record[FLAGS] = 2;
+        record[SPECIES] = 1;
+        record[POKERUS..POKERUS + 4].copy_from_slice(&[0x12, 0x65, 0x09, 0x02]);
+
+        let mut mon = unpack(&record).expect("a Pokémon");
+        assert_eq!(mon.pokerus, 0x12);
+        assert_eq!(mon.met_location, 0x65);
+        assert_eq!(mon.met_level, 9);
+
+        mon.met_level = 20;
+        pack(&mut record, &mon);
+        assert_eq!(u16_le(&record, MET_WORD), 0x0214, "origin game kept");
+    }
+
+    #[test]
+    fn a_move_between_shapes_carries_the_shared_bytes() {
+        let party: Vec<u8> = (0..100u8).collect();
+        let mut boxed = vec![0u8; BOX_SIZE];
+        carry_over(&party, true, &mut boxed);
+        assert_eq!(boxed[..HEADER], party[..HEADER]);
+        assert_eq!(
+            boxed[POKERUS..POKERUS + MISC],
+            party[PARTY_MISC..PARTY_MISC + MISC]
+        );
+
+        let mut back = vec![0u8; 100];
+        carry_over(&boxed, false, &mut back);
+        assert_eq!(back[..HEADER], party[..HEADER]);
+        assert_eq!(
+            back[PARTY_MISC..PARTY_MISC + MISC],
+            party[PARTY_MISC..PARTY_MISC + MISC]
+        );
+    }
 
     #[test]
     fn moves_survive_the_ten_bit_packing() {

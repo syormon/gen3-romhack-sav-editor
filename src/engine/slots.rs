@@ -102,7 +102,7 @@ impl GameSave {
     }
 
     /// A slot's record bytes, if the slot exists in this save.
-    pub(super) fn record(&self, slot: SlotRef) -> Option<&[u8]> {
+    pub fn record(&self, slot: SlotRef) -> Option<&[u8]> {
         if !self.in_range(slot) {
             return None;
         }
@@ -244,7 +244,10 @@ impl GameSave {
 
         // A boxed record is the front of a party record, except where a game
         // compacts its boxes into a layout of their own.
-        if !boxes_are_cfru_compact() {
+        if boxes_are_cfru_compact() {
+            let dst = &mut self.buffer_for_mut(slot)[at..at + size];
+            super::cfru::carry_over(raw, from.is_party(), dst);
+        } else {
             let shared = box_mon_size().min(raw.len()).min(size);
             self.buffer_for_mut(slot)[at..at + shared].copy_from_slice(&raw[..shared]);
         }

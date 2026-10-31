@@ -110,6 +110,9 @@ pub struct Layout {
     pub storage_sectors: (usize, usize),
     pub storage_boxes: usize,
     pub storage_box_names: usize,
+    /// One storage offset per regular box, for a game whose names are not in
+    /// order from `storage_box_names`.
+    pub storage_box_name_offsets: Vec<usize>,
     pub box_name_length: usize,
 
     /// How the Pokémon record is stored. `gen3_shuffled` has its field
@@ -164,8 +167,13 @@ pub enum Area {
     Storage,
     /// The assembled SaveBlock1.
     Sb1,
+    /// The assembled SaveBlock2.
+    Sb2,
     /// One of `ExtraBoxes::sectors`.
     Extra,
+    /// An absolute offset into the save file, past the two slots: a sector
+    /// with one copy and no footer, which the game fills as a plain block.
+    File,
 }
 
 /// A position in an area.
@@ -272,6 +280,20 @@ pub struct PocketDef {
     /// Which part of the save file this pocket sits in.
     #[serde(default)]
     pub region: PocketRegion,
+    /// Where the pocket carries on, for one split across two places. `count`
+    /// above covers only the first part.
+    #[serde(default)]
+    pub continued: Option<PocketPart>,
+}
+
+/// The rest of a split pocket.
+#[derive(Debug, Clone, Copy, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PocketPart {
+    pub offset: usize,
+    pub count: usize,
+    #[serde(default)]
+    pub region: PocketRegion,
 }
 
 /// Where a bag pocket lives.
@@ -327,48 +349,56 @@ impl Default for Layout {
                     offset: 0,
                     count: 150,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
                 PocketDef {
                     name: "Medicine".into(),
                     offset: 600,
                     count: 65,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
                 PocketDef {
                     name: "KeyItems".into(),
                     offset: 860,
                     count: 50,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
                 PocketDef {
                     name: "PokeBalls".into(),
                     offset: 1060,
                     count: 27,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
                 PocketDef {
                     name: "TMsHMs".into(),
                     offset: 1168,
                     count: 128,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
                 PocketDef {
                     name: "MegaStones".into(),
                     offset: 1680,
                     count: 35,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
                 PocketDef {
                     name: "BattleItems".into(),
                     offset: 1820,
                     count: 100,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
                 PocketDef {
                     name: "Berries".into(),
                     offset: 2220,
                     count: 70,
                     region: PocketRegion::SaveBlock1,
+                    continued: None,
                 },
             ],
 
@@ -381,6 +411,7 @@ impl Default for Layout {
             storage_sectors: (5, 13),
             storage_boxes: 0x0004,
             storage_box_names: 0x859C,
+            storage_box_name_offsets: Vec::new(),
             box_name_length: 9,
 
             record_encoding: RecordEncoding::Plain,
@@ -593,8 +624,10 @@ impl Layout {
         match area {
             Area::Storage => self.storage_size,
             Area::Sb1 => self.sb1_size,
+            Area::Sb2 => self.sb2_size,
             // Everything before the sector footer.
             Area::Extra => 0xFF4,
+            Area::File => self.min_save_size,
         }
     }
 
@@ -626,6 +659,7 @@ impl Layout {
             offset + length <= self.area_len(area)
                 && (area != Area::Extra || sector < extra.sectors.len())
                 && (area != Area::Storage || offset >= boxes_end)
+                && (area != Area::File || offset >= slots_end * self.sector_size)
         };
         let per_box = self.box_capacity * self.box_mon_size;
         for (i, b) in extra.boxes.iter().enumerate() {
@@ -814,6 +848,10 @@ pub struct Behavior {
     pub shiny_threshold: u32,
     /// Species that never read as shiny (SoulGold's Shadow Lugia).
     pub never_shiny: Vec<u32>,
+    /// `item_pockets.json` lists every item as the game's own table does, so
+    /// it decides an item's pocket outright rather than backing up the name
+    /// rules.
+    pub item_pockets_exact: bool,
     /// CFRU's reading of the record's ability bit: set, the Pokémon has its
     /// hidden ability, and abilities 1 and 2 come from the personality's low
     /// bit. Otherwise the record's field is the slot itself.
@@ -885,6 +923,7 @@ impl Default for Behavior {
         Self {
             shiny_threshold: 8,
             never_shiny: Vec::new(),
+            item_pockets_exact: false,
             hidden_ability_flag: false,
             new_level: 5,
             new_level_species: Vec::new(),

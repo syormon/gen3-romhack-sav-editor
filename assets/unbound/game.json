@@ -1,7 +1,7 @@
 {
   "name": "Pokémon Unbound",
   "version": "2.1.1.1",
-  "notice": "Box names are unlocated and Poké Ball names unconfirmed; everything else is verified against real saves.",
+  "notice": "Poké Ball names are unconfirmed; everything else is verified against real saves and the ROM.",
   "export_name": "Unbound_edited.sav",
   "link": {
     "label": "Data source: PUSE",
@@ -42,7 +42,12 @@
         "name": "Items",
         "offset": 35416,
         "count": 326,
-        "region": "storage"
+        "region": "storage",
+        "continued": {
+          "offset": 122880,
+          "count": 124,
+          "region": "file"
+        }
       },
       {
         "name": "KeyItems",
@@ -74,13 +79,79 @@
     "total_boxes": 19,
     "box_capacity": 30,
     "storage_boxes": 4,
-    "box_name_length": 0,
+    "storage_box_names": 33604,
+    "storage_box_name_offsets": [
+      33604,
+      33613,
+      33622,
+      33631,
+      33640,
+      33649,
+      33658,
+      33667,
+      33676,
+      33685,
+      33694,
+      33703,
+      33712,
+      33721,
+      33595,
+      33586,
+      33577,
+      33568,
+      33559
+    ],
+    "box_name_length": 9,
+    "extra_boxes": {
+      "sectors": [],
+      "sector_checksum_sizes": [],
+      "boxes": [
+        {
+          "records": [
+            { "in": "file", "offset": 125708, "length": 1252 },
+            { "in": "file", "offset": 126976, "length": 488 }
+          ],
+          "name": { "in": "storage", "offset": 33550 }
+        },
+        {
+          "records": [
+            { "in": "file", "offset": 127464, "length": 1740 }
+          ],
+          "name": { "in": "storage", "offset": 33541 }
+        },
+        {
+          "records": [
+            { "in": "file", "offset": 129204, "length": 1740 }
+          ],
+          "name": { "in": "storage", "offset": 33532 }
+        },
+        {
+          "records": [
+            { "in": "sb1", "offset": 7944, "length": 1740 }
+          ],
+          "name": { "in": "storage", "offset": 33523 }
+        },
+        {
+          "records": [
+            { "in": "sb1", "offset": 9684, "length": 1740 }
+          ],
+          "name": { "in": "storage", "offset": 33514 }
+        },
+        {
+          "records": [
+            { "in": "sb2", "offset": 176, "length": 1740 }
+          ],
+          "name": { "in": "storage", "offset": 33505 }
+        }
+      ]
+    },
     "box_encoding": "cfru_compact",
     "bag": 0
   },
   "record": {
     "nickname_length": 10,
-    "ot_name_length": 7
+    "ot_name_length": 7,
+    "gen3_ball": "growth_u16"
   },
   "sprites": {
     "national_dex_max_id": 809,
@@ -94,6 +165,7 @@
     "met_location": 255,
     "shiny_threshold": 16,
     "hidden_ability_flag": true,
+    "item_pockets_exact": true,
     "pokeballs": [
       {
         "id": 1,

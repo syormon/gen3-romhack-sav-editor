@@ -320,7 +320,7 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
             nick.to_string()
         }
     };
-    super::charmap::write_gba_string(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
+    super::charmap::write_name(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
 
     record[LANGUAGE] = mon.language & 0x7;
     record[FLAGS] = record_flags(record[FLAGS], mon.is_bad_egg, mon.is_egg);
@@ -330,7 +330,7 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
     } else {
         mon.ot_name.clone()
     };
-    super::charmap::write_gba_string(&mut record[OT_NAME..OT_NAME + OT_NAME_LEN], &ot_name);
+    super::charmap::write_name(&mut record[OT_NAME..OT_NAME + OT_NAME_LEN], &ot_name);
 
     // Growth
     set_u16_le(&mut subs.growth, 0, mon.species as u16);

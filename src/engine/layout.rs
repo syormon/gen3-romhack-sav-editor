@@ -144,8 +144,15 @@ pub fn storage_boxes_offset() -> usize {
 }
 
 #[inline]
-pub fn storage_box_names_offset() -> usize {
-    game::current().layout().storage_box_names
+/// Where a regular box's name is in storage.
+pub fn storage_box_name_offset(box_index: usize) -> usize {
+    let pack = game::current();
+    let layout = pack.layout();
+    layout
+        .storage_box_name_offsets
+        .get(box_index)
+        .copied()
+        .unwrap_or(layout.storage_box_names + box_index * layout.box_name_length)
 }
 
 #[inline]
@@ -188,25 +195,16 @@ pub fn pocket_name(index: usize) -> String {
 }
 
 pub fn pocket_capacity(index: usize) -> usize {
-    game::current()
-        .layout()
-        .pocket(index)
-        .map(|p| p.count)
-        .unwrap_or(0)
+    pocket_parts(index).iter().map(|part| part.2).sum()
 }
 
-/// Which buffer a pocket's slots live in.
-pub fn pocket_region(index: usize) -> crate::game::PocketRegion {
-    game::current()
-        .layout()
-        .pocket(index)
-        .map_or(crate::game::PocketRegion::SaveBlock1, |p| p.region)
-}
-
-pub fn pocket_offset(index: usize) -> usize {
-    game::current()
-        .layout()
-        .pocket(index)
-        .map(|p| p.offset)
-        .unwrap_or(0)
+/// Each run of a pocket's slots, in order, as (region, offset, count).
+pub fn pocket_parts(index: usize) -> Vec<(crate::game::PocketRegion, usize, usize)> {
+    let pack = game::current();
+    let Some(pocket) = pack.layout().pocket(index) else {
+        return Vec::new();
+    };
+    std::iter::once((pocket.region, pocket.offset, pocket.count))
+        .chain(pocket.continued.map(|c| (c.region, c.offset, c.count)))
+        .collect()
 }

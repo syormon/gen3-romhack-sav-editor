@@ -1,7 +1,7 @@
 //! Port of `src/engine/MonWriter.ts`.
 
 use super::bytes::*;
-use super::charmap::write_gba_string;
+use super::charmap::write_name;
 use super::layout::*;
 use super::lookup::{
     get_move_base_pp, get_primary_tera_type_id, get_species_name, get_suggested_encounter_level,
@@ -159,7 +159,7 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
         }
     };
     let nick_len = r.nickname_length;
-    write_gba_string(&mut b[r.nickname..r.nickname + nick_len], &game_nick);
+    write_name(&mut b[r.nickname..r.nickname + nick_len], &game_nick);
 
     b[r.language] = (mon.language & 0x7) | ((mon.hidden_nature_modifier & 0x1F) << 3);
     b[r.flags] = record_flags(b[r.flags], mon.is_bad_egg, mon.is_egg);
@@ -170,7 +170,7 @@ pub fn pack_and_write_pokemon(target: &mut [u8], offset: usize, mon: &Pokemon, i
         mon.ot_name.clone()
     };
     let ot_len = r.ot_name_length;
-    write_gba_string(&mut b[r.ot_name..r.ot_name + ot_len], &ot_name);
+    write_name(&mut b[r.ot_name..r.ot_name + ot_len], &ot_name);
     set_u16_bits(
         b,
         r.shiny_word,

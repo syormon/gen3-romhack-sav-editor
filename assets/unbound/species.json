@@ -2242,7 +2242,7 @@
   "dex": 28
  },
  "29": {
-  "name": "Nidoran?",
+  "name": "Nidoran♀",
   "type": "Poison",
   "growth": "medium-slow",
   "abilities": [
@@ -2531,7 +2531,7 @@
   "dex": 31
  },
  "32": {
-  "name": "Nidoran?",
+  "name": "Nidoran♂",
   "type": "Poison",
   "growth": "medium-slow",
   "abilities": [
@@ -10831,7 +10831,7 @@
   "dex": 121
  },
  "122": {
-  "name": "Mr? Mime",
+  "name": "Mr. Mime",
   "type": "Psychic",
   "growth": "medium",
   "abilities": [
@@ -22881,7 +22881,7 @@
   }
  },
  "253": {
-  "name": "MISSINGNO?",
+  "name": "MISSINGNO.",
   "type": "Mystery",
   "growth": "slow",
   "abilities": [
@@ -35796,7 +35796,7 @@
   "dex": 201
  },
  "438": {
-  "name": "Unown ?",
+  "name": "Unown !",
   "type": "Psychic",
   "growth": "medium",
   "abilities": [
@@ -40302,7 +40302,7 @@
   "dex": 438
  },
  "492": {
-  "name": "Mime Jr?",
+  "name": "Mime Jr.",
   "type": "Psychic",
   "growth": "medium",
   "abilities": [
@@ -66151,7 +66151,7 @@
   "dex": 668
  },
  "777": {
-  "name": "Flab?b?",
+  "name": "Flabébé",
   "type": "Fairy",
   "growth": "medium",
   "abilities": [
@@ -71626,7 +71626,7 @@
   "dex": 658
  },
  "840": {
-  "name": "Flab?b?",
+  "name": "Flabébé",
   "type": "Fairy",
   "growth": "medium",
   "abilities": [
@@ -71706,7 +71706,7 @@
   "dex": 669
  },
  "841": {
-  "name": "Flab?b?",
+  "name": "Flabébé",
   "type": "Fairy",
   "growth": "medium",
   "abilities": [
@@ -71786,7 +71786,7 @@
   "dex": 669
  },
  "842": {
-  "name": "Flab?b?",
+  "name": "Flabébé",
   "type": "Fairy",
   "growth": "medium",
   "abilities": [
@@ -71866,7 +71866,7 @@
   "dex": 669
  },
  "843": {
-  "name": "Flab?b?",
+  "name": "Flabébé",
   "type": "Fairy",
   "growth": "medium",
   "abilities": [
@@ -96462,7 +96462,7 @@
   ]
  },
  "1158": {
-  "name": "Mr? Rime",
+  "name": "Mr. Rime",
   "type": "Ice",
   "growth": "medium",
   "abilities": [
@@ -101357,7 +101357,7 @@
   "dex": 110
  },
  "1220": {
-  "name": "Mr? Mime",
+  "name": "Mr. Mime",
   "type": "Ice",
   "growth": "medium",
   "abilities": [
@@ -102159,7 +102159,7 @@
   "dex": 264
  },
  "1228": {
-  "name": "Mime Jr?",
+  "name": "Mime Jr.",
   "type": "Psychic",
   "growth": "medium",
   "abilities": [

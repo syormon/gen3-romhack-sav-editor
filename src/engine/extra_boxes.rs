@@ -16,6 +16,7 @@ use super::layout::*;
 struct Areas<'a> {
     file: &'a [u8],
     sb1: &'a [u8],
+    sb2: &'a [u8],
     storage: &'a [u8],
     /// File offset of each extra sector, for this slot.
     sectors: Vec<usize>,
@@ -26,7 +27,9 @@ impl Areas<'_> {
         let (buf, start) = match area {
             Area::Storage => (self.storage, offset),
             Area::Sb1 => (self.sb1, offset),
+            Area::Sb2 => (self.sb2, offset),
             Area::Extra => (self.file, self.sectors.get(sector)? + offset),
+            Area::File => (self.file, offset),
         };
         buf.get(start..start + length)
     }
@@ -53,11 +56,12 @@ pub struct Loaded {
 /// Reads the extra boxes, or `None` if this game has none or this save does
 /// not carry them — an unwritten sector, or a missing marker, means an older
 /// save format that the layout does not describe.
-pub fn load(file: &[u8], sb1: &[u8], storage: &[u8], slot: usize) -> Option<Loaded> {
+pub fn load(file: &[u8], sb1: &[u8], sb2: &[u8], storage: &[u8], slot: usize) -> Option<Loaded> {
     let cfg = config()?;
     let areas = Areas {
         file,
         sb1,
+        sb2,
         storage,
         sectors: sector_offsets(&cfg, slot),
     };
@@ -76,12 +80,13 @@ pub fn load(file: &[u8], sb1: &[u8], storage: &[u8], slot: usize) -> Option<Load
     let mut names = Vec::with_capacity(cfg.boxes.len());
     for b in &cfg.boxes {
         for span in &b.records {
-            records.extend_from_slice(areas.get(
-                span.area,
-                span.sector,
-                span.offset,
-                span.length,
-            )?);
+            let bytes = areas.get(span.area, span.sector, span.offset, span.length)?;
+            // Flash the game has never written reads as all ones, which would
+            // decode as a box full of Pokémon.
+            if span.area == Area::File && bytes.iter().all(|b| *b == 0xFF) {
+                return None;
+            }
+            records.extend_from_slice(bytes);
         }
         let width = box_name_length();
         let name = areas.get(b.name.area, b.name.sector, b.name.offset, width)?;
@@ -90,15 +95,17 @@ pub fn load(file: &[u8], sb1: &[u8], storage: &[u8], slot: usize) -> Option<Load
     Some(Loaded { records, names })
 }
 
-/// Copies the extra boxes' records back into SaveBlock1 and storage, before
-/// those are cut into sectors — so the ordinary sector checksums cover them.
-pub fn store_in_blocks(records: &[u8], sb1: &mut [u8], storage: &mut [u8]) {
+/// Copies the extra boxes' records back into the save blocks and storage,
+/// before those are cut into sectors — so the ordinary sector checksums cover
+/// them.
+pub fn store_in_blocks(records: &[u8], sb1: &mut [u8], sb2: &mut [u8], storage: &mut [u8]) {
     let Some(cfg) = config() else { return };
     for (span, piece) in pieces(&cfg, records) {
         let buf: &mut [u8] = match span.area {
             Area::Sb1 => sb1,
+            Area::Sb2 => sb2,
             Area::Storage => storage,
-            Area::Extra => continue,
+            Area::Extra | Area::File => continue,
         };
         if let Some(dst) = buf.get_mut(span.offset..span.offset + piece.len()) {
             dst.copy_from_slice(piece);
@@ -112,14 +119,24 @@ pub fn store_in_blocks(records: &[u8], sb1: &mut [u8], storage: &mut [u8]) {
 /// copy of the extra sectors is rebuilt from the loaded slot's: its bytes,
 /// then the records, then the hack's block checksums, then each sector's own
 /// footer checksum. Sector ids and counters are left as the export set them.
+/// Records in the file area have one copy and no footer, so they just go in.
 pub fn store_in_sectors(
     file: &mut [u8],
     loaded_slot: usize,
     records: &[u8],
     sb1: &[u8],
+    sb2: &[u8],
     storage: &[u8],
 ) {
     let Some(cfg) = config() else { return };
+    for (span, piece) in pieces(&cfg, records) {
+        if span.area == Area::File
+            && let Some(dst) = file.get_mut(span.offset..span.offset + piece.len())
+        {
+            dst.copy_from_slice(piece);
+        }
+    }
+
     let source = sector_offsets(&cfg, loaded_slot);
     let originals: Vec<Vec<u8>> = source
         .iter()
@@ -146,8 +163,10 @@ pub fn store_in_sectors(
             for span in &checksum.over {
                 let bytes = match span.area {
                     Area::Sb1 => sb1.get(span.offset..span.offset + span.length),
+                    Area::Sb2 => sb2.get(span.offset..span.offset + span.length),
                     Area::Storage => storage.get(span.offset..span.offset + span.length),
                     Area::Extra => sectors[span.sector].get(span.offset..span.offset + span.length),
+                    Area::File => file.get(span.offset..span.offset + span.length),
                 };
                 covered.extend_from_slice(bytes.unwrap_or_default());
             }

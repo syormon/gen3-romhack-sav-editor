@@ -165,6 +165,17 @@ pub fn write_gba_string(dst: &mut [u8], text: &str) {
     }
 }
 
+/// Writes `text` over a name in a record, unless that is already what it reads.
+///
+/// A name can hold bytes this table cannot say — an egg's is the Japanese
+/// タマゴ even in an English game — and they decode lossily, so writing back
+/// what was read would replace them.
+pub fn write_name(dst: &mut [u8], text: &str) {
+    if decode_gba_string(dst, dst.len()).trim() != text.trim() {
+        write_gba_string(dst, text);
+    }
+}
+
 /// The editable character set, used to validate name inputs.
 pub fn is_encodable(c: char) -> bool {
     encode_char(c).is_some()

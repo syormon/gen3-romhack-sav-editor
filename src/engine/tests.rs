@@ -454,6 +454,31 @@ fn the_unbound_pack_keeps_its_measured_layout() {
     assert_eq!(pack.behavior().shiny_threshold, 16);
     // The ROM's GetAbility: the bit picks the hidden ability, not ability 2.
     assert!(pack.behavior().hidden_ability_flag);
+
+    // The ball moved to Growth+10; the ROM patches the getter and the setter.
+    assert_eq!(pack.record().gen3_ball, crate::game::Gen3Ball::GrowthU16);
+
+    // The ROM's box table has 25 entries, 19 of them contiguous in storage.
+    let extra = l.extra_boxes.as_ref().expect("boxes 20 to 25");
+    assert_eq!(l.total_boxes + extra.boxes.len(), 25);
+    assert_eq!(l.storage_box_name_offsets.len(), l.total_boxes);
+    // Box 20 crosses from sector 30 into 31, skipping the gap for a footer.
+    let box_20 = &extra.boxes[0].records;
+    assert_eq!(box_20[0].offset + box_20[0].length, 0x1EFF0);
+    assert_eq!(box_20[1].offset, 0x1F000);
+
+    // Read from the ROM's item table. Unbound numbers its medicine from 13,
+    // where other games still have Poké Balls.
+    assert!(pack.behavior().item_pockets_exact);
+    assert_eq!(pack.item_pockets[&13], "Items", "Potion");
+    assert_eq!(pack.item_pockets[&182], "KeyItems", "Exp. Share");
+
+    // The ROM's bag table says 450, and only 326 fit in sector 13's tail.
+    let items = l.pocket(0).expect("Items");
+    assert_eq!(
+        items.count + items.continued.expect("a second part").count,
+        450
+    );
 }
 
 /// Serperior has abilities [Overgrow, none, Contrary] and Mienfoo fills all
@@ -623,6 +648,7 @@ fn items_land_in_the_expected_pockets() {
     }
     // Names that merely end in "ball" are not Poké Balls.
     assert_ne!(classify_item_pocket(300, "Iron Ball"), pocket("PokeBalls"));
+    assert_ne!(classify_item_pocket(901, "Snowball"), pocket("PokeBalls"));
     assert_eq!(classify_item_pocket(900, "TM01"), pocket("TMsHMs"));
     assert_eq!(classify_item_pocket(901, "Oran Berry"), pocket("Berries"));
 }

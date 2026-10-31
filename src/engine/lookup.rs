@@ -352,14 +352,22 @@ const EXPLICIT_KEY_ITEMS: [&str; 17] = [
 
 /// Which bag pocket an item belongs in, as an index into the pack's pockets.
 ///
-/// Name-based rules are applied first, then the pack's `item_pockets.json` when
-/// it names something other than the catch-all pocket, then the medicine
-/// keywords — the same order the original editor used.
+/// A pack whose `item_pockets.json` came from the game's own item table says
+/// so with `item_pockets_exact`, and that settles it. Otherwise name-based
+/// rules are applied first, then the mapping when it names something other
+/// than the catch-all pocket, then the medicine keywords — the same order the
+/// original editor used.
 pub fn classify_item_pocket(item_id: u32, name: &str) -> usize {
     let pack = game::current();
     let layout = pack.layout();
     let default = 0;
     let index_of = |name: &str| layout.pocket_index(name);
+
+    if pack.behavior().item_pockets_exact
+        && let Some(index) = pack.item_pockets.get(&item_id).and_then(|m| index_of(m))
+    {
+        return index;
+    }
 
     let lowered = name.to_lowercase();
     let n = lowered.trim();
@@ -382,7 +390,7 @@ pub fn classify_item_pocket(item_id: u32, name: &str) -> usize {
         Some("MegaStones")
     } else if n.contains("berry") {
         Some("Berries")
-    } else if is_ball_name(item_id, n) {
+    } else if is_ball_name(n) {
         Some("PokeBalls")
     } else if BATTLE_KEYWORDS.iter().any(|kw| n.contains(kw)) {
         Some("BattleItems")
@@ -409,9 +417,8 @@ pub fn classify_item_pocket(item_id: u32, name: &str) -> usize {
     default
 }
 
-fn is_ball_name(item_id: u32, n: &str) -> bool {
-    let looks_like_ball = (1..=27).contains(&item_id)
-        || n.ends_with("ball")
+fn is_ball_name(n: &str) -> bool {
+    let looks_like_ball = n.ends_with("ball")
         || n.contains("poke ball")
         || n.contains("great ball")
         || n.contains("ultra ball")
@@ -420,6 +427,7 @@ fn is_ball_name(item_id: u32, n: &str) -> bool {
         && !n.contains("iron ball")
         && !n.contains("light ball")
         && !n.contains("smoke ball")
+        && !n.contains("snowball")
         && !n.contains("ball capsule")
         && !n.contains("ball seal")
 }

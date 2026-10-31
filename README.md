@@ -84,6 +84,8 @@ Some ROMs expand the box size; Many times the extra boxes are not in the same bl
 }
 ```
 
+Each `in` is `storage`, `sb1`, `sb2`, `extra` (one of `sectors`) or `file`, an absolute offset past the two save slots for data with one copy and no sector footer. A bag pocket split across two places can name the second with `continued`.
+
 ## Development
 
 Run locally:
