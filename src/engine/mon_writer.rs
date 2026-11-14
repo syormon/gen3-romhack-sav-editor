@@ -71,7 +71,7 @@ pub fn create_default_pokemon(species_id: u32, trainer: &TrainerInfo, rng: &mut 
         species: species_id,
         tera_type: get_primary_tera_type_id(species_id),
         held_item: 0,
-        pokeball: 1,
+        pokeball: behavior.new_ball,
         experience: exp,
         moves,
         pps,

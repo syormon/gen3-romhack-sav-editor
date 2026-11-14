@@ -1,7 +1,7 @@
 {
   "name": "Pokémon Unbound",
   "version": "2.1.1.1",
-  "notice": "Poké Ball names are unconfirmed; everything else is verified against real saves and the ROM.",
+  "notice": "Verified against real saves and the ROM.",
   "export_name": "Unbound_edited.sav",
   "link": {
     "label": "Data source: PUSE",
@@ -166,113 +166,114 @@
     "shiny_threshold": 16,
     "hidden_ability_flag": true,
     "item_pockets_exact": true,
+    "new_ball": 3,
     "pokeballs": [
       {
-        "id": 1,
+        "id": 0,
         "name": "Master Ball"
       },
       {
-        "id": 2,
+        "id": 1,
         "name": "Ultra Ball"
       },
       {
-        "id": 3,
+        "id": 2,
         "name": "Great Ball"
       },
       {
-        "id": 4,
+        "id": 3,
         "name": "Poké Ball"
       },
       {
-        "id": 5,
+        "id": 4,
         "name": "Safari Ball"
       },
       {
-        "id": 6,
+        "id": 5,
         "name": "Net Ball"
       },
       {
-        "id": 7,
+        "id": 6,
         "name": "Dive Ball"
       },
       {
-        "id": 8,
+        "id": 7,
         "name": "Nest Ball"
       },
       {
-        "id": 9,
+        "id": 8,
         "name": "Repeat Ball"
       },
       {
-        "id": 10,
+        "id": 9,
         "name": "Timer Ball"
       },
       {
-        "id": 11,
+        "id": 10,
         "name": "Luxury Ball"
       },
       {
-        "id": 12,
+        "id": 11,
         "name": "Premier Ball"
       },
       {
-        "id": 13,
+        "id": 12,
         "name": "Dusk Ball"
       },
       {
-        "id": 14,
+        "id": 13,
         "name": "Heal Ball"
       },
       {
-        "id": 15,
+        "id": 14,
         "name": "Quick Ball"
       },
       {
-        "id": 16,
+        "id": 15,
         "name": "Cherish Ball"
       },
       {
-        "id": 17,
+        "id": 16,
         "name": "Park Ball"
       },
       {
-        "id": 18,
+        "id": 17,
         "name": "Fast Ball"
       },
       {
-        "id": 19,
+        "id": 18,
         "name": "Level Ball"
       },
       {
-        "id": 20,
+        "id": 19,
         "name": "Lure Ball"
       },
       {
-        "id": 21,
+        "id": 20,
         "name": "Heavy Ball"
       },
       {
-        "id": 22,
+        "id": 21,
         "name": "Love Ball"
       },
       {
-        "id": 23,
+        "id": 22,
         "name": "Friend Ball"
       },
       {
-        "id": 24,
+        "id": 23,
         "name": "Moon Ball"
       },
       {
-        "id": 25,
+        "id": 24,
         "name": "Sport Ball"
       },
       {
-        "id": 26,
+        "id": 25,
         "name": "Beast Ball"
       },
       {
-        "id": 27,
+        "id": 26,
         "name": "Dream Ball"
       }
     ]

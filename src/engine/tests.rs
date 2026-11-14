@@ -473,6 +473,22 @@ fn the_unbound_pack_keeps_its_measured_layout() {
     assert_eq!(pack.item_pockets[&13], "Items", "Potion");
     assert_eq!(pack.item_pockets[&182], "KeyItems", "Exp. Share");
 
+    // A record stores the ball item's type, counted from 0: the catch code
+    // reads it from the item table, and eggs are made with 3.
+    let ball = |id: u32| {
+        let balls = &pack.behavior().pokeballs;
+        balls.iter().find(|b| b.id == id).map(|b| b.name.clone())
+    };
+    assert_eq!(ball(0).as_deref(), Some("Master Ball"));
+    assert_eq!(ball(3).as_deref(), Some("Poké Ball"));
+    assert_eq!(ball(14).as_deref(), Some("Quick Ball"));
+    assert_eq!(ball(26).as_deref(), Some("Dream Ball"));
+    assert_eq!(
+        pack.behavior().new_ball,
+        3,
+        "new Pokémon come in a Poké Ball"
+    );
+
     // The ROM's bag table says 450, and only 326 fit in sector 13's tail.
     let items = l.pocket(0).expect("Items");
     assert_eq!(

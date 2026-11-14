@@ -870,8 +870,11 @@ pub struct Behavior {
     pub met_location: u8,
     /// Learnset move names that refer to a differently named move table entry.
     pub move_aliases: Vec<MoveAlias>,
-    /// Selectable Poké Balls, as (item id, label).
+    /// Selectable Poké Balls, as (the value a record stores, label). That is
+    /// not always the ball's item id: Unbound stores the item's type, from 0.
     pub pokeballs: Vec<IdName>,
+    /// The ball a newly created Pokémon comes in, from `pokeballs`.
+    pub new_ball: u32,
     /// Selectable Tera types, as (type id, label). Empty hides the control.
     pub tera_types: Vec<IdName>,
     /// One-click "fill the bag" buttons shown on a pocket.
@@ -933,6 +936,7 @@ impl Default for Behavior {
             met_location: 0,
             move_aliases: Vec::new(),
             pokeballs: Vec::new(),
+            new_ball: 1,
             tera_types: Vec::new(),
             quick_add: Vec::new(),
         }
