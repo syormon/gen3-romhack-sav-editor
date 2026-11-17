@@ -35,6 +35,8 @@ pub const PARTY_SIZE: usize = 100;
 const SUBSTRUCTURES: usize = 0x20;
 const BLOCK: usize = 48;
 const CHECKSUM: usize = 0x1C;
+/// pokeemerald-expansion: HP lost while boxed, and bit 14 the shiny override.
+const SHINY_WORD: usize = 0x1E;
 
 const NICKNAME: usize = 0x08;
 const NICKNAME_LEN: usize = 10;
@@ -151,6 +153,20 @@ impl Subs {
     }
 }
 
+fn fields() -> crate::game::Gen3Fields {
+    crate::game::current().record().gen3_fields
+}
+
+/// The nickname's 12 characters: ten in the header, and the last two kept in
+/// spare bits of the Growth substructure (pokeemerald-expansion only).
+fn full_nickname(record: &[u8], growth: &[u8; 12]) -> [u8; 12] {
+    let mut name = [0u8; 12];
+    name[..NICKNAME_LEN].copy_from_slice(&record[NICKNAME..NICKNAME + NICKNAME_LEN]);
+    name[10] = (u32_le(growth, 4) >> 21) as u8;
+    name[11] = (u16_le(growth, 10) >> 6) as u8;
+    name
+}
+
 /// Reads a record. Returns `None` for an empty slot or one whose checksum does
 /// not match, which is how the games themselves tell a used slot from noise.
 pub fn unpack(record: &[u8], is_party: bool) -> Option<Pokemon> {
@@ -159,6 +175,17 @@ pub fn unpack(record: &[u8], is_party: bool) -> Option<Pokemon> {
 
 /// As `unpack`, with the obfuscation stated rather than taken from the pack.
 pub fn unpack_as(record: &[u8], is_party: bool, obfuscated: bool) -> Option<Pokemon> {
+    unpack_with(record, is_party, obfuscated, fields())
+}
+
+/// As `unpack`, with the obfuscation and the field packing stated.
+pub fn unpack_with(
+    record: &[u8],
+    is_party: bool,
+    obfuscated: bool,
+    fields: crate::game::Gen3Fields,
+) -> Option<Pokemon> {
+    let expansion = fields == crate::game::Gen3Fields::Expansion;
     if record.len() < BOX_SIZE {
         return None;
     }
@@ -180,10 +207,20 @@ pub fn unpack_as(record: &[u8], is_party: bool, obfuscated: bool) -> Option<Poke
     let e = &subs.evs;
     let m = &subs.misc;
 
-    let species = u32::from(u16_le(g, 0));
+    let species_word = u32::from(u16_le(g, 0));
+    let species = if expansion {
+        species_word & 0x7FF
+    } else {
+        species_word
+    };
     if species == 0 {
         return None;
     }
+    let experience = if expansion {
+        u32_le(g, 4) & 0x1F_FFFF
+    } else {
+        u32_le(g, 4)
+    };
 
     let origins = u16_le(m, 2);
     let iv_word = u32_le(m, 4);
@@ -195,8 +232,11 @@ pub fn unpack_as(record: &[u8], is_party: bool, obfuscated: bool) -> Option<Poke
     }
 
     let flags = record[FLAGS];
-    let nickname =
-        super::charmap::decode_gba_string(&record[NICKNAME..NICKNAME + NICKNAME_LEN], NICKNAME_LEN);
+    let nickname = if expansion {
+        super::charmap::decode_gba_string(&full_nickname(record, g), 12)
+    } else {
+        super::charmap::decode_gba_string(&record[NICKNAME..NICKNAME + NICKNAME_LEN], NICKNAME_LEN)
+    };
     let species_name = super::lookup::get_species_name(species);
     let is_default_nick =
         nickname.trim().is_empty() || nickname.trim().eq_ignore_ascii_case(species_name.trim());
@@ -214,21 +254,29 @@ pub fn unpack_as(record: &[u8], is_party: bool, obfuscated: bool) -> Option<Poke
             OT_NAME_LEN,
         ),
         language: record[LANGUAGE] & 0x7,
-        hidden_nature_modifier: 0,
+        hidden_nature_modifier: if expansion { record[LANGUAGE] >> 3 } else { 0 },
         is_bad_egg: flags & 0x1 != 0,
         has_species: flags & 0x2 != 0,
         // Gen 3 keeps the egg flag in the IV word, not the flag byte.
         is_egg: (iv_word >> 30) & 1 != 0,
-        // Shininess is purely a function of the personality value here.
-        shiny_modifier: 0,
-        species,
-        tera_type: 0,
-        held_item: u32::from(u16_le(g, 2)),
-        pokeball: match crate::game::current().record().gen3_ball {
-            crate::game::Gen3Ball::GrowthU16 => u32::from(u16_le(g, 10)),
-            crate::game::Gen3Ball::OriginsBits => u32::from((origins >> 11) & 0xF),
+        // Vanilla's shininess is purely a function of the personality value.
+        shiny_modifier: if expansion {
+            ((u16_le(record, SHINY_WORD) >> 14) & 1) as u8
+        } else {
+            0
         },
-        experience: u32_le(g, 4),
+        species,
+        tera_type: if expansion { species_word >> 11 } else { 0 },
+        held_item: u32::from(u16_le(g, 2)) & if expansion { 0x3FF } else { 0xFFFF },
+        pokeball: if expansion {
+            u32::from(u16_le(g, 10) & 0x3F)
+        } else {
+            match crate::game::current().record().gen3_ball {
+                crate::game::Gen3Ball::GrowthU16 => u32::from(u16_le(g, 10)),
+                crate::game::Gen3Ball::OriginsBits => u32::from((origins >> 11) & 0xF),
+            }
+        },
+        experience,
         moves: [
             u32::from(u16_le(a, 0)),
             u32::from(u16_le(a, 2)),
@@ -260,10 +308,15 @@ pub fn unpack_as(record: &[u8], is_party: bool, obfuscated: bool) -> Option<Poke
         met_location: m[1],
         met_level: u32::from(origins & 0x7F),
         // Boxed Pokémon carry no level; it comes from experience.
-        level: super::experience::level_from_experience(species, u32_le(g, 4)),
+        level: super::experience::level_from_experience(species, experience),
         friendship: g[9],
-        // One bit here, not two: slot 0 or slot 1.
-        ability_num: ((iv_word >> 31) & 1) as u8,
+        // Vanilla has one bit, slot 0 or 1; expansion two, in the ribbon word,
+        // where bit 31 of the IV word is the Gigantamax factor instead.
+        ability_num: if expansion {
+            ((u32_le(m, 8) >> 29) & 0x3) as u8
+        } else {
+            ((iv_word >> 31) & 1) as u8
+        },
         status: None,
         hp: None,
         max_hp: None,
@@ -297,6 +350,18 @@ pub fn pack(record: &mut [u8], mon: &Pokemon, is_party: bool) {
 
 /// As `pack`, with the obfuscation stated rather than taken from the pack.
 pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: bool) {
+    pack_with(record, mon, is_party, obfuscated, fields());
+}
+
+/// As `pack`, with the obfuscation and the field packing stated.
+pub fn pack_with(
+    record: &mut [u8],
+    mon: &Pokemon,
+    is_party: bool,
+    obfuscated: bool,
+    fields: crate::game::Gen3Fields,
+) {
+    let expansion = fields == crate::game::Gen3Fields::Expansion;
     let size = if is_party { PARTY_SIZE } else { BOX_SIZE };
     if record.len() < size {
         return;
@@ -320,10 +385,31 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
             nick.to_string()
         }
     };
-    super::charmap::write_name(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
+    if expansion {
+        // All twelve characters, so a name is compared and kept whole.
+        let mut name = full_nickname(record, &subs.growth);
+        super::charmap::write_name(&mut name, &game_nick);
+        record[NICKNAME..NICKNAME + NICKNAME_LEN].copy_from_slice(&name[..NICKNAME_LEN]);
+        set_u32_bits(&mut subs.growth, 4, 0xFF << 21, u32::from(name[10]) << 21);
+        set_u16_bits(&mut subs.growth, 10, 0xFF << 6, u16::from(name[11]) << 6);
+    } else {
+        super::charmap::write_name(&mut record[NICKNAME..NICKNAME + NICKNAME_LEN], &game_nick);
+    }
 
-    record[LANGUAGE] = mon.language & 0x7;
+    record[LANGUAGE] = if expansion {
+        (mon.language & 0x7) | ((mon.hidden_nature_modifier & 0x1F) << 3)
+    } else {
+        mon.language & 0x7
+    };
     record[FLAGS] = record_flags(record[FLAGS], mon.is_bad_egg, mon.is_egg);
+    if expansion {
+        set_u16_bits(
+            record,
+            SHINY_WORD,
+            1 << 14,
+            u16::from(mon.shiny_modifier & 1) << 14,
+        );
+    }
 
     let ot_name = if mon.ot_name.trim().is_empty() {
         crate::game::current().behavior().default_ot_name.clone()
@@ -332,10 +418,22 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
     };
     super::charmap::write_name(&mut record[OT_NAME..OT_NAME + OT_NAME_LEN], &ot_name);
 
-    // Growth
-    set_u16_le(&mut subs.growth, 0, mon.species as u16);
-    set_u16_le(&mut subs.growth, 2, mon.held_item as u16);
-    set_u32_le(&mut subs.growth, 4, mon.experience);
+    // Growth. Expansion shares these words with other fields, so only the
+    // field's own bits are written.
+    if expansion {
+        let tera = (mon.tera_type & 0x1F) as u16;
+        set_u16_le(
+            &mut subs.growth,
+            0,
+            (mon.species & 0x7FF) as u16 | (tera << 11),
+        );
+        set_u16_bits(&mut subs.growth, 2, 0x3FF, mon.held_item as u16);
+        set_u32_bits(&mut subs.growth, 4, 0x1F_FFFF, mon.experience);
+    } else {
+        set_u16_le(&mut subs.growth, 0, mon.species as u16);
+        set_u16_le(&mut subs.growth, 2, mon.held_item as u16);
+        set_u32_le(&mut subs.growth, 4, mon.experience);
+    }
     let mut pp_bonuses = 0u8;
     for i in 0..4 {
         pp_bonuses |= ((mon.pp_bonuses[i] & 0x3) as u8) << (2 * i);
@@ -362,13 +460,18 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
     subs.misc[1] = mon.met_location;
     let origins = u16_le(&subs.misc, 2);
     let origins = (origins & !0x7F) | ((mon.met_level as u16) & 0x7F);
-    let origins = match crate::game::current().record().gen3_ball {
-        crate::game::Gen3Ball::GrowthU16 => {
-            set_u16_le(&mut subs.growth, 10, mon.pokeball as u16);
-            origins
-        }
-        crate::game::Gen3Ball::OriginsBits => {
-            (origins & !(0xF << 11)) | (((mon.pokeball as u16) & 0xF) << 11)
+    let origins = if expansion {
+        set_u16_bits(&mut subs.growth, 10, 0x3F, mon.pokeball as u16);
+        origins
+    } else {
+        match crate::game::current().record().gen3_ball {
+            crate::game::Gen3Ball::GrowthU16 => {
+                set_u16_le(&mut subs.growth, 10, mon.pokeball as u16);
+                origins
+            }
+            crate::game::Gen3Ball::OriginsBits => {
+                (origins & !(0xF << 11)) | (((mon.pokeball as u16) & 0xF) << 11)
+            }
         }
     };
     set_u16_le(&mut subs.misc, 2, origins);
@@ -380,10 +483,21 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
     if mon.is_egg {
         iv_word |= 1 << 30;
     }
-    if mon.ability_num & 1 != 0 {
-        iv_word |= 1 << 31;
+    if expansion {
+        // Bit 31 is the Gigantamax factor; the ability lives in the ribbons.
+        set_u32_bits(&mut subs.misc, 4, 0x7FFF_FFFF, iv_word);
+        set_u32_bits(
+            &mut subs.misc,
+            8,
+            0x3 << 29,
+            u32::from(mon.ability_num & 0x3) << 29,
+        );
+    } else {
+        if mon.ability_num & 1 != 0 {
+            iv_word |= 1 << 31;
+        }
+        set_u32_le(&mut subs.misc, 4, iv_word);
     }
-    set_u32_le(&mut subs.misc, 4, iv_word);
 
     subs.write(record, personality, mon.ot_id, obfuscated);
 
@@ -405,6 +519,98 @@ pub fn pack_as(record: &mut [u8], mon: &Pokemon, is_party: bool, obfuscated: boo
 mod tests {
     use super::*;
     use crate::engine::tests::{ensure_pack, sample_mon};
+    use crate::game::Gen3Fields::Expansion;
+
+    /// The fields pokeemerald-expansion packs together, each written where
+    /// Heart & Soul's getter reads it.
+    #[test]
+    fn expansion_fields_land_in_their_own_bits() {
+        ensure_pack();
+        let mut mon = sample_mon(155, 50, "Blaze");
+        mon.tera_type = 11;
+        mon.pokeball = 27;
+        mon.ability_num = 2;
+        mon.hidden_nature_modifier = 5;
+        mon.shiny_modifier = 1;
+        mon.experience = 125_000;
+
+        let mut record = vec![0u8; PARTY_SIZE];
+        pack_with(&mut record, &mon, true, true, Expansion);
+        let read = unpack_with(&record, true, true, Expansion).expect("record decodes");
+        for (field, got, want) in [
+            ("species", read.species, mon.species),
+            ("tera", read.tera_type, 11),
+            ("ball", read.pokeball, 27),
+            ("ability", u32::from(read.ability_num), 2),
+            ("mint", u32::from(read.hidden_nature_modifier), 5),
+            ("shiny override", u32::from(read.shiny_modifier), 1),
+            ("experience", read.experience, 125_000),
+        ] {
+            assert_eq!(got, want, "{field}");
+        }
+
+        let personality = u32_le(&record, 0);
+        let (subs, _) = Subs::read(&record, personality, mon.ot_id, true);
+        assert_eq!(u16_le(&subs.growth, 0), 155 | (11 << 11));
+        assert_eq!(u16_le(&subs.growth, 10) & 0x3F, 27);
+        assert_eq!(
+            u32_le(&subs.misc, 8) >> 29 & 0x3,
+            2,
+            "ribbon word bits 29-30"
+        );
+        assert_eq!(u32_le(&subs.misc, 4) >> 31, 0, "not the Gigantamax bit");
+        assert_eq!(record[LANGUAGE] >> 3, 5);
+        assert_eq!(u16_le(&record, SHINY_WORD) >> 14 & 1, 1);
+    }
+
+    #[test]
+    fn an_expansion_nickname_keeps_all_twelve_characters() {
+        ensure_pack();
+        let mon = sample_mon(155, 50, "Abcdefghijkl");
+        let mut record = vec![0u8; PARTY_SIZE];
+        pack_with(&mut record, &mon, true, true, Expansion);
+        let read = unpack_with(&record, true, true, Expansion).expect("record decodes");
+        assert_eq!(read.nickname, "Abcdefghijkl");
+        assert_eq!(
+            read.experience, mon.experience,
+            "the 11th character is not experience"
+        );
+        assert_eq!(
+            read.pokeball, mon.pokeball,
+            "the 12th character is not the ball"
+        );
+    }
+
+    /// Bits the editor does not model, such as the Gigantamax factor, survive
+    /// an edit of the fields that share their words.
+    #[test]
+    fn expansion_keeps_bits_it_does_not_own() {
+        ensure_pack();
+        let mut mon = sample_mon(155, 50, "Blaze");
+        let mut record = vec![0u8; PARTY_SIZE];
+        pack_with(&mut record, &mon, true, true, Expansion);
+
+        let personality = u32_le(&record, 0);
+        let (mut subs, _) = Subs::read(&record, personality, mon.ot_id, true);
+        set_u32_bits(&mut subs.misc, 4, 1 << 31, 1 << 31);
+        set_u16_bits(&mut subs.growth, 2, 0xFC00, 0xA400);
+        set_u32_bits(&mut subs.misc, 8, 1 << 31, 1 << 31);
+        subs.write(&mut record, personality, mon.ot_id, true);
+
+        mon.held_item = 0x1FF;
+        mon.ability_num = 1;
+        mon.ivs = [1, 2, 3, 4, 5, 6];
+        pack_with(&mut record, &mon, true, true, Expansion);
+        let (subs, _) = Subs::read(&record, personality, mon.ot_id, true);
+        assert_eq!(u32_le(&subs.misc, 4) >> 31, 1, "Gigantamax factor kept");
+        assert_eq!(
+            u16_le(&subs.growth, 2),
+            0xA400 | 0x1FF,
+            "the item word's spare bits kept"
+        );
+        assert_eq!(u32_le(&subs.misc, 8) >> 31, 1, "fateful encounter kept");
+        assert_eq!(u32_le(&subs.misc, 8) >> 29 & 0x3, 1);
+    }
 
     /// Verified against Ehsan516/seaglass-save-editor: a record written here
     /// decodes field-for-field there, and one written there decodes here.

@@ -606,6 +606,27 @@ pub struct RecordLayout {
     /// pokeemerald-expansion builds moved it to a u16 in the Growth
     /// substructure, holding the ball's item id.
     pub gen3_ball: Gen3Ball,
+    /// Gen 3 only: whether the fields are packed as pokeemerald-expansion packs
+    /// them. With `expansion`, `gen3_ball` is not used.
+    pub gen3_fields: Gen3Fields,
+}
+
+/// How a Gen 3 record packs its fields.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum Gen3Fields {
+    /// As the original games: whole words, and the ability bit at the top of
+    /// the IV word.
+    #[default]
+    Vanilla,
+    /// pokeemerald-expansion's packing, as Heart & Soul's own getter unpacks
+    /// it: species in 11 bits of its word with the tera type above, held item
+    /// in 10, experience in 21 with the nickname's 11th character above, the
+    /// ball in 6 bits at Growth+10 with the 12th character above, and a two-bit
+    /// ability number in bits 29-30 of the ribbon word. The header carries a
+    /// mint nature in the language byte's top five bits and a shiny override
+    /// in bit 14 of the word at 0x1E.
+    Expansion,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Default)]
@@ -796,6 +817,7 @@ impl Default for RecordLayout {
             sp_attack: 92,
             sp_defense: 94,
             gen3_ball: Gen3Ball::OriginsBits,
+            gen3_fields: Gen3Fields::Vanilla,
         }
     }
 }

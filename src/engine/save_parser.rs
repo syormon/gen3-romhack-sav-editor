@@ -363,9 +363,11 @@ impl GameSave {
                         set_u16_le(buf, base + i * 4, item.id as u16);
                         set_u16_le(buf, base + i * 4 + 2, enc_qty);
                     }
+                    // An empty slot holds an encrypted zero, as the games
+                    // leave it.
                     None => {
                         set_u16_le(buf, base + i * 4, 0);
-                        set_u16_le(buf, base + i * 4 + 2, 0);
+                        set_u16_le(buf, base + i * 4 + 2, enc_hword);
                     }
                 }
             }

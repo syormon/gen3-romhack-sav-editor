@@ -48,9 +48,17 @@ pub fn calculate(mon: &Pokemon) -> Option<Stats> {
 }
 
 /// The nature the stats are computed with. pokeemerald-expansion lets a mint
-/// change it without touching the personality value, by storing an offset.
+/// change it without touching the personality value, by storing a modifier.
+/// Heart & Soul's getter XORs it in; the plain records' games are taken to add
+/// it, as the editor always has, for want of a minted Pokémon to check against.
 fn effective_nature(mon: &Pokemon) -> u32 {
-    (mon.nature() + u32::from(mon.hidden_nature_modifier)) % 25
+    let hidden = u32::from(mon.hidden_nature_modifier);
+    let pack = crate::game::current();
+    if pack.record().gen3_fields == crate::game::Gen3Fields::Expansion {
+        (mon.nature() ^ hidden) % 25
+    } else {
+        (mon.nature() + hidden) % 25
+    }
 }
 
 fn from_parts(base: [u32; 6], ivs: [u32; 6], evs: [u32; 6], level: u32, nature: u32) -> Stats {

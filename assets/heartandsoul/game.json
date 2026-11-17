@@ -1,0 +1,213 @@
+{
+  "name": "Pokémon Heart and Soul",
+  "version": "2.0.6",
+  "notice": "Read from the v2.0.6 ROM's own tables and checked against a real save.",
+  "export_name": "HeartAndSoul_edited.sav",
+  "layout": {
+    "record_encoding": "gen3_shuffled",
+    "mon_size": 100,
+    "box_mon_size": 80,
+    "sb2_size": 3892,
+    "sb1_size": 15760,
+    "storage_size": 33744,
+    "sector_sizes": [
+      {
+        "sector": 0,
+        "size": 3892
+      },
+      {
+        "sector": 4,
+        "size": 3856
+      },
+      {
+        "sector": 13,
+        "size": 2000
+      }
+    ],
+    "player_name": 0,
+    "player_name_length": 7,
+    "player_gender": 8,
+    "trainer_id": 10,
+    "encryption_key": 172,
+    "party_count": 568,
+    "party": 572,
+    "money": 1172,
+    "coins": 1176,
+    "bag": 1380,
+    "pockets": [
+      {
+        "name": "Items",
+        "offset": 0,
+        "count": 236
+      },
+      {
+        "name": "KeyItems",
+        "offset": 944,
+        "count": 60
+      },
+      {
+        "name": "PokeBalls",
+        "offset": 1184,
+        "count": 39
+      },
+      {
+        "name": "TMsHMs",
+        "offset": 1340,
+        "count": 160
+      },
+      {
+        "name": "Berries",
+        "offset": 1980,
+        "count": 66
+      },
+      {
+        "name": "Medicine",
+        "offset": 2244,
+        "count": 92
+      }
+    ],
+    "total_boxes": 14,
+    "box_capacity": 30,
+    "storage_boxes": 4,
+    "storage_box_names": 33604,
+    "box_name_length": 9
+  },
+  "record": {
+    "nickname_length": 10,
+    "ot_name_length": 7,
+    "gen3_fields": "expansion"
+  },
+  "sprites": {
+    "national_dex_max_id": 1025,
+    "use_showdown_fallback": true,
+    "species_ids_are_dex_numbers": false
+  },
+  "behavior": {
+    "new_level": 5,
+    "fallback_move": 33,
+    "default_ot_name": "Trainer",
+    "met_location": 255,
+    "shiny_threshold": 8,
+    "item_pockets_exact": true,
+    "new_ball": 1,
+    "pokeballs": [
+      {
+        "id": 0,
+        "name": "STRANGE BALL"
+      },
+      {
+        "id": 1,
+        "name": "POKé BALL"
+      },
+      {
+        "id": 2,
+        "name": "GREAT BALL"
+      },
+      {
+        "id": 3,
+        "name": "ULTRA BALL"
+      },
+      {
+        "id": 4,
+        "name": "MASTER BALL"
+      },
+      {
+        "id": 5,
+        "name": "PREMIER BALL"
+      },
+      {
+        "id": 6,
+        "name": "HEAL BALL"
+      },
+      {
+        "id": 7,
+        "name": "NET BALL"
+      },
+      {
+        "id": 8,
+        "name": "NEST BALL"
+      },
+      {
+        "id": 9,
+        "name": "DIVE BALL"
+      },
+      {
+        "id": 10,
+        "name": "DUSK BALL"
+      },
+      {
+        "id": 11,
+        "name": "TIMER BALL"
+      },
+      {
+        "id": 12,
+        "name": "QUICK BALL"
+      },
+      {
+        "id": 13,
+        "name": "REPEAT BALL"
+      },
+      {
+        "id": 14,
+        "name": "LUXURY BALL"
+      },
+      {
+        "id": 15,
+        "name": "LEVEL BALL"
+      },
+      {
+        "id": 16,
+        "name": "LURE BALL"
+      },
+      {
+        "id": 17,
+        "name": "MOON BALL"
+      },
+      {
+        "id": 18,
+        "name": "FRIEND BALL"
+      },
+      {
+        "id": 19,
+        "name": "LOVE BALL"
+      },
+      {
+        "id": 20,
+        "name": "FAST BALL"
+      },
+      {
+        "id": 21,
+        "name": "HEAVY BALL"
+      },
+      {
+        "id": 22,
+        "name": "DREAM BALL"
+      },
+      {
+        "id": 23,
+        "name": "SAFARI BALL"
+      },
+      {
+        "id": 24,
+        "name": "SPORT BALL"
+      },
+      {
+        "id": 25,
+        "name": "PARK BALL"
+      },
+      {
+        "id": 26,
+        "name": "BEAST BALL"
+      },
+      {
+        "id": 27,
+        "name": "CHERISH BALL"
+      },
+      {
+        "id": 28,
+        "name": "GS BALL"
+      }
+    ],
+    "tera_types": []
+  }
+}

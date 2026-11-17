@@ -65,7 +65,9 @@ pub fn max_pp(move_id: u32, bonus: u32) -> u32 {
 /// that bit on the hidden ability and picks between the others some other way.
 pub fn storable_ability_slots() -> u8 {
     let pack = game::current();
-    if pack.layout().record_encoding.is_gen3() && !pack.behavior().hidden_ability_flag {
+    let two_bits = pack.record().gen3_fields == game::Gen3Fields::Expansion;
+    if pack.layout().record_encoding.is_gen3() && !pack.behavior().hidden_ability_flag && !two_bits
+    {
         2
     } else {
         3

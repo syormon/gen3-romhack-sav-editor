@@ -11,6 +11,7 @@ The following editors were helpful in understanding how to read each romhack:
 | SoulGold | https://github.com/jozeton-app/soul-gold-web | `plain` | 100% |
 | Unbound | https://github.com/Zannael/PUSE | `gen3_plain` + `cfru_compact` boxes | 100% |
 | Seaglass | https://github.com/Ehsan516/seaglass-save-editor | `gen3_shuffled` | 100% |
+| Heart and Soul | - (read from the ROM) | `gen3_shuffled` + `"gen3_fields": "expansion"` | 100% |
 | FireRed Rocket Edition | - | - | 0% |
 
 

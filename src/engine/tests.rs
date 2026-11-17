@@ -520,6 +520,46 @@ fn a_flagged_ability_follows_the_games_own_lookup() {
     assert_eq!(slot(true, 0, true, false), 0);
 }
 
+/// Facts about Heart & Soul read from its ROM and a real save.
+#[test]
+fn the_heart_and_soul_pack_keeps_its_measured_layout() {
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("assets")
+        .join("heartandsoul");
+    let pack = crate::game::GamePack::load(&dir).expect("heart and soul pack loads");
+    let l = pack.layout();
+
+    // The ROM's own GF header gives the block sizes and party offsets.
+    assert_eq!((l.sb2_size, l.sb1_size), (3892, 15760));
+    assert_eq!((l.party_count, l.party), (0x238, 0x23C));
+    assert_eq!(l.encryption_key, Some(0xAC));
+    // Its header lists five pockets; a sixth, Medicine, follows Berries.
+    let medicine = l
+        .pocket(l.pocket_index("Medicine").expect("Medicine"))
+        .expect("pocket");
+    assert_eq!((l.bag + medicine.offset, medicine.count), (0xE28, 92));
+
+    // The getter's own unpacking: expansion bitfields, the shiny test at 8.
+    assert_eq!(
+        pack.record().gen3_fields,
+        crate::game::Gen3Fields::Expansion
+    );
+    assert_eq!(pack.behavior().shiny_threshold, 8);
+    assert_eq!(pack.behavior().new_ball, 1);
+    let ball = |id: u32| {
+        let balls = &pack.behavior().pokeballs;
+        balls.iter().find(|b| b.id == id).map(|b| b.name.clone())
+    };
+    assert_eq!(ball(1).as_deref(), Some("POKé BALL"));
+    assert_eq!(ball(27).as_deref(), Some("CHERISH BALL"));
+
+    // Names are the game's own, uppercase, so a default nickname matches.
+    let cyndaquil = pack.species.get(&155).expect("Cyndaquil");
+    assert_eq!(cyndaquil.name, "CYNDAQUIL");
+    assert_eq!(cyndaquil.dex, Some(155));
+    assert_eq!(pack.item_pockets[&28], "Medicine", "Potion");
+}
+
 /// A hack that renumbers its species must not address sprites by that number.
 /// Unbound's Gible is species 496; National Dex 496 is Servine, and PokeAPI
 /// serves it happily — so the editor showed the wrong Pokemon with complete

@@ -1,0 +1,3394 @@
+{
+ "0": {
+  "name": "None",
+  "pp": 0
+ },
+ "1": {
+  "name": "POUND",
+  "pp": 35
+ },
+ "2": {
+  "name": "KARATE CHOP",
+  "pp": 25
+ },
+ "3": {
+  "name": "DOUBLE SLAP",
+  "pp": 10
+ },
+ "4": {
+  "name": "COMET PUNCH",
+  "pp": 15
+ },
+ "5": {
+  "name": "MEGA PUNCH",
+  "pp": 20
+ },
+ "6": {
+  "name": "PAY DAY",
+  "pp": 20
+ },
+ "7": {
+  "name": "FIRE PUNCH",
+  "pp": 15
+ },
+ "8": {
+  "name": "ICE PUNCH",
+  "pp": 15
+ },
+ "9": {
+  "name": "THUNDER PUNCH",
+  "pp": 15
+ },
+ "10": {
+  "name": "SCRATCH",
+  "pp": 35
+ },
+ "11": {
+  "name": "VISE GRIP",
+  "pp": 30
+ },
+ "12": {
+  "name": "GUILLOTINE",
+  "pp": 5
+ },
+ "13": {
+  "name": "RAZOR WIND",
+  "pp": 10
+ },
+ "14": {
+  "name": "SWORDS DANCE",
+  "pp": 20
+ },
+ "15": {
+  "name": "CUT",
+  "pp": 30
+ },
+ "16": {
+  "name": "GUST",
+  "pp": 35
+ },
+ "17": {
+  "name": "WING ATTACK",
+  "pp": 35
+ },
+ "18": {
+  "name": "WHIRLWIND",
+  "pp": 20
+ },
+ "19": {
+  "name": "FLY",
+  "pp": 15
+ },
+ "20": {
+  "name": "BIND",
+  "pp": 20
+ },
+ "21": {
+  "name": "SLAM",
+  "pp": 20
+ },
+ "22": {
+  "name": "VINE WHIP",
+  "pp": 25
+ },
+ "23": {
+  "name": "STOMP",
+  "pp": 20
+ },
+ "24": {
+  "name": "DOUBLE KICK",
+  "pp": 30
+ },
+ "25": {
+  "name": "MEGA KICK",
+  "pp": 5
+ },
+ "26": {
+  "name": "JUMP KICK",
+  "pp": 10
+ },
+ "27": {
+  "name": "ROLLING KICK",
+  "pp": 15
+ },
+ "28": {
+  "name": "SAND ATTACK",
+  "pp": 15
+ },
+ "29": {
+  "name": "HEADBUTT",
+  "pp": 15
+ },
+ "30": {
+  "name": "HORN ATTACK",
+  "pp": 25
+ },
+ "31": {
+  "name": "FURY ATTACK",
+  "pp": 20
+ },
+ "32": {
+  "name": "HORN DRILL",
+  "pp": 5
+ },
+ "33": {
+  "name": "TACKLE",
+  "pp": 35
+ },
+ "34": {
+  "name": "BODY SLAM",
+  "pp": 15
+ },
+ "35": {
+  "name": "WRAP",
+  "pp": 20
+ },
+ "36": {
+  "name": "TAKE DOWN",
+  "pp": 20
+ },
+ "37": {
+  "name": "THRASH",
+  "pp": 10
+ },
+ "38": {
+  "name": "DOUBLE-EDGE",
+  "pp": 15
+ },
+ "39": {
+  "name": "TAIL WHIP",
+  "pp": 30
+ },
+ "40": {
+  "name": "POISON STING",
+  "pp": 35
+ },
+ "41": {
+  "name": "TWINEEDLE",
+  "pp": 20
+ },
+ "42": {
+  "name": "PIN MISSILE",
+  "pp": 20
+ },
+ "43": {
+  "name": "LEER",
+  "pp": 30
+ },
+ "44": {
+  "name": "BITE",
+  "pp": 25
+ },
+ "45": {
+  "name": "GROWL",
+  "pp": 40
+ },
+ "46": {
+  "name": "ROAR",
+  "pp": 20
+ },
+ "47": {
+  "name": "SING",
+  "pp": 15
+ },
+ "48": {
+  "name": "SUPERSONIC",
+  "pp": 20
+ },
+ "49": {
+  "name": "SONIC BOOM",
+  "pp": 20
+ },
+ "50": {
+  "name": "DISABLE",
+  "pp": 20
+ },
+ "51": {
+  "name": "ACID",
+  "pp": 30
+ },
+ "52": {
+  "name": "EMBER",
+  "pp": 25
+ },
+ "53": {
+  "name": "FLAMETHROWER",
+  "pp": 15
+ },
+ "54": {
+  "name": "MIST",
+  "pp": 30
+ },
+ "55": {
+  "name": "WATER GUN",
+  "pp": 25
+ },
+ "56": {
+  "name": "HYDRO PUMP",
+  "pp": 5
+ },
+ "57": {
+  "name": "SURF",
+  "pp": 15
+ },
+ "58": {
+  "name": "ICE BEAM",
+  "pp": 10
+ },
+ "59": {
+  "name": "BLIZZARD",
+  "pp": 5
+ },
+ "60": {
+  "name": "PSYBEAM",
+  "pp": 20
+ },
+ "61": {
+  "name": "BUBBLE BEAM",
+  "pp": 20
+ },
+ "62": {
+  "name": "AURORA BEAM",
+  "pp": 20
+ },
+ "63": {
+  "name": "HYPER BEAM",
+  "pp": 5
+ },
+ "64": {
+  "name": "PECK",
+  "pp": 35
+ },
+ "65": {
+  "name": "DRILL PECK",
+  "pp": 20
+ },
+ "66": {
+  "name": "SUBMISSION",
+  "pp": 20
+ },
+ "67": {
+  "name": "LOW KICK",
+  "pp": 20
+ },
+ "68": {
+  "name": "COUNTER",
+  "pp": 20
+ },
+ "69": {
+  "name": "SEISMIC TOSS",
+  "pp": 20
+ },
+ "70": {
+  "name": "STRENGTH",
+  "pp": 15
+ },
+ "71": {
+  "name": "ABSORB",
+  "pp": 25
+ },
+ "72": {
+  "name": "MEGA DRAIN",
+  "pp": 25
+ },
+ "73": {
+  "name": "LEECH SEED",
+  "pp": 10
+ },
+ "74": {
+  "name": "GROWTH",
+  "pp": 20
+ },
+ "75": {
+  "name": "RAZOR LEAF",
+  "pp": 25
+ },
+ "76": {
+  "name": "SOLAR BEAM",
+  "pp": 10
+ },
+ "77": {
+  "name": "POISON POWDER",
+  "pp": 35
+ },
+ "78": {
+  "name": "STUN SPORE",
+  "pp": 30
+ },
+ "79": {
+  "name": "SLEEP POWDER",
+  "pp": 15
+ },
+ "80": {
+  "name": "PETAL DANCE",
+  "pp": 10
+ },
+ "81": {
+  "name": "STRING SHOT",
+  "pp": 40
+ },
+ "82": {
+  "name": "DRAGON RAGE",
+  "pp": 10
+ },
+ "83": {
+  "name": "FIRE SPIN",
+  "pp": 15
+ },
+ "84": {
+  "name": "THUNDER SHOCK",
+  "pp": 30
+ },
+ "85": {
+  "name": "THUNDERBOLT",
+  "pp": 15
+ },
+ "86": {
+  "name": "THUNDER WAVE",
+  "pp": 20
+ },
+ "87": {
+  "name": "THUNDER",
+  "pp": 10
+ },
+ "88": {
+  "name": "ROCK THROW",
+  "pp": 15
+ },
+ "89": {
+  "name": "EARTHQUAKE",
+  "pp": 10
+ },
+ "90": {
+  "name": "FISSURE",
+  "pp": 5
+ },
+ "91": {
+  "name": "DIG",
+  "pp": 10
+ },
+ "92": {
+  "name": "TOXIC",
+  "pp": 10
+ },
+ "93": {
+  "name": "CONFUSION",
+  "pp": 25
+ },
+ "94": {
+  "name": "PSYCHIC",
+  "pp": 10
+ },
+ "95": {
+  "name": "HYPNOSIS",
+  "pp": 20
+ },
+ "96": {
+  "name": "MEDITATE",
+  "pp": 40
+ },
+ "97": {
+  "name": "AGILITY",
+  "pp": 30
+ },
+ "98": {
+  "name": "QUICK ATTACK",
+  "pp": 30
+ },
+ "99": {
+  "name": "RAGE",
+  "pp": 20
+ },
+ "100": {
+  "name": "TELEPORT",
+  "pp": 20
+ },
+ "101": {
+  "name": "NIGHT SHADE",
+  "pp": 15
+ },
+ "102": {
+  "name": "MIMIC",
+  "pp": 10
+ },
+ "103": {
+  "name": "SCREECH",
+  "pp": 40
+ },
+ "104": {
+  "name": "DOUBLE TEAM",
+  "pp": 15
+ },
+ "105": {
+  "name": "RECOVER",
+  "pp": 5
+ },
+ "106": {
+  "name": "HARDEN",
+  "pp": 30
+ },
+ "107": {
+  "name": "MINIMIZE",
+  "pp": 10
+ },
+ "108": {
+  "name": "SMOKESCREEN",
+  "pp": 20
+ },
+ "109": {
+  "name": "CONFUSE RAY",
+  "pp": 10
+ },
+ "110": {
+  "name": "WITHDRAW",
+  "pp": 40
+ },
+ "111": {
+  "name": "DEFENSE CURL",
+  "pp": 40
+ },
+ "112": {
+  "name": "BARRIER",
+  "pp": 20
+ },
+ "113": {
+  "name": "LIGHT SCREEN",
+  "pp": 30
+ },
+ "114": {
+  "name": "HAZE",
+  "pp": 30
+ },
+ "115": {
+  "name": "REFLECT",
+  "pp": 20
+ },
+ "116": {
+  "name": "FOCUS ENERGY",
+  "pp": 30
+ },
+ "117": {
+  "name": "BIDE",
+  "pp": 10
+ },
+ "118": {
+  "name": "METRONOME",
+  "pp": 10
+ },
+ "119": {
+  "name": "MIRROR MOVE",
+  "pp": 20
+ },
+ "120": {
+  "name": "SELF-DESTRUCT",
+  "pp": 5
+ },
+ "121": {
+  "name": "EGG BOMB",
+  "pp": 10
+ },
+ "122": {
+  "name": "LICK",
+  "pp": 30
+ },
+ "123": {
+  "name": "SMOG",
+  "pp": 20
+ },
+ "124": {
+  "name": "SLUDGE",
+  "pp": 20
+ },
+ "125": {
+  "name": "BONE CLUB",
+  "pp": 20
+ },
+ "126": {
+  "name": "FIRE BLAST",
+  "pp": 5
+ },
+ "127": {
+  "name": "WATERFALL",
+  "pp": 15
+ },
+ "128": {
+  "name": "CLAMP",
+  "pp": 15
+ },
+ "129": {
+  "name": "SWIFT",
+  "pp": 20
+ },
+ "130": {
+  "name": "SKULL BASH",
+  "pp": 10
+ },
+ "131": {
+  "name": "SPIKE CANNON",
+  "pp": 15
+ },
+ "132": {
+  "name": "CONSTRICT",
+  "pp": 35
+ },
+ "133": {
+  "name": "AMNESIA",
+  "pp": 20
+ },
+ "134": {
+  "name": "KINESIS",
+  "pp": 15
+ },
+ "135": {
+  "name": "SOFT-BOILED",
+  "pp": 5
+ },
+ "136": {
+  "name": "HIGH JUMP KICK",
+  "pp": 10
+ },
+ "137": {
+  "name": "GLARE",
+  "pp": 30
+ },
+ "138": {
+  "name": "DREAM EATER",
+  "pp": 15
+ },
+ "139": {
+  "name": "POISON GAS",
+  "pp": 40
+ },
+ "140": {
+  "name": "BARRAGE",
+  "pp": 20
+ },
+ "141": {
+  "name": "LEECH LIFE",
+  "pp": 10
+ },
+ "142": {
+  "name": "LOVELY KISS",
+  "pp": 10
+ },
+ "143": {
+  "name": "SKY ATTACK",
+  "pp": 5
+ },
+ "144": {
+  "name": "TRANSFORM",
+  "pp": 10
+ },
+ "145": {
+  "name": "BUBBLE",
+  "pp": 30
+ },
+ "146": {
+  "name": "DIZZY PUNCH",
+  "pp": 10
+ },
+ "147": {
+  "name": "SPORE",
+  "pp": 15
+ },
+ "148": {
+  "name": "FLASH",
+  "pp": 20
+ },
+ "149": {
+  "name": "PSYWAVE",
+  "pp": 15
+ },
+ "150": {
+  "name": "SPLASH",
+  "pp": 40
+ },
+ "151": {
+  "name": "ACID ARMOR",
+  "pp": 20
+ },
+ "152": {
+  "name": "CRABHAMMER",
+  "pp": 10
+ },
+ "153": {
+  "name": "EXPLOSION",
+  "pp": 5
+ },
+ "154": {
+  "name": "FURY SWIPES",
+  "pp": 15
+ },
+ "155": {
+  "name": "BONEMERANG",
+  "pp": 10
+ },
+ "156": {
+  "name": "REST",
+  "pp": 5
+ },
+ "157": {
+  "name": "ROCK SLIDE",
+  "pp": 10
+ },
+ "158": {
+  "name": "HYPER FANG",
+  "pp": 15
+ },
+ "159": {
+  "name": "SHARPEN",
+  "pp": 30
+ },
+ "160": {
+  "name": "CONVERSION",
+  "pp": 30
+ },
+ "161": {
+  "name": "TRI ATTACK",
+  "pp": 10
+ },
+ "162": {
+  "name": "SUPER FANG",
+  "pp": 10
+ },
+ "163": {
+  "name": "SLASH",
+  "pp": 20
+ },
+ "164": {
+  "name": "SUBSTITUTE",
+  "pp": 10
+ },
+ "165": {
+  "name": "STRUGGLE",
+  "pp": 1
+ },
+ "166": {
+  "name": "SKETCH",
+  "pp": 1
+ },
+ "167": {
+  "name": "TRIPLE KICK",
+  "pp": 10
+ },
+ "168": {
+  "name": "THIEF",
+  "pp": 25
+ },
+ "169": {
+  "name": "SPIDER WEB",
+  "pp": 10
+ },
+ "170": {
+  "name": "MIND READER",
+  "pp": 5
+ },
+ "171": {
+  "name": "NIGHTMARE",
+  "pp": 15
+ },
+ "172": {
+  "name": "FLAME WHEEL",
+  "pp": 25
+ },
+ "173": {
+  "name": "SNORE",
+  "pp": 15
+ },
+ "174": {
+  "name": "CURSE",
+  "pp": 10
+ },
+ "175": {
+  "name": "FLAIL",
+  "pp": 15
+ },
+ "176": {
+  "name": "CONVERSION 2",
+  "pp": 30
+ },
+ "177": {
+  "name": "AEROBLAST",
+  "pp": 5
+ },
+ "178": {
+  "name": "COTTON SPORE",
+  "pp": 40
+ },
+ "179": {
+  "name": "REVERSAL",
+  "pp": 15
+ },
+ "180": {
+  "name": "SPITE",
+  "pp": 10
+ },
+ "181": {
+  "name": "POWDER SNOW",
+  "pp": 25
+ },
+ "182": {
+  "name": "PROTECT",
+  "pp": 10
+ },
+ "183": {
+  "name": "MACH PUNCH",
+  "pp": 30
+ },
+ "184": {
+  "name": "SCARY FACE",
+  "pp": 10
+ },
+ "185": {
+  "name": "FEINT ATTACK",
+  "pp": 20
+ },
+ "186": {
+  "name": "SWEET KISS",
+  "pp": 10
+ },
+ "187": {
+  "name": "BELLY DRUM",
+  "pp": 10
+ },
+ "188": {
+  "name": "SLUDGE BOMB",
+  "pp": 10
+ },
+ "189": {
+  "name": "MUD-SLAP",
+  "pp": 10
+ },
+ "190": {
+  "name": "OCTAZOOKA",
+  "pp": 10
+ },
+ "191": {
+  "name": "SPIKES",
+  "pp": 20
+ },
+ "192": {
+  "name": "ZAP CANNON",
+  "pp": 5
+ },
+ "193": {
+  "name": "FORESIGHT",
+  "pp": 40
+ },
+ "194": {
+  "name": "DESTINY BOND",
+  "pp": 5
+ },
+ "195": {
+  "name": "PERISH SONG",
+  "pp": 5
+ },
+ "196": {
+  "name": "ICY WIND",
+  "pp": 15
+ },
+ "197": {
+  "name": "DETECT",
+  "pp": 5
+ },
+ "198": {
+  "name": "BONE RUSH",
+  "pp": 10
+ },
+ "199": {
+  "name": "LOCK-ON",
+  "pp": 5
+ },
+ "200": {
+  "name": "OUTRAGE",
+  "pp": 10
+ },
+ "201": {
+  "name": "SANDSTORM",
+  "pp": 10
+ },
+ "202": {
+  "name": "GIGA DRAIN",
+  "pp": 25
+ },
+ "203": {
+  "name": "ENDURE",
+  "pp": 10
+ },
+ "204": {
+  "name": "CHARM",
+  "pp": 20
+ },
+ "205": {
+  "name": "ROLLOUT",
+  "pp": 20
+ },
+ "206": {
+  "name": "FALSE SWIPE",
+  "pp": 40
+ },
+ "207": {
+  "name": "SWAGGER",
+  "pp": 15
+ },
+ "208": {
+  "name": "MILK DRINK",
+  "pp": 5
+ },
+ "209": {
+  "name": "SPARK",
+  "pp": 20
+ },
+ "210": {
+  "name": "FURY CUTTER",
+  "pp": 20
+ },
+ "211": {
+  "name": "STEEL WING",
+  "pp": 25
+ },
+ "212": {
+  "name": "MEAN LOOK",
+  "pp": 5
+ },
+ "213": {
+  "name": "ATTRACT",
+  "pp": 15
+ },
+ "214": {
+  "name": "SLEEP TALK",
+  "pp": 10
+ },
+ "215": {
+  "name": "HEAL BELL",
+  "pp": 5
+ },
+ "216": {
+  "name": "RETURN",
+  "pp": 20
+ },
+ "217": {
+  "name": "PRESENT",
+  "pp": 15
+ },
+ "218": {
+  "name": "FRUSTRATION",
+  "pp": 20
+ },
+ "219": {
+  "name": "SAFEGUARD",
+  "pp": 25
+ },
+ "220": {
+  "name": "PAIN SPLIT",
+  "pp": 20
+ },
+ "221": {
+  "name": "SACRED FIRE",
+  "pp": 5
+ },
+ "222": {
+  "name": "MAGNITUDE",
+  "pp": 30
+ },
+ "223": {
+  "name": "DYNAMIC PUNCH",
+  "pp": 5
+ },
+ "224": {
+  "name": "MEGAHORN",
+  "pp": 10
+ },
+ "225": {
+  "name": "DRAGON BREATH",
+  "pp": 20
+ },
+ "226": {
+  "name": "BATON PASS",
+  "pp": 40
+ },
+ "227": {
+  "name": "ENCORE",
+  "pp": 5
+ },
+ "228": {
+  "name": "PURSUIT",
+  "pp": 20
+ },
+ "229": {
+  "name": "RAPID SPIN",
+  "pp": 40
+ },
+ "230": {
+  "name": "SWEET SCENT",
+  "pp": 20
+ },
+ "231": {
+  "name": "IRON TAIL",
+  "pp": 15
+ },
+ "232": {
+  "name": "METAL CLAW",
+  "pp": 35
+ },
+ "233": {
+  "name": "VITAL THROW",
+  "pp": 10
+ },
+ "234": {
+  "name": "MORNING SUN",
+  "pp": 5
+ },
+ "235": {
+  "name": "SYNTHESIS",
+  "pp": 5
+ },
+ "236": {
+  "name": "MOONLIGHT",
+  "pp": 5
+ },
+ "237": {
+  "name": "HIDDEN POWER",
+  "pp": 15
+ },
+ "238": {
+  "name": "CROSS CHOP",
+  "pp": 5
+ },
+ "239": {
+  "name": "TWISTER",
+  "pp": 20
+ },
+ "240": {
+  "name": "RAIN DANCE",
+  "pp": 5
+ },
+ "241": {
+  "name": "SUNNY DAY",
+  "pp": 5
+ },
+ "242": {
+  "name": "CRUNCH",
+  "pp": 15
+ },
+ "243": {
+  "name": "MIRROR COAT",
+  "pp": 20
+ },
+ "244": {
+  "name": "PSYCH UP",
+  "pp": 10
+ },
+ "245": {
+  "name": "EXTREME SPEED",
+  "pp": 5
+ },
+ "246": {
+  "name": "ANCIENT POWER",
+  "pp": 5
+ },
+ "247": {
+  "name": "SHADOW BALL",
+  "pp": 15
+ },
+ "248": {
+  "name": "FUTURE SIGHT",
+  "pp": 10
+ },
+ "249": {
+  "name": "ROCK SMASH",
+  "pp": 15
+ },
+ "250": {
+  "name": "WHIRLPOOL",
+  "pp": 15
+ },
+ "251": {
+  "name": "BEAT UP",
+  "pp": 10
+ },
+ "252": {
+  "name": "FAKE OUT",
+  "pp": 10
+ },
+ "253": {
+  "name": "UPROAR",
+  "pp": 10
+ },
+ "254": {
+  "name": "STOCKPILE",
+  "pp": 20
+ },
+ "255": {
+  "name": "SPIT UP",
+  "pp": 10
+ },
+ "256": {
+  "name": "SWALLOW",
+  "pp": 10
+ },
+ "257": {
+  "name": "HEAT WAVE",
+  "pp": 10
+ },
+ "258": {
+  "name": "HAIL",
+  "pp": 10
+ },
+ "259": {
+  "name": "TORMENT",
+  "pp": 15
+ },
+ "260": {
+  "name": "FLATTER",
+  "pp": 15
+ },
+ "261": {
+  "name": "WILL-O-WISP",
+  "pp": 15
+ },
+ "262": {
+  "name": "MEMENTO",
+  "pp": 10
+ },
+ "263": {
+  "name": "FACADE",
+  "pp": 20
+ },
+ "264": {
+  "name": "FOCUS PUNCH",
+  "pp": 20
+ },
+ "265": {
+  "name": "SMELLING SALTS",
+  "pp": 10
+ },
+ "266": {
+  "name": "FOLLOW ME",
+  "pp": 20
+ },
+ "267": {
+  "name": "NATURE POWER",
+  "pp": 20
+ },
+ "268": {
+  "name": "CHARGE",
+  "pp": 20
+ },
+ "269": {
+  "name": "TAUNT",
+  "pp": 20
+ },
+ "270": {
+  "name": "HELPING HAND",
+  "pp": 20
+ },
+ "271": {
+  "name": "TRICK",
+  "pp": 10
+ },
+ "272": {
+  "name": "ROLE PLAY",
+  "pp": 10
+ },
+ "273": {
+  "name": "WISH",
+  "pp": 10
+ },
+ "274": {
+  "name": "ASSIST",
+  "pp": 20
+ },
+ "275": {
+  "name": "INGRAIN",
+  "pp": 20
+ },
+ "276": {
+  "name": "SUPERPOWER",
+  "pp": 5
+ },
+ "277": {
+  "name": "MAGIC COAT",
+  "pp": 15
+ },
+ "278": {
+  "name": "RECYCLE",
+  "pp": 10
+ },
+ "279": {
+  "name": "REVENGE",
+  "pp": 10
+ },
+ "280": {
+  "name": "BRICK BREAK",
+  "pp": 15
+ },
+ "281": {
+  "name": "YAWN",
+  "pp": 10
+ },
+ "282": {
+  "name": "KNOCK OFF",
+  "pp": 20
+ },
+ "283": {
+  "name": "ENDEAVOR",
+  "pp": 5
+ },
+ "284": {
+  "name": "ERUPTION",
+  "pp": 5
+ },
+ "285": {
+  "name": "SKILL SWAP",
+  "pp": 10
+ },
+ "286": {
+  "name": "IMPRISON",
+  "pp": 10
+ },
+ "287": {
+  "name": "REFRESH",
+  "pp": 20
+ },
+ "288": {
+  "name": "GRUDGE",
+  "pp": 5
+ },
+ "289": {
+  "name": "SNATCH",
+  "pp": 10
+ },
+ "290": {
+  "name": "SECRET POWER",
+  "pp": 20
+ },
+ "291": {
+  "name": "DIVE",
+  "pp": 10
+ },
+ "292": {
+  "name": "ARM THRUST",
+  "pp": 20
+ },
+ "293": {
+  "name": "CAMOUFLAGE",
+  "pp": 20
+ },
+ "294": {
+  "name": "TAIL GLOW",
+  "pp": 20
+ },
+ "295": {
+  "name": "LUSTER PURGE",
+  "pp": 5
+ },
+ "296": {
+  "name": "MIST BALL",
+  "pp": 5
+ },
+ "297": {
+  "name": "FEATHER DANCE",
+  "pp": 15
+ },
+ "298": {
+  "name": "TEETER DANCE",
+  "pp": 20
+ },
+ "299": {
+  "name": "BLAZE KICK",
+  "pp": 10
+ },
+ "300": {
+  "name": "MUD SPORT",
+  "pp": 15
+ },
+ "301": {
+  "name": "ICE BALL",
+  "pp": 20
+ },
+ "302": {
+  "name": "NEEDLE ARM",
+  "pp": 15
+ },
+ "303": {
+  "name": "SLACK OFF",
+  "pp": 5
+ },
+ "304": {
+  "name": "HYPER VOICE",
+  "pp": 10
+ },
+ "305": {
+  "name": "POISON FANG",
+  "pp": 15
+ },
+ "306": {
+  "name": "CRUSH CLAW",
+  "pp": 10
+ },
+ "307": {
+  "name": "BLAST BURN",
+  "pp": 5
+ },
+ "308": {
+  "name": "HYDRO CANNON",
+  "pp": 5
+ },
+ "309": {
+  "name": "METEOR MASH",
+  "pp": 10
+ },
+ "310": {
+  "name": "ASTONISH",
+  "pp": 15
+ },
+ "311": {
+  "name": "WEATHER BALL",
+  "pp": 10
+ },
+ "312": {
+  "name": "AROMATHERAPY",
+  "pp": 5
+ },
+ "313": {
+  "name": "FAKE TEARS",
+  "pp": 20
+ },
+ "314": {
+  "name": "AIR CUTTER",
+  "pp": 25
+ },
+ "315": {
+  "name": "OVERHEAT",
+  "pp": 5
+ },
+ "316": {
+  "name": "ODOR SLEUTH",
+  "pp": 40
+ },
+ "317": {
+  "name": "ROCK TOMB",
+  "pp": 15
+ },
+ "318": {
+  "name": "SILVER WIND",
+  "pp": 5
+ },
+ "319": {
+  "name": "METAL SOUND",
+  "pp": 40
+ },
+ "320": {
+  "name": "GRASS WHISTLE",
+  "pp": 15
+ },
+ "321": {
+  "name": "TICKLE",
+  "pp": 20
+ },
+ "322": {
+  "name": "COSMIC POWER",
+  "pp": 20
+ },
+ "323": {
+  "name": "WATER SPOUT",
+  "pp": 5
+ },
+ "324": {
+  "name": "SIGNAL BEAM",
+  "pp": 15
+ },
+ "325": {
+  "name": "SHADOW PUNCH",
+  "pp": 20
+ },
+ "326": {
+  "name": "EXTRASENSORY",
+  "pp": 20
+ },
+ "327": {
+  "name": "SKY UPPERCUT",
+  "pp": 15
+ },
+ "328": {
+  "name": "SAND TOMB",
+  "pp": 15
+ },
+ "329": {
+  "name": "SHEER COLD",
+  "pp": 5
+ },
+ "330": {
+  "name": "MUDDY WATER",
+  "pp": 10
+ },
+ "331": {
+  "name": "BULLET SEED",
+  "pp": 30
+ },
+ "332": {
+  "name": "AERIAL ACE",
+  "pp": 20
+ },
+ "333": {
+  "name": "ICICLE SPEAR",
+  "pp": 30
+ },
+ "334": {
+  "name": "IRON DEFENSE",
+  "pp": 15
+ },
+ "335": {
+  "name": "BLOCK",
+  "pp": 5
+ },
+ "336": {
+  "name": "HOWL",
+  "pp": 40
+ },
+ "337": {
+  "name": "DRAGON CLAW",
+  "pp": 15
+ },
+ "338": {
+  "name": "FRENZY PLANT",
+  "pp": 5
+ },
+ "339": {
+  "name": "BULK UP",
+  "pp": 20
+ },
+ "340": {
+  "name": "BOUNCE",
+  "pp": 5
+ },
+ "341": {
+  "name": "MUD SHOT",
+  "pp": 15
+ },
+ "342": {
+  "name": "POISON TAIL",
+  "pp": 25
+ },
+ "343": {
+  "name": "COVET",
+  "pp": 25
+ },
+ "344": {
+  "name": "VOLT TACKLE",
+  "pp": 15
+ },
+ "345": {
+  "name": "MAGICAL LEAF",
+  "pp": 20
+ },
+ "346": {
+  "name": "WATER SPORT",
+  "pp": 15
+ },
+ "347": {
+  "name": "CALM MIND",
+  "pp": 20
+ },
+ "348": {
+  "name": "LEAF BLADE",
+  "pp": 15
+ },
+ "349": {
+  "name": "DRAGON DANCE",
+  "pp": 20
+ },
+ "350": {
+  "name": "ROCK BLAST",
+  "pp": 10
+ },
+ "351": {
+  "name": "SHOCK WAVE",
+  "pp": 20
+ },
+ "352": {
+  "name": "WATER PULSE",
+  "pp": 20
+ },
+ "353": {
+  "name": "DOOM DESIRE",
+  "pp": 5
+ },
+ "354": {
+  "name": "PSYCHO BOOST",
+  "pp": 5
+ },
+ "355": {
+  "name": "ROOST",
+  "pp": 5
+ },
+ "356": {
+  "name": "GRAVITY",
+  "pp": 5
+ },
+ "357": {
+  "name": "MIRACLE EYE",
+  "pp": 40
+ },
+ "358": {
+  "name": "WAKE-UP SLAP",
+  "pp": 10
+ },
+ "359": {
+  "name": "HAMMER ARM",
+  "pp": 10
+ },
+ "360": {
+  "name": "GYRO BALL",
+  "pp": 5
+ },
+ "361": {
+  "name": "HEALING WISH",
+  "pp": 10
+ },
+ "362": {
+  "name": "BRINE",
+  "pp": 10
+ },
+ "363": {
+  "name": "NATURAL GIFT",
+  "pp": 15
+ },
+ "364": {
+  "name": "FEINT",
+  "pp": 10
+ },
+ "365": {
+  "name": "PLUCK",
+  "pp": 20
+ },
+ "366": {
+  "name": "TAILWIND",
+  "pp": 15
+ },
+ "367": {
+  "name": "ACUPRESSURE",
+  "pp": 30
+ },
+ "368": {
+  "name": "METAL BURST",
+  "pp": 10
+ },
+ "369": {
+  "name": "U-TURN",
+  "pp": 20
+ },
+ "370": {
+  "name": "CLOSE COMBAT",
+  "pp": 5
+ },
+ "371": {
+  "name": "PAYBACK",
+  "pp": 10
+ },
+ "372": {
+  "name": "ASSURANCE",
+  "pp": 10
+ },
+ "373": {
+  "name": "EMBARGO",
+  "pp": 15
+ },
+ "374": {
+  "name": "FLING",
+  "pp": 10
+ },
+ "375": {
+  "name": "PSYCHO SHIFT",
+  "pp": 10
+ },
+ "376": {
+  "name": "TRUMP CARD",
+  "pp": 5
+ },
+ "377": {
+  "name": "HEAL BLOCK",
+  "pp": 15
+ },
+ "378": {
+  "name": "WRING OUT",
+  "pp": 5
+ },
+ "379": {
+  "name": "POWER TRICK",
+  "pp": 10
+ },
+ "380": {
+  "name": "GASTRO ACID",
+  "pp": 10
+ },
+ "381": {
+  "name": "LUCKY CHANT",
+  "pp": 30
+ },
+ "382": {
+  "name": "ME FIRST",
+  "pp": 20
+ },
+ "383": {
+  "name": "COPYCAT",
+  "pp": 20
+ },
+ "384": {
+  "name": "POWER SWAP",
+  "pp": 10
+ },
+ "385": {
+  "name": "GUARD SWAP",
+  "pp": 10
+ },
+ "386": {
+  "name": "PUNISHMENT",
+  "pp": 5
+ },
+ "387": {
+  "name": "LAST RESORT",
+  "pp": 5
+ },
+ "388": {
+  "name": "WORRY SEED",
+  "pp": 10
+ },
+ "389": {
+  "name": "SUCKER PUNCH",
+  "pp": 5
+ },
+ "390": {
+  "name": "TOXIC SPIKES",
+  "pp": 20
+ },
+ "391": {
+  "name": "HEART SWAP",
+  "pp": 10
+ },
+ "392": {
+  "name": "AQUA RING",
+  "pp": 20
+ },
+ "393": {
+  "name": "MAGNET RISE",
+  "pp": 10
+ },
+ "394": {
+  "name": "FLARE BLITZ",
+  "pp": 15
+ },
+ "395": {
+  "name": "FORCE PALM",
+  "pp": 10
+ },
+ "396": {
+  "name": "AURA SPHERE",
+  "pp": 20
+ },
+ "397": {
+  "name": "ROCK POLISH",
+  "pp": 20
+ },
+ "398": {
+  "name": "POISON JAB",
+  "pp": 20
+ },
+ "399": {
+  "name": "DARK PULSE",
+  "pp": 15
+ },
+ "400": {
+  "name": "NIGHT SLASH",
+  "pp": 15
+ },
+ "401": {
+  "name": "AQUA TAIL",
+  "pp": 10
+ },
+ "402": {
+  "name": "SEED BOMB",
+  "pp": 15
+ },
+ "403": {
+  "name": "AIR SLASH",
+  "pp": 15
+ },
+ "404": {
+  "name": "X-SCISSOR",
+  "pp": 15
+ },
+ "405": {
+  "name": "BUG BUZZ",
+  "pp": 10
+ },
+ "406": {
+  "name": "DRAGON PULSE",
+  "pp": 10
+ },
+ "407": {
+  "name": "DRAGON RUSH",
+  "pp": 10
+ },
+ "408": {
+  "name": "POWER GEM",
+  "pp": 20
+ },
+ "409": {
+  "name": "DRAIN PUNCH",
+  "pp": 10
+ },
+ "410": {
+  "name": "VACUUM WAVE",
+  "pp": 30
+ },
+ "411": {
+  "name": "FOCUS BLAST",
+  "pp": 5
+ },
+ "412": {
+  "name": "ENERGY BALL",
+  "pp": 10
+ },
+ "413": {
+  "name": "BRAVE BIRD",
+  "pp": 15
+ },
+ "414": {
+  "name": "EARTH POWER",
+  "pp": 10
+ },
+ "415": {
+  "name": "SWITCHEROO",
+  "pp": 10
+ },
+ "416": {
+  "name": "GIGA IMPACT",
+  "pp": 5
+ },
+ "417": {
+  "name": "NASTY PLOT",
+  "pp": 20
+ },
+ "418": {
+  "name": "BULLET PUNCH",
+  "pp": 30
+ },
+ "419": {
+  "name": "AVALANCHE",
+  "pp": 10
+ },
+ "420": {
+  "name": "ICE SHARD",
+  "pp": 30
+ },
+ "421": {
+  "name": "SHADOW CLAW",
+  "pp": 15
+ },
+ "422": {
+  "name": "THUNDER FANG",
+  "pp": 15
+ },
+ "423": {
+  "name": "ICE FANG",
+  "pp": 15
+ },
+ "424": {
+  "name": "FIRE FANG",
+  "pp": 15
+ },
+ "425": {
+  "name": "SHADOW SNEAK",
+  "pp": 30
+ },
+ "426": {
+  "name": "MUD BOMB",
+  "pp": 10
+ },
+ "427": {
+  "name": "PSYCHO CUT",
+  "pp": 20
+ },
+ "428": {
+  "name": "ZEN HEADBUTT",
+  "pp": 15
+ },
+ "429": {
+  "name": "MIRROR SHOT",
+  "pp": 10
+ },
+ "430": {
+  "name": "FLASH CANNON",
+  "pp": 10
+ },
+ "431": {
+  "name": "ROCK CLIMB",
+  "pp": 20
+ },
+ "432": {
+  "name": "DEFOG",
+  "pp": 15
+ },
+ "433": {
+  "name": "TRICK ROOM",
+  "pp": 5
+ },
+ "434": {
+  "name": "DRACO METEOR",
+  "pp": 5
+ },
+ "435": {
+  "name": "DISCHARGE",
+  "pp": 15
+ },
+ "436": {
+  "name": "LAVA PLUME",
+  "pp": 15
+ },
+ "437": {
+  "name": "LEAF STORM",
+  "pp": 5
+ },
+ "438": {
+  "name": "POWER WHIP",
+  "pp": 10
+ },
+ "439": {
+  "name": "ROCK WRECKER",
+  "pp": 5
+ },
+ "440": {
+  "name": "CROSS POISON",
+  "pp": 20
+ },
+ "441": {
+  "name": "GUNK SHOT",
+  "pp": 5
+ },
+ "442": {
+  "name": "IRON HEAD",
+  "pp": 15
+ },
+ "443": {
+  "name": "MAGNET BOMB",
+  "pp": 20
+ },
+ "444": {
+  "name": "STONE EDGE",
+  "pp": 5
+ },
+ "445": {
+  "name": "CAPTIVATE",
+  "pp": 20
+ },
+ "446": {
+  "name": "STEALTH ROCK",
+  "pp": 20
+ },
+ "447": {
+  "name": "GRASS KNOT",
+  "pp": 20
+ },
+ "448": {
+  "name": "CHATTER",
+  "pp": 20
+ },
+ "449": {
+  "name": "JUDGMENT",
+  "pp": 10
+ },
+ "450": {
+  "name": "BUG BITE",
+  "pp": 20
+ },
+ "451": {
+  "name": "CHARGE BEAM",
+  "pp": 10
+ },
+ "452": {
+  "name": "WOOD HAMMER",
+  "pp": 15
+ },
+ "453": {
+  "name": "AQUA JET",
+  "pp": 20
+ },
+ "454": {
+  "name": "ATTACK ORDER",
+  "pp": 15
+ },
+ "455": {
+  "name": "DEFEND ORDER",
+  "pp": 10
+ },
+ "456": {
+  "name": "HEAL ORDER",
+  "pp": 10
+ },
+ "457": {
+  "name": "HEAD SMASH",
+  "pp": 5
+ },
+ "458": {
+  "name": "DOUBLE HIT",
+  "pp": 10
+ },
+ "459": {
+  "name": "ROAR OF TIME",
+  "pp": 5
+ },
+ "460": {
+  "name": "SPACIAL REND",
+  "pp": 5
+ },
+ "461": {
+  "name": "LUNAR DANCE",
+  "pp": 10
+ },
+ "462": {
+  "name": "CRUSH GRIP",
+  "pp": 5
+ },
+ "463": {
+  "name": "MAGMA STORM",
+  "pp": 5
+ },
+ "464": {
+  "name": "DARK VOID",
+  "pp": 10
+ },
+ "465": {
+  "name": "SEED FLARE",
+  "pp": 5
+ },
+ "466": {
+  "name": "OMINOUS WIND",
+  "pp": 5
+ },
+ "467": {
+  "name": "SHADOW FORCE",
+  "pp": 5
+ },
+ "468": {
+  "name": "HONE CLAWS",
+  "pp": 15
+ },
+ "469": {
+  "name": "WIDE GUARD",
+  "pp": 10
+ },
+ "470": {
+  "name": "GUARD SPLIT",
+  "pp": 10
+ },
+ "471": {
+  "name": "POWER SPLIT",
+  "pp": 10
+ },
+ "472": {
+  "name": "WONDER ROOM",
+  "pp": 10
+ },
+ "473": {
+  "name": "PSYSHOCK",
+  "pp": 10
+ },
+ "474": {
+  "name": "VENOSHOCK",
+  "pp": 10
+ },
+ "475": {
+  "name": "AUTOTOMIZE",
+  "pp": 15
+ },
+ "476": {
+  "name": "RAGE POWDER",
+  "pp": 20
+ },
+ "477": {
+  "name": "TELEKINESIS",
+  "pp": 15
+ },
+ "478": {
+  "name": "MAGIC ROOM",
+  "pp": 10
+ },
+ "479": {
+  "name": "SMACK DOWN",
+  "pp": 15
+ },
+ "480": {
+  "name": "STORM THROW",
+  "pp": 10
+ },
+ "481": {
+  "name": "FLAME BURST",
+  "pp": 15
+ },
+ "482": {
+  "name": "SLUDGE WAVE",
+  "pp": 10
+ },
+ "483": {
+  "name": "QUIVER DANCE",
+  "pp": 20
+ },
+ "484": {
+  "name": "HEAVY SLAM",
+  "pp": 10
+ },
+ "485": {
+  "name": "SYNCHRONOISE",
+  "pp": 10
+ },
+ "486": {
+  "name": "ELECTRO BALL",
+  "pp": 10
+ },
+ "487": {
+  "name": "SOAK",
+  "pp": 20
+ },
+ "488": {
+  "name": "FLAME CHARGE",
+  "pp": 20
+ },
+ "489": {
+  "name": "COIL",
+  "pp": 20
+ },
+ "490": {
+  "name": "LOW SWEEP",
+  "pp": 20
+ },
+ "491": {
+  "name": "ACID SPRAY",
+  "pp": 20
+ },
+ "492": {
+  "name": "FOUL PLAY",
+  "pp": 15
+ },
+ "493": {
+  "name": "SIMPLE BEAM",
+  "pp": 15
+ },
+ "494": {
+  "name": "ENTRAINMENT",
+  "pp": 15
+ },
+ "495": {
+  "name": "AFTER YOU",
+  "pp": 15
+ },
+ "496": {
+  "name": "ROUND",
+  "pp": 15
+ },
+ "497": {
+  "name": "ECHOED VOICE",
+  "pp": 15
+ },
+ "498": {
+  "name": "CHIP AWAY",
+  "pp": 20
+ },
+ "499": {
+  "name": "CLEAR SMOG",
+  "pp": 15
+ },
+ "500": {
+  "name": "STORED POWER",
+  "pp": 10
+ },
+ "501": {
+  "name": "QUICK GUARD",
+  "pp": 15
+ },
+ "502": {
+  "name": "ALLY SWITCH",
+  "pp": 15
+ },
+ "503": {
+  "name": "SCALD",
+  "pp": 15
+ },
+ "504": {
+  "name": "SHELL SMASH",
+  "pp": 15
+ },
+ "505": {
+  "name": "HEAL PULSE",
+  "pp": 10
+ },
+ "506": {
+  "name": "HEX",
+  "pp": 10
+ },
+ "507": {
+  "name": "SKY DROP",
+  "pp": 10
+ },
+ "508": {
+  "name": "SHIFT GEAR",
+  "pp": 10
+ },
+ "509": {
+  "name": "CIRCLE THROW",
+  "pp": 10
+ },
+ "510": {
+  "name": "INCINERATE",
+  "pp": 15
+ },
+ "511": {
+  "name": "QUASH",
+  "pp": 15
+ },
+ "512": {
+  "name": "ACROBATICS",
+  "pp": 15
+ },
+ "513": {
+  "name": "REFLECT TYPE",
+  "pp": 15
+ },
+ "514": {
+  "name": "RETALIATE",
+  "pp": 5
+ },
+ "515": {
+  "name": "FINAL GAMBIT",
+  "pp": 5
+ },
+ "516": {
+  "name": "BESTOW",
+  "pp": 15
+ },
+ "517": {
+  "name": "INFERNO",
+  "pp": 5
+ },
+ "518": {
+  "name": "WATER PLEDGE",
+  "pp": 10
+ },
+ "519": {
+  "name": "FIRE PLEDGE",
+  "pp": 10
+ },
+ "520": {
+  "name": "GRASS PLEDGE",
+  "pp": 10
+ },
+ "521": {
+  "name": "VOLT SWITCH",
+  "pp": 20
+ },
+ "522": {
+  "name": "STRUGGLE BUG",
+  "pp": 20
+ },
+ "523": {
+  "name": "BULLDOZE",
+  "pp": 20
+ },
+ "524": {
+  "name": "FROST BREATH",
+  "pp": 10
+ },
+ "525": {
+  "name": "DRAGON TAIL",
+  "pp": 10
+ },
+ "526": {
+  "name": "WORK UP",
+  "pp": 30
+ },
+ "527": {
+  "name": "ELECTROWEB",
+  "pp": 15
+ },
+ "528": {
+  "name": "WILD CHARGE",
+  "pp": 15
+ },
+ "529": {
+  "name": "DRILL RUN",
+  "pp": 10
+ },
+ "530": {
+  "name": "DUAL CHOP",
+  "pp": 15
+ },
+ "531": {
+  "name": "HEART STAMP",
+  "pp": 25
+ },
+ "532": {
+  "name": "HORN LEECH",
+  "pp": 10
+ },
+ "533": {
+  "name": "SACRED SWORD",
+  "pp": 15
+ },
+ "534": {
+  "name": "RAZOR SHELL",
+  "pp": 10
+ },
+ "535": {
+  "name": "HEAT CRASH",
+  "pp": 10
+ },
+ "536": {
+  "name": "LEAF TORNADO",
+  "pp": 10
+ },
+ "537": {
+  "name": "STEAMROLLER",
+  "pp": 20
+ },
+ "538": {
+  "name": "COTTON GUARD",
+  "pp": 10
+ },
+ "539": {
+  "name": "NIGHT DAZE",
+  "pp": 10
+ },
+ "540": {
+  "name": "PSYSTRIKE",
+  "pp": 10
+ },
+ "541": {
+  "name": "TAIL SLAP",
+  "pp": 10
+ },
+ "542": {
+  "name": "HURRICANE",
+  "pp": 10
+ },
+ "543": {
+  "name": "HEAD CHARGE",
+  "pp": 15
+ },
+ "544": {
+  "name": "GEAR GRIND",
+  "pp": 15
+ },
+ "545": {
+  "name": "SEARING SHOT",
+  "pp": 5
+ },
+ "546": {
+  "name": "TECHNO BLAST",
+  "pp": 5
+ },
+ "547": {
+  "name": "RELIC SONG",
+  "pp": 10
+ },
+ "548": {
+  "name": "SECRET SWORD",
+  "pp": 10
+ },
+ "549": {
+  "name": "GLACIATE",
+  "pp": 10
+ },
+ "550": {
+  "name": "BOLT STRIKE",
+  "pp": 5
+ },
+ "551": {
+  "name": "BLUE FLARE",
+  "pp": 5
+ },
+ "552": {
+  "name": "FIERY DANCE",
+  "pp": 10
+ },
+ "553": {
+  "name": "FREEZE SHOCK",
+  "pp": 5
+ },
+ "554": {
+  "name": "ICE BURN",
+  "pp": 5
+ },
+ "555": {
+  "name": "SNARL",
+  "pp": 15
+ },
+ "556": {
+  "name": "ICICLE CRASH",
+  "pp": 10
+ },
+ "557": {
+  "name": "V-CREATE",
+  "pp": 5
+ },
+ "558": {
+  "name": "FUSION FLARE",
+  "pp": 5
+ },
+ "559": {
+  "name": "FUSION BOLT",
+  "pp": 5
+ },
+ "560": {
+  "name": "FLYING PRESS",
+  "pp": 10
+ },
+ "561": {
+  "name": "MAT BLOCK",
+  "pp": 15
+ },
+ "562": {
+  "name": "BELCH",
+  "pp": 10
+ },
+ "563": {
+  "name": "ROTOTILLER",
+  "pp": 10
+ },
+ "564": {
+  "name": "STICKY WEB",
+  "pp": 20
+ },
+ "565": {
+  "name": "FELL STINGER",
+  "pp": 25
+ },
+ "566": {
+  "name": "PHANTOM FORCE",
+  "pp": 10
+ },
+ "567": {
+  "name": "TRICK-OR-TREAT",
+  "pp": 20
+ },
+ "568": {
+  "name": "NOBLE ROAR",
+  "pp": 30
+ },
+ "569": {
+  "name": "ION DELUGE",
+  "pp": 25
+ },
+ "570": {
+  "name": "PARABOLIC CHARGE",
+  "pp": 20
+ },
+ "571": {
+  "name": "FOREST'S CURSE",
+  "pp": 20
+ },
+ "572": {
+  "name": "PETAL BLIZZARD",
+  "pp": 15
+ },
+ "573": {
+  "name": "FREEZE-DRY",
+  "pp": 20
+ },
+ "574": {
+  "name": "DISARMING VOICE",
+  "pp": 15
+ },
+ "575": {
+  "name": "PARTING SHOT",
+  "pp": 20
+ },
+ "576": {
+  "name": "TOPSY-TURVY",
+  "pp": 20
+ },
+ "577": {
+  "name": "DRAINING KISS",
+  "pp": 10
+ },
+ "578": {
+  "name": "CRAFTY SHIELD",
+  "pp": 10
+ },
+ "579": {
+  "name": "FLOWER SHIELD",
+  "pp": 10
+ },
+ "580": {
+  "name": "GRASSY TERRAIN",
+  "pp": 10
+ },
+ "581": {
+  "name": "MISTY TERRAIN",
+  "pp": 10
+ },
+ "582": {
+  "name": "ELECTRIFY",
+  "pp": 20
+ },
+ "583": {
+  "name": "PLAY ROUGH",
+  "pp": 10
+ },
+ "584": {
+  "name": "FAIRY WIND",
+  "pp": 30
+ },
+ "585": {
+  "name": "MOONBLAST",
+  "pp": 15
+ },
+ "586": {
+  "name": "BOOMBURST",
+  "pp": 10
+ },
+ "587": {
+  "name": "FAIRY LOCK",
+  "pp": 10
+ },
+ "588": {
+  "name": "KING'S SHIELD",
+  "pp": 10
+ },
+ "589": {
+  "name": "PLAY NICE",
+  "pp": 20
+ },
+ "590": {
+  "name": "CONFIDE",
+  "pp": 20
+ },
+ "591": {
+  "name": "DIAMOND STORM",
+  "pp": 5
+ },
+ "592": {
+  "name": "STEAM ERUPTION",
+  "pp": 5
+ },
+ "593": {
+  "name": "HYPERSPACE HOLE",
+  "pp": 5
+ },
+ "594": {
+  "name": "WATER SHURIKEN",
+  "pp": 20
+ },
+ "595": {
+  "name": "MYSTICAL FIRE",
+  "pp": 10
+ },
+ "596": {
+  "name": "SPIKY SHIELD",
+  "pp": 10
+ },
+ "597": {
+  "name": "AROMATIC MIST",
+  "pp": 20
+ },
+ "598": {
+  "name": "EERIE IMPULSE",
+  "pp": 15
+ },
+ "599": {
+  "name": "VENOM DRENCH",
+  "pp": 20
+ },
+ "600": {
+  "name": "POWDER",
+  "pp": 20
+ },
+ "601": {
+  "name": "GEOMANCY",
+  "pp": 10
+ },
+ "602": {
+  "name": "MAGNETIC FLUX",
+  "pp": 20
+ },
+ "603": {
+  "name": "HAPPY HOUR",
+  "pp": 30
+ },
+ "604": {
+  "name": "ELECTRIC TERRAIN",
+  "pp": 10
+ },
+ "605": {
+  "name": "DAZZLING GLEAM",
+  "pp": 10
+ },
+ "606": {
+  "name": "CELEBRATE",
+  "pp": 40
+ },
+ "607": {
+  "name": "HOLD HANDS",
+  "pp": 40
+ },
+ "608": {
+  "name": "BABY-DOLL EYES",
+  "pp": 30
+ },
+ "609": {
+  "name": "NUZZLE",
+  "pp": 20
+ },
+ "610": {
+  "name": "HOLD BACK",
+  "pp": 40
+ },
+ "611": {
+  "name": "INFESTATION",
+  "pp": 20
+ },
+ "612": {
+  "name": "POWER-UP PUNCH",
+  "pp": 20
+ },
+ "613": {
+  "name": "OBLIVION WING",
+  "pp": 10
+ },
+ "614": {
+  "name": "THOUSAND ARROWS",
+  "pp": 10
+ },
+ "615": {
+  "name": "THOUSAND WAVES",
+  "pp": 10
+ },
+ "616": {
+  "name": "LAND'S WRATH",
+  "pp": 10
+ },
+ "617": {
+  "name": "LIGHT OF RUIN",
+  "pp": 5
+ },
+ "618": {
+  "name": "ORIGIN PULSE",
+  "pp": 10
+ },
+ "619": {
+  "name": "PRECIPICE BLADES",
+  "pp": 10
+ },
+ "620": {
+  "name": "DRAGON ASCENT",
+  "pp": 5
+ },
+ "621": {
+  "name": "HYPERSPACE FURY",
+  "pp": 5
+ },
+ "622": {
+  "name": "SHORE UP",
+  "pp": 5
+ },
+ "623": {
+  "name": "FIRST IMPRESSION",
+  "pp": 10
+ },
+ "624": {
+  "name": "BANEFUL BUNKER",
+  "pp": 10
+ },
+ "625": {
+  "name": "SPIRIT SHACKLE",
+  "pp": 10
+ },
+ "626": {
+  "name": "DARKEST LARIAT",
+  "pp": 10
+ },
+ "627": {
+  "name": "SPARKLING ARIA",
+  "pp": 10
+ },
+ "628": {
+  "name": "ICE HAMMER",
+  "pp": 10
+ },
+ "629": {
+  "name": "FLORAL HEALING",
+  "pp": 10
+ },
+ "630": {
+  "name": "HIGH HORSEPOWER",
+  "pp": 10
+ },
+ "631": {
+  "name": "STRENGTH SAP",
+  "pp": 10
+ },
+ "632": {
+  "name": "SOLAR BLADE",
+  "pp": 10
+ },
+ "633": {
+  "name": "LEAFAGE",
+  "pp": 40
+ },
+ "634": {
+  "name": "SPOTLIGHT",
+  "pp": 15
+ },
+ "635": {
+  "name": "TOXIC THREAD",
+  "pp": 20
+ },
+ "636": {
+  "name": "LASER FOCUS",
+  "pp": 30
+ },
+ "637": {
+  "name": "GEAR UP",
+  "pp": 20
+ },
+ "638": {
+  "name": "THROAT CHOP",
+  "pp": 15
+ },
+ "639": {
+  "name": "POLLEN PUFF",
+  "pp": 15
+ },
+ "640": {
+  "name": "ANCHOR SHOT",
+  "pp": 20
+ },
+ "641": {
+  "name": "PSYCHIC TERRAIN",
+  "pp": 10
+ },
+ "642": {
+  "name": "LUNGE",
+  "pp": 15
+ },
+ "643": {
+  "name": "FIRE LASH",
+  "pp": 15
+ },
+ "644": {
+  "name": "POWER TRIP",
+  "pp": 10
+ },
+ "645": {
+  "name": "BURN UP",
+  "pp": 5
+ },
+ "646": {
+  "name": "SPEED SWAP",
+  "pp": 10
+ },
+ "647": {
+  "name": "SMART STRIKE",
+  "pp": 10
+ },
+ "648": {
+  "name": "PURIFY",
+  "pp": 20
+ },
+ "649": {
+  "name": "REVELATION DANCE",
+  "pp": 15
+ },
+ "650": {
+  "name": "CORE ENFORCER",
+  "pp": 10
+ },
+ "651": {
+  "name": "TROP KICK",
+  "pp": 15
+ },
+ "652": {
+  "name": "INSTRUCT",
+  "pp": 15
+ },
+ "653": {
+  "name": "BEAK BLAST",
+  "pp": 15
+ },
+ "654": {
+  "name": "CLANGING SCALES",
+  "pp": 5
+ },
+ "655": {
+  "name": "DRAGON HAMMER",
+  "pp": 15
+ },
+ "656": {
+  "name": "BRUTAL SWING",
+  "pp": 20
+ },
+ "657": {
+  "name": "AURORA VEIL",
+  "pp": 20
+ },
+ "658": {
+  "name": "SHELL TRAP",
+  "pp": 5
+ },
+ "659": {
+  "name": "FLEUR CANNON",
+  "pp": 5
+ },
+ "660": {
+  "name": "PSYCHIC FANGS",
+  "pp": 15
+ },
+ "661": {
+  "name": "STOMPING TANTRUM",
+  "pp": 10
+ },
+ "662": {
+  "name": "SHADOW BONE",
+  "pp": 10
+ },
+ "663": {
+  "name": "ACCELEROCK",
+  "pp": 20
+ },
+ "664": {
+  "name": "LIQUIDATION",
+  "pp": 10
+ },
+ "665": {
+  "name": "PRISMATIC LASER",
+  "pp": 10
+ },
+ "666": {
+  "name": "SPECTRAL THIEF",
+  "pp": 10
+ },
+ "667": {
+  "name": "SUNSTEEL STRIKE",
+  "pp": 5
+ },
+ "668": {
+  "name": "MOONGEIST BEAM",
+  "pp": 5
+ },
+ "669": {
+  "name": "TEARFUL LOOK",
+  "pp": 20
+ },
+ "670": {
+  "name": "ZING ZAP",
+  "pp": 10
+ },
+ "671": {
+  "name": "NATURE'S MADNESS",
+  "pp": 10
+ },
+ "672": {
+  "name": "MULTI-ATTACK",
+  "pp": 10
+ },
+ "673": {
+  "name": "MIND BLOWN",
+  "pp": 5
+ },
+ "674": {
+  "name": "PLASMA FISTS",
+  "pp": 15
+ },
+ "675": {
+  "name": "PHOTON GEYSER",
+  "pp": 5
+ },
+ "676": {
+  "name": "ZIPPY ZAP",
+  "pp": 10
+ },
+ "677": {
+  "name": "SPLISHY SPLASH",
+  "pp": 15
+ },
+ "678": {
+  "name": "FLOATY FALL",
+  "pp": 15
+ },
+ "679": {
+  "name": "PIKA PAPOW",
+  "pp": 20
+ },
+ "680": {
+  "name": "BOUNCY BUBBLE",
+  "pp": 20
+ },
+ "681": {
+  "name": "BUZZY BUZZ",
+  "pp": 20
+ },
+ "682": {
+  "name": "SIZZLY SLIDE",
+  "pp": 20
+ },
+ "683": {
+  "name": "GLITZY GLOW",
+  "pp": 15
+ },
+ "684": {
+  "name": "BADDY BAD",
+  "pp": 15
+ },
+ "685": {
+  "name": "SAPPY SEED",
+  "pp": 10
+ },
+ "686": {
+  "name": "FREEZY FROST",
+  "pp": 10
+ },
+ "687": {
+  "name": "SPARKLY SWIRL",
+  "pp": 5
+ },
+ "688": {
+  "name": "VEEVEE VOLLEY",
+  "pp": 20
+ },
+ "689": {
+  "name": "DOUBLE IRON BASH",
+  "pp": 5
+ },
+ "690": {
+  "name": "DYNAMAX CANNON",
+  "pp": 5
+ },
+ "691": {
+  "name": "SNIPE SHOT",
+  "pp": 15
+ },
+ "692": {
+  "name": "JAW LOCK",
+  "pp": 10
+ },
+ "693": {
+  "name": "STUFF CHEEKS",
+  "pp": 10
+ },
+ "694": {
+  "name": "NO RETREAT",
+  "pp": 5
+ },
+ "695": {
+  "name": "TAR SHOT",
+  "pp": 15
+ },
+ "696": {
+  "name": "MAGIC POWDER",
+  "pp": 20
+ },
+ "697": {
+  "name": "DRAGON DARTS",
+  "pp": 10
+ },
+ "698": {
+  "name": "TEATIME",
+  "pp": 10
+ },
+ "699": {
+  "name": "OCTOLOCK",
+  "pp": 15
+ },
+ "700": {
+  "name": "BOLT BEAK",
+  "pp": 10
+ },
+ "701": {
+  "name": "FISHIOUS REND",
+  "pp": 10
+ },
+ "702": {
+  "name": "COURT CHANGE",
+  "pp": 10
+ },
+ "703": {
+  "name": "CLANGOROUS SOUL",
+  "pp": 5
+ },
+ "704": {
+  "name": "BODY PRESS",
+  "pp": 10
+ },
+ "705": {
+  "name": "DECORATE",
+  "pp": 15
+ },
+ "706": {
+  "name": "DRUM BEATING",
+  "pp": 10
+ },
+ "707": {
+  "name": "SNAP TRAP",
+  "pp": 15
+ },
+ "708": {
+  "name": "PYRO BALL",
+  "pp": 5
+ },
+ "709": {
+  "name": "BEHEMOTH BLADE",
+  "pp": 5
+ },
+ "710": {
+  "name": "BEHEMOTH BASH",
+  "pp": 5
+ },
+ "711": {
+  "name": "AURA WHEEL",
+  "pp": 10
+ },
+ "712": {
+  "name": "BREAKING SWIPE",
+  "pp": 15
+ },
+ "713": {
+  "name": "BRANCH POKE",
+  "pp": 40
+ },
+ "714": {
+  "name": "OVERDRIVE",
+  "pp": 10
+ },
+ "715": {
+  "name": "APPLE ACID",
+  "pp": 10
+ },
+ "716": {
+  "name": "GRAV APPLE",
+  "pp": 10
+ },
+ "717": {
+  "name": "SPIRIT BREAK",
+  "pp": 15
+ },
+ "718": {
+  "name": "STRANGE STEAM",
+  "pp": 10
+ },
+ "719": {
+  "name": "LIFE DEW",
+  "pp": 10
+ },
+ "720": {
+  "name": "OBSTRUCT",
+  "pp": 10
+ },
+ "721": {
+  "name": "FALSE SURRENDER",
+  "pp": 10
+ },
+ "722": {
+  "name": "METEOR ASSAULT",
+  "pp": 5
+ },
+ "723": {
+  "name": "ETERNABEAM",
+  "pp": 5
+ },
+ "724": {
+  "name": "STEEL BEAM",
+  "pp": 5
+ },
+ "725": {
+  "name": "EXPANDING FORCE",
+  "pp": 10
+ },
+ "726": {
+  "name": "STEEL ROLLER",
+  "pp": 5
+ },
+ "727": {
+  "name": "SCALE SHOT",
+  "pp": 20
+ },
+ "728": {
+  "name": "METEOR BEAM",
+  "pp": 10
+ },
+ "729": {
+  "name": "SHELL SIDE ARM",
+  "pp": 10
+ },
+ "730": {
+  "name": "MISTY EXPLOSION",
+  "pp": 5
+ },
+ "731": {
+  "name": "GRASSY GLIDE",
+  "pp": 20
+ },
+ "732": {
+  "name": "RISING VOLTAGE",
+  "pp": 20
+ },
+ "733": {
+  "name": "TERRAIN PULSE",
+  "pp": 10
+ },
+ "734": {
+  "name": "SKITTER SMACK",
+  "pp": 10
+ },
+ "735": {
+  "name": "BURNING JEALOUSY",
+  "pp": 5
+ },
+ "736": {
+  "name": "LASH OUT",
+  "pp": 5
+ },
+ "737": {
+  "name": "POLTERGEIST",
+  "pp": 5
+ },
+ "738": {
+  "name": "CORROSIVE GAS",
+  "pp": 40
+ },
+ "739": {
+  "name": "COACHING",
+  "pp": 10
+ },
+ "740": {
+  "name": "FLIP TURN",
+  "pp": 20
+ },
+ "741": {
+  "name": "TRIPLE AXEL",
+  "pp": 10
+ },
+ "742": {
+  "name": "DUAL WINGBEAT",
+  "pp": 10
+ },
+ "743": {
+  "name": "SCORCHING SANDS",
+  "pp": 10
+ },
+ "744": {
+  "name": "JUNGLE HEALING",
+  "pp": 10
+ },
+ "745": {
+  "name": "WICKED BLOW",
+  "pp": 5
+ },
+ "746": {
+  "name": "SURGING STRIKES",
+  "pp": 5
+ },
+ "747": {
+  "name": "THUNDER CAGE",
+  "pp": 15
+ },
+ "748": {
+  "name": "DRAGON ENERGY",
+  "pp": 5
+ },
+ "749": {
+  "name": "FREEZING GLARE",
+  "pp": 10
+ },
+ "750": {
+  "name": "FIERY WRATH",
+  "pp": 10
+ },
+ "751": {
+  "name": "THUNDEROUS KICK",
+  "pp": 10
+ },
+ "752": {
+  "name": "GLACIAL LANCE",
+  "pp": 5
+ },
+ "753": {
+  "name": "ASTRAL BARRAGE",
+  "pp": 5
+ },
+ "754": {
+  "name": "EERIE SPELL",
+  "pp": 5
+ },
+ "755": {
+  "name": "DIRE CLAW",
+  "pp": 15
+ },
+ "756": {
+  "name": "PSYSHIELD BASH",
+  "pp": 10
+ },
+ "757": {
+  "name": "POWER SHIFT",
+  "pp": 10
+ },
+ "758": {
+  "name": "STONE AXE",
+  "pp": 15
+ },
+ "759": {
+  "name": "SPRINGTIDE STORM",
+  "pp": 5
+ },
+ "760": {
+  "name": "MYSTICAL POWER",
+  "pp": 10
+ },
+ "761": {
+  "name": "RAGING FURY",
+  "pp": 10
+ },
+ "762": {
+  "name": "WAVE CRASH",
+  "pp": 10
+ },
+ "763": {
+  "name": "CHLOROBLAST",
+  "pp": 5
+ },
+ "764": {
+  "name": "MOUNTAIN GALE",
+  "pp": 10
+ },
+ "765": {
+  "name": "VICTORY DANCE",
+  "pp": 20
+ },
+ "766": {
+  "name": "HEADLONG RUSH",
+  "pp": 5
+ },
+ "767": {
+  "name": "BARB BARRAGE",
+  "pp": 10
+ },
+ "768": {
+  "name": "ESPER WING",
+  "pp": 10
+ },
+ "769": {
+  "name": "BITTER MALICE",
+  "pp": 15
+ },
+ "770": {
+  "name": "SHELTER",
+  "pp": 10
+ },
+ "771": {
+  "name": "TRIPLE ARROWS",
+  "pp": 10
+ },
+ "772": {
+  "name": "INFERNAL PARADE",
+  "pp": 15
+ },
+ "773": {
+  "name": "CEASELESS EDGE",
+  "pp": 15
+ },
+ "774": {
+  "name": "BLEAKWIND STORM",
+  "pp": 10
+ },
+ "775": {
+  "name": "WILDBOLT STORM",
+  "pp": 10
+ },
+ "776": {
+  "name": "SANDSEAR STORM",
+  "pp": 10
+ },
+ "777": {
+  "name": "LUNAR BLESSING",
+  "pp": 10
+ },
+ "778": {
+  "name": "TAKE HEART",
+  "pp": 10
+ },
+ "779": {
+  "name": "TERA BLAST",
+  "pp": 10
+ },
+ "780": {
+  "name": "SILK TRAP",
+  "pp": 10
+ },
+ "781": {
+  "name": "AXE KICK",
+  "pp": 10
+ },
+ "782": {
+  "name": "LAST RESPECTS",
+  "pp": 10
+ },
+ "783": {
+  "name": "LUMINA CRASH",
+  "pp": 10
+ },
+ "784": {
+  "name": "ORDER UP",
+  "pp": 10
+ },
+ "785": {
+  "name": "JET PUNCH",
+  "pp": 15
+ },
+ "786": {
+  "name": "SPICY EXTRACT",
+  "pp": 15
+ },
+ "787": {
+  "name": "SPIN OUT",
+  "pp": 5
+ },
+ "788": {
+  "name": "POPULATION BOMB",
+  "pp": 10
+ },
+ "789": {
+  "name": "ICE SPINNER",
+  "pp": 15
+ },
+ "790": {
+  "name": "GLAIVE RUSH",
+  "pp": 5
+ },
+ "791": {
+  "name": "REVIVAL BLESSING",
+  "pp": 1
+ },
+ "792": {
+  "name": "SALT CURE",
+  "pp": 15
+ },
+ "793": {
+  "name": "TRIPLE DIVE",
+  "pp": 10
+ },
+ "794": {
+  "name": "MORTAL SPIN",
+  "pp": 15
+ },
+ "795": {
+  "name": "DOODLE",
+  "pp": 10
+ },
+ "796": {
+  "name": "FILLET AWAY",
+  "pp": 10
+ },
+ "797": {
+  "name": "KOWTOW CLEAVE",
+  "pp": 10
+ },
+ "798": {
+  "name": "FLOWER TRICK",
+  "pp": 10
+ },
+ "799": {
+  "name": "TORCH SONG",
+  "pp": 10
+ },
+ "800": {
+  "name": "AQUA STEP",
+  "pp": 10
+ },
+ "801": {
+  "name": "RAGING BULL",
+  "pp": 10
+ },
+ "802": {
+  "name": "MAKE IT RAIN",
+  "pp": 5
+ },
+ "803": {
+  "name": "RUINATION",
+  "pp": 10
+ },
+ "804": {
+  "name": "COLLISION COURSE",
+  "pp": 5
+ },
+ "805": {
+  "name": "ELECTRO DRIFT",
+  "pp": 5
+ },
+ "806": {
+  "name": "SHED TAIL",
+  "pp": 10
+ },
+ "807": {
+  "name": "CHILLY RECEPTION",
+  "pp": 10
+ },
+ "808": {
+  "name": "TIDY UP",
+  "pp": 10
+ },
+ "809": {
+  "name": "SNOWSCAPE",
+  "pp": 10
+ },
+ "810": {
+  "name": "POUNCE",
+  "pp": 20
+ },
+ "811": {
+  "name": "TRAILBLAZE",
+  "pp": 20
+ },
+ "812": {
+  "name": "CHILLING WATER",
+  "pp": 20
+ },
+ "813": {
+  "name": "HYPER DRILL",
+  "pp": 5
+ },
+ "814": {
+  "name": "TWIN BEAM",
+  "pp": 10
+ },
+ "815": {
+  "name": "RAGE FIST",
+  "pp": 10
+ },
+ "816": {
+  "name": "ARMOR CANNON",
+  "pp": 5
+ },
+ "817": {
+  "name": "BITTER BLADE",
+  "pp": 10
+ },
+ "818": {
+  "name": "DOUBLE SHOCK",
+  "pp": 5
+ },
+ "819": {
+  "name": "GIGATON HAMMER",
+  "pp": 5
+ },
+ "820": {
+  "name": "COMEUPPANCE",
+  "pp": 10
+ },
+ "821": {
+  "name": "AQUA CUTTER",
+  "pp": 20
+ },
+ "822": {
+  "name": "BLAZING TORQUE",
+  "pp": 10
+ },
+ "823": {
+  "name": "WICKED TORQUE",
+  "pp": 10
+ },
+ "824": {
+  "name": "NOXIOUS TORQUE",
+  "pp": 10
+ },
+ "825": {
+  "name": "COMBAT TORQUE",
+  "pp": 10
+ },
+ "826": {
+  "name": "MAGICAL TORQUE",
+  "pp": 10
+ },
+ "827": {
+  "name": "PSYBLADE",
+  "pp": 15
+ },
+ "828": {
+  "name": "HYDRO STEAM",
+  "pp": 15
+ },
+ "829": {
+  "name": "BLOOD MOON",
+  "pp": 5
+ },
+ "830": {
+  "name": "MATCHA GOTCHA",
+  "pp": 15
+ },
+ "831": {
+  "name": "SYRUP BOMB",
+  "pp": 10
+ },
+ "832": {
+  "name": "IVY CUDGEL",
+  "pp": 10
+ },
+ "833": {
+  "name": "ELECTRO SHOT",
+  "pp": 10
+ },
+ "834": {
+  "name": "TERA STARSTORM",
+  "pp": 5
+ },
+ "835": {
+  "name": "FICKLE BEAM",
+  "pp": 5
+ },
+ "836": {
+  "name": "BURNING BULWARK",
+  "pp": 10
+ },
+ "837": {
+  "name": "THUNDERCLAP",
+  "pp": 5
+ },
+ "838": {
+  "name": "MIGHTY CLEAVE",
+  "pp": 5
+ },
+ "839": {
+  "name": "TACHYON CUTTER",
+  "pp": 10
+ },
+ "840": {
+  "name": "HARD PRESS",
+  "pp": 10
+ },
+ "841": {
+  "name": "DRAGON CHEER",
+  "pp": 15
+ },
+ "842": {
+  "name": "ALLURING VOICE",
+  "pp": 10
+ },
+ "843": {
+  "name": "TEMPER FLARE",
+  "pp": 10
+ },
+ "844": {
+  "name": "SUPERCELL SLAM",
+  "pp": 15
+ },
+ "845": {
+  "name": "PSYCHIC NOISE",
+  "pp": 10
+ },
+ "846": {
+  "name": "UPPER HAND",
+  "pp": 15
+ },
+ "847": {
+  "name": "MALIGNANT CHAIN",
+  "pp": 5
+ }
+}

@@ -39,8 +39,8 @@ use serde::Deserialize;
 // module's surface even when the binary itself never names them.
 #[allow(unused_imports)]
 pub use manifest::{
-    Area, Behavior, BoxEncoding, ExtraBoxes, Gen3Ball, Layout, Manifest, PocketDef, PocketRegion,
-    RecordEncoding, RecordLayout, Span,
+    Area, Behavior, BoxEncoding, ExtraBoxes, Gen3Ball, Gen3Fields, Layout, Manifest, PocketDef,
+    PocketRegion, RecordEncoding, RecordLayout, Span,
 };
 
 pub const MANIFEST_NAME: &str = "game.json";
@@ -475,9 +475,11 @@ pub fn guess_from_file_name(packs: &[PackInfo], file_name: &str) -> Option<usize
 }
 
 /// Lowercase letters and digits only, with accented letters folded to their
-/// base letter so "Pokémon" and "Pokemon" compare equal.
+/// base letter so "Pokémon" and "Pokemon" compare equal, and "&" read as "and"
+/// so "Heart & Soul" names the `heartandsoul` folder.
 fn loose_key(text: &str) -> String {
-    text.chars()
+    text.replace('&', "and")
+        .chars()
         .flat_map(char::to_lowercase)
         .map(|c| match c {
             'à' | 'á' | 'â' | 'ä' | 'ã' | 'å' => 'a',
@@ -658,9 +660,16 @@ mod tests {
             pack("seaglass", "Pokémon Emerald Seaglass"),
             pack("soulgold", "Pokémon SoulGold"),
             pack("unbound", "Pokémon Unbound"),
+            pack("heartandsoul", "Pokémon Heart and Soul"),
         ];
         let guess = |file: &str| guess_from_file_name(&packs, file);
 
+        assert_eq!(guess("Pokémon Heart and Soul (v2.0.6).sav"), Some(3));
+        assert_eq!(
+            guess("heart & soul.sav"),
+            Some(3),
+            "punctuation and spacing ignored"
+        );
         assert_eq!(guess("Pokémon Unbound (v2.1.1.1).sav"), Some(2));
         assert_eq!(guess("unbound.sav"), Some(2));
         assert_eq!(guess("Soul Gold (v1.1.4).sav"), Some(1));
