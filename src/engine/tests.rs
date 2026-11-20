@@ -520,6 +520,31 @@ fn a_flagged_ability_follows_the_games_own_lookup() {
     assert_eq!(slot(true, 0, true, false), 0);
 }
 
+/// Facts about Seaglass read from its ROM's setter and species table.
+#[test]
+fn the_seaglass_pack_matches_its_rom() {
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("assets")
+        .join("seaglass");
+    let pack = crate::game::GamePack::load(&dir).expect("seaglass pack loads");
+
+    // Its SetBoxMonData packs experience in 21 bits, the ball in 6 and the
+    // ability number in the ribbon word, as pokeemerald-expansion does.
+    assert_eq!(
+        pack.record().gen3_fields,
+        crate::game::Gen3Fields::Expansion
+    );
+    // The same setter makes a Pokémon shiny when the value is 15 or less.
+    assert_eq!(pack.behavior().shiny_threshold, 16);
+    // Seaglass gives its species abilities of its own.
+    let bulbasaur = pack.species.get(&1).expect("Bulbasaur");
+    assert_eq!(
+        bulbasaur.abilities,
+        [65, 34, 47],
+        "Overgrow, Chlorophyll, Thick Fat"
+    );
+}
+
 /// Facts about Heart & Soul read from its ROM and a real save.
 #[test]
 fn the_heart_and_soul_pack_keeps_its_measured_layout() {

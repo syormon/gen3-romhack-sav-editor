@@ -159,8 +159,10 @@ pub fn id_combo(
 pub struct SearchPicker {
     pub salt: String,
     pub width: f32,
-    pub row_height: f32,
+    /// How many rows the list shows before it scrolls.
     pub max_rows: usize,
+    /// Put the cursor in the search field, for a picker that opens on its own.
+    pub focus: bool,
 }
 
 impl SearchPicker {
@@ -168,9 +170,19 @@ impl SearchPicker {
         Self {
             salt: salt.into(),
             width,
-            row_height: 20.0,
             max_rows: 12,
+            focus: false,
         }
+    }
+
+    pub fn rows(mut self, rows: usize) -> Self {
+        self.max_rows = rows;
+        self
+    }
+
+    pub fn focused(mut self) -> Self {
+        self.focus = true;
+        self
     }
 
     /// Shows a text field plus a filtered list; returns the id that was picked.
@@ -186,21 +198,29 @@ impl SearchPicker {
         let mut picked = None;
         let q = query.trim().to_lowercase();
 
-        ui.add(
+        let edit = ui.add(
             egui::TextEdit::singleline(query)
                 .desired_width(self.width)
                 .hint_text("Type to search…")
                 .font(egui::TextStyle::Body),
         );
+        if self.focus {
+            edit.request_focus();
+        }
 
         let matches: Vec<(u32, String, bool)> = entries
             .filter(|(_, name, _)| q.is_empty() || name.to_lowercase().contains(&q))
             .take(400)
             .collect();
 
+        // A row is one selectable label: the theme's control height plus the
+        // gap between items.
+        let row_height = ui.spacing().interact_size.y + ui.spacing().item_spacing.y;
+        let height = row_height * self.max_rows as f32;
         egui::ScrollArea::vertical()
             .id_salt(&self.salt)
-            .max_height(self.row_height * self.max_rows as f32)
+            .max_height(height)
+            .min_scrolled_height(height)
             .show(ui, |ui| {
                 ui.set_min_width(self.width);
                 if matches.is_empty() {

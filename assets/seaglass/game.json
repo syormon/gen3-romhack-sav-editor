@@ -1,7 +1,7 @@
 {
   "name": "Pokémon Emerald Seaglass",
   "version": "3.0",
-  "notice": "Save layout, name tables, bag and Poké Ball field all verified against the ROM and a real save.",
+  "notice": "Save layout, record fields, name tables and abilities verified against the ROM and a real save.",
   "export_name": "Seaglass_edited.sav",
   "link": {
     "label": "Reference editor",
@@ -66,7 +66,7 @@
   "record": {
     "nickname_length": 10,
     "ot_name_length": 7,
-    "gen3_ball": "growth_u16"
+    "gen3_fields": "expansion"
   },
   "sprites": {
     "national_dex_max_id": 386,
@@ -77,6 +77,7 @@
     "fallback_move": 33,
     "default_ot_name": "Trainer",
     "met_location": 255,
+    "shiny_threshold": 16,
     "pokeballs": [
       {
         "id": 1,

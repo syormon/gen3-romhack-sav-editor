@@ -1,6 +1,8 @@
 //! The Pokémon inspector: species, ability, nature, tera type, level, ball,
 //! held item, the four move slots and IVs/EVs.
 
+use std::collections::HashSet;
+
 use eframe::egui::{self, RichText, Ui};
 
 use crate::engine::experience::experience_for_level;
@@ -314,11 +316,10 @@ fn core_details(ui: &mut Ui, insp: &mut super::app::Inspector) {
 }
 
 fn moves_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
+    let learnset = learnset_move_ids(insp.mon.species);
     ui.vertical(|ui| {
         widgets::heading(ui, "Moves & PP Up", theme::AMBER);
         ui.add_space(4.0);
-
-        let learnset = learnset_move_ids(insp.mon.species);
 
         for i in 0..4 {
             theme::well_frame().show(ui, |ui| {
@@ -334,39 +335,8 @@ fn moves_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
                     RichText::new(move_name).size(12.0)
                 };
                 if ui.button(label).clicked() {
-                    insp.move_picker = if insp.move_picker == Some(i) {
-                        None
-                    } else {
-                        Some(i)
-                    };
+                    insp.move_picker = Some(i);
                     insp.move_query.clear();
-                }
-
-                if insp.move_picker == Some(i) {
-                    // Learnset moves first and starred, as in the web build's
-                    // "Compatible / Learnset Moves" option group.
-                    let mut entries: Vec<(u32, String, bool)> =
-                        vec![(0, "(None)".to_string(), false)];
-                    let mut others: Vec<(u32, String, bool)> = Vec::new();
-                    for m in all_moves_list() {
-                        if learnset.contains(&m.id) {
-                            entries.push((m.id, m.name.clone(), true));
-                        } else {
-                            others.push((m.id, m.name.clone(), false));
-                        }
-                    }
-                    entries.extend(others);
-
-                    let picked = SearchPicker::new(
-                        format!("move-picker-{i}"),
-                        ui.available_width(),
-                    )
-                    .show(ui, &mut insp.move_query, entries.into_iter());
-                    if let Some(id) = picked {
-                        insp.mon.moves[i] = id;
-                        insp.mon.pps[i] = max_pp(id, insp.mon.pp_bonuses[i]);
-                        insp.move_picker = None;
-                    }
                 }
 
                 ui.horizontal(|ui| {
@@ -393,6 +363,58 @@ fn moves_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
             ui.add_space(6.0);
         }
     });
+
+    if let Some(i) = insp.move_picker {
+        move_picker(ui, insp, i, &learnset);
+    }
+}
+
+/// The move list for slot `i`, in a dialog of its own: the column it belongs to
+/// is too short to show more than a few rows.
+fn move_picker(ui: &mut Ui, insp: &mut super::app::Inspector, i: usize, learnset: &HashSet<u32>) {
+    // Learnset moves first and starred, as in the web build's
+    // "Compatible / Learnset Moves" option group.
+    let mut entries: Vec<(u32, String, bool)> = vec![(0, "(None)".to_string(), false)];
+    let mut others: Vec<(u32, String, bool)> = Vec::new();
+    for m in all_moves_list() {
+        if learnset.contains(&m.id) {
+            entries.push((m.id, m.name.clone(), true));
+        } else {
+            others.push((m.id, m.name.clone(), false));
+        }
+    }
+    entries.extend(others);
+
+    let mut picked = None;
+    let response = egui::Modal::new(egui::Id::new("move-picker")).show(ui.ctx(), |ui| {
+        ui.set_width(420.0);
+        widgets::heading(ui, &format!("Move {}", i + 1), theme::AMBER);
+        ui.label(
+            RichText::new(format!("Now: {}", get_move_name(insp.mon.moves[i])))
+                .size(12.0)
+                .color(theme::MUTED),
+        );
+        ui.add_space(8.0);
+        picked = SearchPicker::new("move-picker", 420.0)
+            .rows(16)
+            .focused()
+            .show(ui, &mut insp.move_query, entries.into_iter());
+        ui.add_space(8.0);
+        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            if color_button(ui, "Cancel", theme::BORDER).clicked() {
+                insp.move_picker = None;
+            }
+        });
+    });
+    if let Some(id) = picked {
+        insp.mon.moves[i] = id;
+        insp.mon.pps[i] = max_pp(id, insp.mon.pp_bonuses[i]);
+        insp.move_picker = None;
+    }
+    // Escape, or a click outside the dialog.
+    if response.should_close() {
+        insp.move_picker = None;
+    }
 }
 
 fn stats_column(ui: &mut Ui, insp: &mut super::app::Inspector) {
